@@ -1,0 +1,3532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Álgebra 2 — Transformaciones Lineales Interactivas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=STIX+Two+Text:ital,wght@0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+ 
+  
+  <style>
+    :root {
+      --bg-main: #0b0c10;
+      --bg-card: #11131a;
+      --bg-elevated: #171a24;
+      --border-color: #222736;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --neon-blue: #4f7df3;
+      --neon-cyan: #18c5d9;
+      --neon-purple: #a855f7;
+      --neon-green: #10b981;
+      --neon-coral: #f06565;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* Encabezado Principal */
+    header.app-header {
+      background: linear-gradient(180deg, rgba(79, 125, 243, 0.08) 0%, rgba(11, 12, 16, 0) 100%);
+      border-bottom: 1px solid var(--border-color);
+      padding: 2.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .header-title {
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      max-width: 720px;
+    }
+
+    /* Contenedor Modular */
+    main.container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* Tarjetas de Ejercicios */
+    .exercise-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.25s ease;
+    }
+
+    .exercise-card:hover {
+      border-color: #2f364b;
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-title-group h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 0.35rem;
+    }
+
+    .card-title-group p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Badges Neón */
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+    .badge-blue   { color: var(--neon-blue);   background: rgba(79, 125, 243, 0.12); border-color: rgba(79, 125, 243, 0.3); }
+    .badge-cyan   { color: var(--neon-cyan);   background: rgba(24, 197, 217, 0.12); border-color: rgba(24, 197, 217, 0.3); }
+    .badge-purple { color: var(--neon-purple); background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.3); }
+    .badge-green  { color: var(--neon-green);  background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); }
+    .badge-coral  { color: var(--neon-coral);  background: rgba(240, 101, 101, 0.12); border-color: rgba(240, 101, 101, 0.3); }
+
+    /* Layout interno de cada ejercicio */
+    .exercise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .exercise-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Panel de Controles */
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .control-group {
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .control-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--neon-cyan);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--neon-blue);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(79, 125, 243, 0.7);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Matrices 2x2 */
+    .matrix-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-main);
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .matrix-bracket {
+      width: 8px;
+      align-self: stretch;
+      border: 2px solid var(--text-secondary);
+    }
+    .matrix-bracket.left  { border-right: none; border-radius: 4px 0 0 4px; }
+    .matrix-bracket.right { border-left: none;  border-radius: 0 4px 4px 0; }
+
+    .matrix-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .matrix-cell {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      min-width: 58px;
+      text-align: center;
+    }
+
+    input.matrix-cell {
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input.matrix-cell:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    /* Botones */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.55rem 0.95rem;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--neon-blue);
+      background: rgba(79, 125, 243, 0.14);
+    }
+
+    .btn.active, .btn-primary {
+      background: var(--neon-blue);
+      border-color: var(--neon-blue);
+      color: #ffffff;
+    }
+
+    /* Lecturas Matemáticas y Resultados */
+    .math-readout {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--neon-purple);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .math-readout strong {
+      color: var(--text-primary);
+    }
+
+    /* Contenedor del Canvas */
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .canvas-wrapper canvas {
+      display: block;
+      width: 100%;
+      height: 440px;
+    }
+
+    .canvas-legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      background: rgba(17, 19, 26, 0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    /* Tipografía Matemática y Vectores en Columna */
+    .math-font {
+      font-family: 'STIX Two Text', 'Cambria Math', 'Times New Roman', serif;
+      letter-spacing: 0.01em;
+    }
+
+    .math-var {
+      font-family: 'STIX Two Text', 'Cambria Math', serif;
+      font-style: italic;
+    }
+
+    .vec-arrow {
+      display: inline-block;
+      position: relative;
+      font-family: 'STIX Two Text', 'Cambria Math', serif;
+      font-style: italic;
+      font-weight: 700;
+      padding-top: 0.22em;
+    }
+
+    .vec-arrow::before {
+      content: "→";
+      position: absolute;
+      top: -0.36em;
+      left: 52%;
+      transform: translateX(-50%);
+      font-style: normal;
+      font-size: 0.72em;
+      line-height: 1;
+    }
+
+    .formula-column-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-family: 'STIX Two Text', 'Cambria Math', serif;
+      font-size: 1.05rem;
+    }
+
+    .col-vector {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      vertical-align: middle;
+    }
+
+    .col-vector-cells {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.15rem 0.35rem;
+    }
+
+    .col-vector-cells span {
+      min-width: 44px;
+    }
+
+    /* Deslizadores fluidos */
+    input[type="range"] {
+      touch-action: none;
+      will-change: transform;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      transition: box-shadow 0.12s ease;
+      will-change: transform;
+    }
+
+    input[type="range"]:active::-webkit-slider-thumb {
+      transform: scale(1.18);
+      box-shadow: 0 0 14px rgba(24, 197, 217, 0.9);
+    }
+
+    /* Pantalla Principal (Menú de Selección) */
+    .view-hidden {
+      display: none !important;
+    }
+
+    .main-menu-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .menu-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--neon-purple);
+      margin-bottom: 0.75rem;
+    }
+
+    .menu-main-title {
+      font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.65rem;
+    }
+
+    .menu-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.75rem;
+    }
+
+    .menu-options-grid {
+      width: 100%;
+      max-width: 820px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 720px) {
+      .menu-options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .menu-option-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.6rem;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .menu-option-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(168, 85, 247, 0.55);
+    }
+
+    .btn-purple-option {
+      width: 100%;
+      background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 1.15rem 1.25rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.32);
+      transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-purple-option:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 8px 26px rgba(168, 85, 247, 0.5);
+    }
+
+    .btn-purple-option:active {
+      transform: scale(0.98);
+    }
+
+    .btn-back-menu {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 0.95rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-back-menu:hover {
+      border-color: var(--neon-purple);
+      background: rgba(168, 85, 247, 0.14);
+    }
+    /* Fondo Interactivo de Partículas Matemáticas en Pantalla Principal */
+    .main-menu-screen {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #menu-bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .main-menu-screen > *:not(#menu-bg-canvas) {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+ 
+<!-- PANTALLA PRINCIPAL -->
+  <section id="main-menu-screen" class="main-menu-screen">
+    <canvas id="menu-bg-canvas"></canvas>
+    <span class="menu-kicker">LABORATORIO VIRTUAL • ÁLGEBRA LINEAL</span>
+    <h1 class="menu-main-title">Núcleo e Imagen de una Transformación Lineal</h1>
+    <p class="menu-subtitle">Selecciona que ejercicios quieres explorar</p>
+
+    <div class="menu-options-grid">
+      <div class="menu-option-card">
+        <button type="button" id="btn-open-r2-r2" class="btn-purple-option">
+          Ejercicios de <span class="math-font">ℝ²</span> a <span class="math-font">ℝ²</span>
+        </button>
+      </div>
+
+      <div class="menu-option-card">
+        <button type="button" id="btn-open-r2-r3" class="btn-purple-option">
+          Ejercicios de <span class="math-font">ℝ²</span> a <span class="math-font">ℝ³</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTA DE EJERCICIOS: R2 -> R2 -->
+  <div id="view-r2-r2" class="view-hidden">
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <button type="button" class="btn-back-menu" onclick="backToMainMenu()">← Volver al inicio</button>
+        </div>
+        <span class="header-tag">// ÁLGEBRA 2 • TRANSFORMACIONES LINEALES</span>
+        <h2 class="header-title">Ejercicios de <span class="math-font" style="-webkit-text-fill-color: #a855f7;">ℝ²</span> a <span class="math-font" style="-webkit-text-fill-color: #18c5d9;">ℝ²</span></h2>
+      </div>
+    </header>
+
+    
+    <style>
+  /* Estilos exclusivos del Módulo 1 (R² -> R²) */
+  .ex1-dual-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 980px) {
+    .ex1-dual-panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ex1-subpanel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ex1-subpanel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .ex1-subpanel-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .ex1-formula-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ex1-col-equation {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'STIX Two Text', 'Cambria Math', serif;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+  }
+
+  .ex1-bracket-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .ex1-col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.25rem 0.35rem;
+    text-align: center;
+  }
+
+  .ex1-coeff-input {
+    width: 54px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.25rem 0.2rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ex1-coeff-input:focus {
+    border-color: var(--neon-cyan);
+  }
+
+  .comp-x-color { color: #18c5d9 !important; }
+  .comp-y-color { color: #f06565 !important; }
+
+  .ex1-slider-x::-webkit-slider-thumb {
+    background: #18c5d9 !important;
+    box-shadow: 0 0 10px rgba(24, 197, 217, 0.8) !important;
+  }
+  .ex1-slider-y::-webkit-slider-thumb {
+    background: #f06565 !important;
+    box-shadow: 0 0 10px rgba(240, 101, 101, 0.8) !important;
+  }
+
+  .ex1-status-box {
+    border-radius: 10px;
+    padding: 0.95rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+    line-height: 1.55;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .ex1-status-box.is-invalid {
+    background: rgba(240, 101, 101, 0.09);
+    border: 1px solid rgba(240, 101, 101, 0.55);
+    color: #fca5a5;
+  }
+
+  .ex1-status-box.is-valid {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.7);
+    color: #6ee7b7;
+  }
+
+  .eliot-toast {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    max-width: 265px;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(17, 19, 26, 0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(16, 185, 129, 0.75);
+    border-radius: 12px;
+    padding: 0.55rem 0.8rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 5;
+  }
+
+  .eliot-toast.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .eliot-avatar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .eliot-msg {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    color: #f1f5f9;
+  }
+
+  .eliot-msg strong {
+    display: block;
+    color: #10b981;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .ex1-canvas-box canvas {
+    height: 390px !important;
+    cursor: crosshair;
+  }
+  /* Controles de Zoom en las gráficas */
+  .ex1-zoom-controls {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(17, 19, 26, 0.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.25rem;
+    z-index: 4;
+  }
+
+  .ex1-zoom-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 0.45rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .ex1-zoom-btn:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(24, 197, 217, 0.15);
+    color: var(--neon-cyan);
+  }
+</style>
+
+  
+<article class="exercise-card" id="ex1-card">
+  <div class="card-header">
+    <div class="card-title-group">
+      <span class="badge badge-purple">EJERCICIO 01 • ℝ² → ℝ²</span>
+      <h2>Núcleo e Imagen de una Transformación Lineal en el Plano</h2>
+      <p>Edita la transformación en forma columna, busca con precisión exacta un vector del núcleo <span class="math-font">nu <span class="math-var">T</span></span> y observa su proyección en la imagen <span class="math-font">im <span class="math-var">T</span></span>.</p>
+    </div>
+  </div>
+
+  <!-- BARRA DE FÓRMULA EDITABLE CON SELECTOR DE ESTRUCTURA -->
+  <div class="ex1-formula-bar">
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Estructura en <span class="math-font">ℝ²</span>:</span>
+        <select id="ex1-structure-mode" onchange="changeStructureEx1()" style="background:var(--bg-main); color:var(--neon-cyan); border:1px solid var(--border-color); border-radius:8px; padding:0.35rem 0.65rem; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; outline:none; cursor:pointer;">
+          <option value="equations">1. Ecuaciones por componente</option>
+          <option value="matrix">2. Forma matricial A·v⃗</option>
+          <option value="columns">3. Combinación lineal x·T(î) + y·T(ĵ)</option>
+        </select>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn" onclick="setPresetEx1(2, 4, 1, 2)">Recta (Predet.)</button>
+        <button type="button" class="btn" onclick="setPresetEx1(1, -2, -2, 4)">Recta y = 0.5x</button>
+        <button type="button" class="btn" onclick="setPresetEx1(2, 0, 0, 1)">Inyectiva (nu <span class="math-var">T</span> = {<span class="vec-arrow">0</span>})</button>
+        <button type="button" class="btn" onclick="setPresetEx1(0, 0, 0, 0)">Nula (Todo ℝ²)</button>
+      </div>
+    </div>
+
+    <div id="ex1-dynamic-formula" class="ex1-col-equation" style="justify-content:center; padding:0.35rem 0;"></div>
+  </div>
+
+  <!-- DOS PANELES: NÚCLEO E IMAGEN -->
+  <div class="ex1-dual-panels">
+
+    <!-- PANEL 1: NÚCLEO nu T -->
+    <section class="ex1-subpanel">
+      <div class="ex1-subpanel-header">
+        <h3 class="ex1-subpanel-title">1. Núcleo <span class="math-font" style="color: var(--neon-cyan);">nu <span class="math-var">T</span></span> — Dominio <span class="math-font">ℝ²</span></h3>
+        <span class="badge badge-cyan math-font">T(<span class="vec-arrow">v</span>) = <span class="vec-arrow">0</span></span>
+      </div>
+
+      <div class="canvas-wrapper ex1-canvas-box">
+        <canvas id="canvas1_ker"></canvas>
+        <div class="ex1-zoom-controls">
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('ker', 1.25)" title="Acercar">+</button>
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('ker', 0.8)" title="Alejar (ver más plano)">−</button>
+          <button type="button" class="ex1-zoom-btn" onclick="resetZoomEx1('ker')" title="Restablecer vista">1:1</button>
+        </div>
+
+        <div id="eliot-toast-1" class="eliot-toast" aria-live="polite">
+          <svg class="eliot-avatar" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="42" y="6" width="16" height="9" rx="3" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="45" y="13" width="10" height="5" fill="#1e293b"/>
+            <rect x="12" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+            <rect x="78" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+            <rect x="18" y="18" width="64" height="56" rx="24" fill="#f8fafc" stroke="#3b82f6" stroke-width="3"/>
+            <rect x="24" y="25" width="52" height="40" rx="16" fill="#0b0f19"/>
+            <path d="M31 35 Q37 31 43 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M57 35 Q63 31 69 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="37" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <circle cx="35" cy="43" r="2" fill="#ffffff"/>
+            <circle cx="63" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <circle cx="61" cy="43" r="2" fill="#ffffff"/>
+            <path d="M44 54 Q50 61 56 54 Z" fill="#f472b6" stroke="#38bdf8" stroke-width="1.5"/>
+            <circle cx="13" cy="76" r="9" fill="#f8fafc" stroke="#3b82f6" stroke-width="2.5"/>
+            <line x1="8" y1="68" x2="6" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <line x1="13" y1="67" x2="13" y2="60" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <line x1="18" y1="68" x2="20" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <rect x="30" y="75" width="40" height="20" rx="8" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2.5"/>
+            <rect x="42" y="80" width="16" height="10" rx="4" fill="#a855f7"/>
+          </svg>
+          <div class="eliot-msg">
+            <strong>Eliot dice:</strong>
+            <span id="eliot-msg-text-1">¡Excelente! Llegaste al vector exacto del núcleo.</span>
+          </div>
+        </div>
+
+        <div class="canvas-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">nu <span class="math-var">T</span></span></span>
+        </div>
+      </div>
+
+      <div class="control-group" style="display:flex; flex-direction:column; gap:0.85rem;">
+        <div>
+          <div class="control-label">
+            <span class="comp-x-color" style="font-weight:700;">Componente <span class="math-var">x</span></span>
+            <span id="ex1-val-x" class="control-value comp-x-color">1.0</span>
+          </div>
+          <input type="range" id="ex1-slider-x" class="ex1-slider-x" min="-5" max="5" step="0.5" value="1">
+        </div>
+
+        <div>
+          <div class="control-label">
+            <span class="comp-y-color" style="font-weight:700;">Componente <span class="math-var">y</span></span>
+            <span id="ex1-val-y" class="control-value comp-y-color">1.5</span>
+          </div>
+          <input type="range" id="ex1-slider-y" class="ex1-slider-y" min="-5" max="5" step="0.5" value="1.5">
+        </div>
+      </div>
+
+      <div id="ex1-status-box" class="ex1-status-box is-invalid"></div>
+    </section>
+
+    <!-- PANEL 2: IMAGEN im T -->
+    <section class="ex1-subpanel">
+      <div class="ex1-subpanel-header">
+        <h3 class="ex1-subpanel-title">2. Imagen <span class="math-font" style="color: var(--neon-purple);">im <span class="math-var">T</span></span> — Codominio <span class="math-font">ℝ²</span></h3>
+        <span class="badge badge-purple math-font">Gen{T(î), T(ĵ)}</span>
+      </div>
+
+      <div class="canvas-wrapper ex1-canvas-box">
+        <canvas id="canvas1_img"></canvas>
+        <div class="ex1-zoom-controls">
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('img', 1.25)" title="Acercar">+</button>
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('img', 0.8)" title="Alejar (ver más plano)">−</button>
+          <button type="button" class="ex1-zoom-btn" onclick="resetZoomEx1('img')" title="Restablecer vista">1:1</button>
+        </div>
+
+        <div class="canvas-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-font">im <span class="math-var">T</span></span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">T(î)</span> / Comp. 1</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">T(ĵ)</span> / Comp. 2</span>
+        </div>
+      </div>
+
+      <div id="ex1-img-readout" class="math-readout" style="border-left-color: var(--neon-purple);"></div>
+    </section>
+
+  </div>
+</article>
+
+    </main>
+  </div>
+
+  <!-- VISTA DE EJERCICIOS: R2 -> R3 -->
+  <div id="view-r2-r3" class="view-hidden">
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <button type="button" class="btn-back-menu" onclick="backToMainMenu()">← Volver al inicio</button>
+        </div>
+        <span class="header-tag">// ÁLGEBRA 2 • TRANSFORMACIONES LINEALES</span>
+        <h2 class="header-title">Ejercicios de <span class="math-font" style="-webkit-text-fill-color: #a855f7;">ℝ²</span> a <span class="math-font" style="-webkit-text-fill-color: #18c5d9;">ℝ³</span></h2>
+      </div>
+    </header>
+
+    <main class="container" id="exercises-r2-r3-container">
+      <!-- ========================================================= -->
+      <!-- PEGAR AQUÍ MÓDULOS DE EJERCICIOS DE R2 A R3               -->
+      <!-- ========================================================= -->
+<style>
+  /* Estilos exclusivos del Módulo 2 (R² -> R³) */
+  .ex2-zoom-btn.active {
+    border-color: var(--neon-purple);
+    background: rgba(168, 85, 247, 0.25);
+    color: #e9d5ff;
+  }
+  .ex2-dual-panels {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .ex2-dual-panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ex2-subpanel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ex2-subpanel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .ex2-subpanel-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .ex2-formula-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ex2-col-equation {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'STIX Two Text', 'Cambria Math', serif;
+    font-size: 1.12rem;
+    color: var(--text-primary);
+  }
+
+  .ex2-bracket-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .ex2-col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    padding: 0.25rem 0.35rem;
+    text-align: center;
+  }
+
+  .ex2-coeff-input {
+    width: 52px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.22rem 0.2rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ex2-coeff-input:focus {
+    border-color: var(--neon-cyan);
+  }
+
+  /* Colores sincronizados por componente (X=Cian, Y=Coral, Z=Púrpura) */
+  .ex2-cx { color: #18c5d9 !important; }
+  .ex2-cy { color: #f06565 !important; }
+  .ex2-cz { color: #a855f7 !important; }
+
+  .ex2-slider-x::-webkit-slider-thumb {
+    background: #18c5d9 !important;
+    box-shadow: 0 0 10px rgba(24, 197, 217, 0.8) !important;
+  }
+  .ex2-slider-y::-webkit-slider-thumb {
+    background: #f06565 !important;
+    box-shadow: 0 0 10px rgba(240, 101, 101, 0.8) !important;
+  }
+
+  /* Barra de herramientas de Rastreo (Trace) */
+  .ex2-trace-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .ex2-trace-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ex2-trace-toggle input[type="checkbox"] {
+    accent-color: #a855f7;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .ex2-mini-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.32rem 0.65rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .ex2-mini-btn:hover {
+    border-color: var(--neon-purple);
+    background: rgba(168, 85, 247, 0.16);
+  }
+
+  /* Caja de validación exacta */
+  .ex2-status-box {
+    border-radius: 10px;
+    padding: 0.9rem 1.05rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .ex2-status-box.is-invalid {
+    background: rgba(240, 101, 101, 0.09);
+    border: 1px solid rgba(240, 101, 101, 0.55);
+    color: #fca5a5;
+  }
+
+  .ex2-status-box.is-valid {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.7);
+    color: #6ee7b7;
+  }
+
+  /* Controles flotantes de Zoom / Vista en gráficas */
+  .ex2-zoom-controls {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(17, 19, 26, 0.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.25rem;
+    z-index: 4;
+  }
+
+  .ex2-zoom-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 0.45rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .ex2-zoom-btn:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(24, 197, 217, 0.15);
+    color: var(--neon-cyan);
+  }
+
+  /* Notificación no intrusiva de Eliot */
+  .ex2-eliot-toast {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    max-width: 255px;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(17, 19, 26, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(16, 185, 129, 0.75);
+    border-radius: 12px;
+    padding: 0.55rem 0.8rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 5;
+  }
+
+  .ex2-eliot-toast.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .ex2-canvas-2d canvas {
+    height: 390px !important;
+    cursor: crosshair;
+  }
+
+  .ex2-canvas-3d canvas {
+    height: 455px !important;
+    cursor: grab;
+  }
+
+  .ex2-canvas-3d canvas:active {
+    cursor: grabbing;
+  }
+</style>
+
+<article class="exercise-card" id="ex2-card">
+  <div class="card-header">
+    <div class="card-title-group">
+      <span class="badge badge-purple">EJERCICIO 02 • ℝ² → ℝ³</span>
+      <h2>Núcleo 2D e Imagen Espacial 3D de una Transformación Lineal</h2>
+      <p>Edita la transformación en columnas, encuentra el núcleo <span class="math-font">nu <span class="math-var">T</span></span> en <span class="math-font">ℝ²</span> o activa el <strong>Modo Rastreo</strong> para dibujar trayectorias y ver su proyección con relieve en <span class="math-font">ℝ³</span>.</p>
+    </div>
+  </div>
+
+  <!-- BARRA DE FÓRMULA EDITABLE CON SELECTOR DE ESTRUCTURA -->
+  <div class="ex2-formula-bar">
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Estructura <span class="math-font">ℝ² → ℝ³</span>:</span>
+        <select id="ex2-structure-mode" onchange="changeStructureEx2()" style="background:var(--bg-main); color:var(--neon-cyan); border:1px solid var(--border-color); border-radius:8px; padding:0.35rem 0.65rem; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; outline:none; cursor:pointer;">
+          <option value="equations">1. Ecuaciones por componente</option>
+          <option value="matrix">2. Forma matricial A·v⃗ (3×2)</option>
+          <option value="columns">3. Combinación lineal x·c⃗₁ + y·c⃗₂</option>
+        </select>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn" onclick="setPresetEx2(1, 2, 2, 4, -1, -2)">Recta en ℝ³ (dim nu = 1)</button>
+        <button type="button" class="btn" onclick="setPresetEx2(2, 0, 0, 2, 1, -1)">Plano en ℝ³ (Inyectiva)</button>
+        <button type="button" class="btn" onclick="setPresetEx2(0, 0, 0, 0, 0, 0)">Nula (nu T = ℝ²)</button>
+      </div>
+    </div>
+
+    <div id="ex2-dynamic-formula" class="ex2-col-equation" style="justify-content:center; padding:0.35rem 0;"></div>
+  </div>
+
+  <!-- DOS PANELES: DOMINIO 2D (nu T + RASTREO) E IMAGEN 3D (im T) -->
+  <div class="ex2-dual-panels">
+
+    <!-- PANEL 1: NÚCLEO nu T Y RASTREO EN R² -->
+    <section class="ex2-subpanel">
+      <div class="ex2-subpanel-header">
+        <h3 class="ex2-subpanel-title">1. Dominio <span class="math-font">ℝ²</span> — Núcleo <span class="math-font" style="color: var(--neon-cyan);">nu <span class="math-var">T</span></span></h3>
+        <span class="badge badge-cyan math-font">T(<span class="vec-arrow">v</span>) = <span class="vec-arrow">0</span></span>
+      </div>
+
+      <div class="canvas-wrapper ex2-canvas-2d">
+        <canvas id="canvas2_ker"></canvas>
+
+        <div class="ex2-zoom-controls">
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 1.2)" title="Acercar 3D">+</button>
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 0.83)" title="Alejar 3D">−</button>
+          <button type="button" id="ex2-btn-spin" class="ex2-zoom-btn" onclick="toggleSpinEx2()" title="Girar lentamente en 3D">⟳ Girar</button>
+          <button type="button" class="ex2-zoom-btn" onclick="resetZoomEx2('img')" title="Centrar vista 3D">Centrar</button>
+        </div>
+
+        <!-- Notificación flotante no intrusiva de Eliot -->
+        <div id="eliot-toast-2" class="ex2-eliot-toast" aria-live="polite">
+          <svg style="width:44px; height:44px; flex-shrink:0;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="42" y="6" width="16" height="9" rx="3" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2"/>
+            <rect x="45" y="13" width="10" height="5" fill="#1e293b"/>
+            <rect x="12" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+            <rect x="78" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+            <rect x="18" y="18" width="64" height="56" rx="24" fill="#f8fafc" stroke="#3b82f6" stroke-width="3"/>
+            <rect x="24" y="25" width="52" height="40" rx="16" fill="#0b0f19"/>
+            <path d="M31 35 Q37 31 43 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M57 35 Q63 31 69 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="37" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <circle cx="35" cy="43" r="2" fill="#ffffff"/>
+            <circle cx="63" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <circle cx="61" cy="43" r="2" fill="#ffffff"/>
+            <path d="M44 54 Q50 61 56 54 Z" fill="#f472b6" stroke="#38bdf8" stroke-width="1.5"/>
+            <circle cx="13" cy="76" r="9" fill="#f8fafc" stroke="#3b82f6" stroke-width="2.5"/>
+            <line x1="8" y1="68" x2="6" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <line x1="13" y1="67" x2="13" y2="60" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <line x1="18" y1="68" x2="20" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+            <rect x="30" y="75" width="40" height="20" rx="8" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2.5"/>
+            <rect x="42" y="80" width="16" height="10" rx="4" fill="#a855f7"/>
+          </svg>
+          <div style="font-size:0.78rem; line-height:1.35; color:#f1f5f9;">
+            <strong style="display:block; color:#10b981; font-family:'JetBrains Mono',monospace; font-size:0.74rem;">Eliot dice:</strong>
+            <span id="eliot-msg-text-2">¡Exacto! El vector colapsa al origen (0, 0, 0) en ℝ³.</span>
+          </div>
+        </div>
+
+        <div class="canvas-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro</span>
+        </div>
+      </div>
+
+      <!-- Controles de Rastreo (Dibujar Rastro, Deshacer, Limpiar) -->
+      <div class="ex2-trace-bar">
+        <label class="ex2-trace-toggle">
+          <input type="checkbox" id="ex2-trace-active" onchange="toggleTraceEx2()">
+          <span>Dibujar Rastro (<span class="math-font">ℝ² → ℝ³</span>)</span>
+        </label>
+        <div class="btn-group">
+          <button type="button" class="ex2-mini-btn" onclick="undoTraceEx2()">↶ Deshacer</button>
+          <button type="button" class="ex2-mini-btn" onclick="clearTraceEx2()">Limpiar</button>
+        </div>
+      </div>
+
+      <!-- Deslizadores fluidos con colores sincronizados -->
+      <div class="control-group" style="display:flex; flex-direction:column; gap:0.85rem;">
+        <div>
+          <div class="control-label">
+            <span class="ex2-cx" style="font-weight:700;">Componente <span class="math-var">x</span></span>
+            <span id="ex2-val-x" class="control-value ex2-cx">1.0</span>
+          </div>
+          <input type="range" id="ex2-slider-x" class="ex2-slider-x" min="-5" max="5" step="0.5" value="1">
+        </div>
+
+        <div>
+          <div class="control-label">
+            <span class="ex2-cy" style="font-weight:700;">Componente <span class="math-var">y</span></span>
+            <span id="ex2-val-y" class="control-value ex2-cy">1.0</span>
+          </div>
+          <input type="range" id="ex2-slider-y" class="ex2-slider-y" min="-5" max="5" step="0.5" value="1">
+        </div>
+      </div>
+
+      <!-- Caja de validación exacta -->
+      <div id="ex2-status-box" class="ex2-status-box is-invalid"></div>
+    </section>
+
+    <!-- PANEL 2: CODOMINIO 3D E IMAGEN im T -->
+    <section class="ex2-subpanel">
+      <div class="ex2-subpanel-header">
+        <h3 class="ex2-subpanel-title">2. Codominio <span class="math-font">ℝ³</span> — Imagen <span class="math-font" style="color: var(--neon-purple);">im <span class="math-var">T</span></span></h3>
+        <span class="badge badge-purple math-font">Arrastra para rotar 3D</span>
+      </div>
+
+      <div class="canvas-wrapper ex2-canvas-3d">
+        <canvas id="canvas2_img"></canvas>
+
+        <div class="ex2-zoom-controls">
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 1.2)" title="Acercar 3D">+</button>
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 0.83)" title="Alejar 3D">−</button>
+          <button type="button" class="ex2-zoom-btn" onclick="resetZoomEx2('img')" title="Centrar vista 3D">Centrar</button>
+        </div>
+
+        <div class="canvas-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span>Comp. <span class="math-var">z</span> / <span class="math-font">im <span class="math-var">T</span></span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro 3D</span>
+        </div>
+      </div>
+
+      <!-- Lectura en columnas de T(v) en R³ y Teorema Rango-Nulidad -->
+      <div id="ex2-img-readout" class="math-readout" style="border-left-color: var(--neon-purple);"></div>
+    </section>
+
+  </div>
+</article>
+
+    </main>
+  </div>
+ 
+
+  <script>
+    /* ==========================================================================
+       1. CONSTANTES DE ESTILO Y MOTOR GRÁFICO AUXILIAR (COMPARTIDO)
+       ========================================================================== */
+    const MATH_THEME = {
+      bg: '#0b0c10',
+      gridMinor: 'rgba(34, 39, 54, 0.55)',
+      gridMajor: '#222736',
+      axis: '#475569',
+      text: '#64748b',
+      blue: '#4f7df3',
+      cyan: '#18c5d9',
+      purple: '#a855f7',
+      green: '#10b981',
+      coral: '#f06565',
+      white: '#f1f5f9'
+    };
+
+    /**
+     * Inicializa un canvas con soporte HiDPI (Retina) y devuelve su contexto y métricas.
+     */
+    function setupHiDPICanvas(canvasId, scale = 44) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return null;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || 560;
+      const height = rect.height || 440;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      return {
+        canvas,
+        ctx,
+        width,
+        height,
+        scale,
+        origin: { x: width / 2, y: height / 2 }
+      };
+    }
+
+    /**
+     * Conversión de coordenadas matemáticas (x, y) a píxeles de pantalla.
+     */
+    function mathToScreen(x, y, origin, scale) {
+      return {
+        px: origin.x + x * scale,
+        py: origin.y - y * scale
+      };
+    }
+
+    /**
+     * Conversión de píxeles de pantalla a coordenadas matemáticas (x, y).
+     */
+    function screenToMath(px, py, origin, scale) {
+      return {
+        x: (px - origin.x) / scale,
+        y: (origin.y - py) / scale
+      };
+    }
+
+    /**
+     * Dibuja la cuadrícula cartesiana estándar y los ejes principales.
+     */
+    function drawBaseGrid(view, showNumbers = true) {
+      const { ctx, width, height, scale, origin } = view;
+      ctx.clearRect(0, 0, width, height);
+
+      const xMin = Math.floor(-origin.x / scale);
+      const xMax = Math.ceil((width - origin.x) / scale);
+      const yMin = Math.floor(-(height - origin.y) / scale);
+      const yMax = Math.ceil(origin.y / scale);
+
+      ctx.lineWidth = 1;
+
+      // Líneas verticales
+      for (let x = xMin; x <= xMax; x++) {
+        const { px } = mathToScreen(x, 0, origin, scale);
+        ctx.strokeStyle = x === 0 ? MATH_THEME.axis : MATH_THEME.gridMajor;
+        ctx.lineWidth = x === 0 ? 1.6 : 1;
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, height);
+        ctx.stroke();
+
+        if (showNumbers && x !== 0) {
+          ctx.fillStyle = MATH_THEME.text;
+          ctx.font = '11px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(x.toString(), px, origin.y + 15);
+        }
+      }
+
+      // Líneas horizontales
+      for (let y = yMin; y <= yMax; y++) {
+        const { py } = mathToScreen(0, y, origin, scale);
+        ctx.strokeStyle = y === 0 ? MATH_THEME.axis : MATH_THEME.gridMajor;
+        ctx.lineWidth = y === 0 ? 1.6 : 1;
+        ctx.beginPath();
+        ctx.moveTo(0, py);
+        ctx.lineTo(width, py);
+        ctx.stroke();
+
+        if (showNumbers && y !== 0) {
+          ctx.fillStyle = MATH_THEME.text;
+          ctx.font = '11px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(y.toString(), origin.x - 7, py + 4);
+        }
+      }
+    }
+
+    /**
+     * Dibuja una cuadrícula deformada por una matriz 2x2: [[a, b], [c, d]]
+     * donde T(x, y) = (a*x + b*y, c*x + d*y).
+     */
+    function drawTransformedGrid(view, matrix, color = 'rgba(24, 197, 217, 0.22)', range = 10) {
+      const { ctx, scale, origin } = view;
+      const [[a, b], [c, d]] = matrix;
+
+      const transform = (x, y) => mathToScreen(a * x + b * y, c * x + d * y, origin, scale);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+
+      for (let i = -range; i <= range; i++) {
+        // Líneas paralelas al eje Y transformado
+        const p1 = transform(i, -range);
+        const p2 = transform(i, range);
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+
+        // Líneas paralelas al eje X transformado
+        const q1 = transform(-range, i);
+        const q2 = transform(range, i);
+        ctx.beginPath();
+        ctx.moveTo(q1.px, q1.py);
+        ctx.lineTo(q2.px, q2.py);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    /**
+     * Dibuja el paralelogramo generado por los vectores base transformados (área = |det(A)|).
+     */
+    function drawUnitSquare(view, matrix, fillColor = 'rgba(168, 85, 247, 0.16)', strokeColor = '#a855f7') {
+      const { ctx, scale, origin } = view;
+      const [[a, b], [c, d]] = matrix;
+
+      const p0 = mathToScreen(0, 0, origin, scale);
+      const p1 = mathToScreen(a, c, origin, scale);
+      const p2 = mathToScreen(a + b, c + d, origin, scale);
+      const p3 = mathToScreen(b, d, origin, scale);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(p0.px, p0.py);
+      ctx.lineTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.lineTo(p3.px, p3.py);
+      ctx.closePath();
+
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = strokeColor;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    /**
+     * Dibuja un vector desde (x0, y0) hasta (x1, y1) con punta de flecha y etiqueta opcional.
+     */
+  /**
+     * Garantiza renderizado fluido a 60/120 FPS al arrastrar deslizadores.
+     */
+    function createSmoothRenderer(renderFn) {
+      let rafId = null;
+      return function scheduleRender() {
+        if (rafId !== null) return;
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          renderFn();
+        });
+      };
+    }
+
+    /**
+     * Dibuja un vector desde (x0, y0) hasta (x1, y1) con punta de flecha y su nombre matemático visible.
+     */
+    function drawVector(view, x1, y1, color = MATH_THEME.blue, label = 'v⃗', x0 = 0, y0 = 0, dashed = false) {
+      const { ctx, width, height, scale, origin } = view;
+      const start = mathToScreen(x0, y0, origin, scale);
+      const end = mathToScreen(x1, y1, origin, scale);
+
+      const dx = end.px - start.px;
+      const dy = end.py - start.py;
+      const len = Math.hypot(dx, dy);
+      if (len < 1) return;
+
+      const angle = Math.atan2(dy, dx);
+      const headLen = Math.min(11, len * 0.35);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2.5;
+      if (dashed) ctx.setLineDash([5, 4]);
+
+      ctx.beginPath();
+      ctx.moveTo(start.px, start.py);
+      ctx.lineTo(end.px - Math.cos(angle) * (headLen * 0.6), end.py - Math.sin(angle) * (headLen * 0.6));
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(end.px, end.py);
+      ctx.lineTo(
+        end.px - headLen * Math.cos(angle - Math.PI / 6),
+        end.py - headLen * Math.sin(angle - Math.PI / 6)
+      );
+      ctx.lineTo(
+        end.px - headLen * Math.cos(angle + Math.PI / 6),
+        end.py - headLen * Math.sin(angle + Math.PI / 6)
+      );
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = 'italic bold 14px "STIX Two Text", "Cambria Math", serif';
+        const metrics = ctx.measureText(label);
+        const padX = 5;
+        const boxW = metrics.width + padX * 2;
+        const boxH = 20;
+
+        let lx = end.px + Math.cos(angle) * 16 - boxW / 2;
+        let ly = end.py + Math.sin(angle) * 16 - boxH / 2;
+
+        lx = Math.max(6, Math.min(width - boxW - 6, lx));
+        ly = Math.max(6, Math.min(height - boxH - 6, ly));
+
+        ctx.fillStyle = 'rgba(11, 12, 16, 0.85)';
+        ctx.beginPath();
+        ctx.roundRect(lx, ly, boxW, boxH, 5);
+        ctx.fill();
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, lx + boxW / 2, ly + boxH / 2 + 1);
+      }
+      ctx.restore();
+    }
+
+    /* ==========================================================================
+       CONTROL DE NAVEGACIÓN DE LA PANTALLA PRINCIPAL
+       ========================================================================== */
+    function openCategoryView(category) {
+      const menu = document.getElementById('main-menu-screen');
+      const viewR2R2 = document.getElementById('view-r2-r2');
+      const viewR2R3 = document.getElementById('view-r2-r3');
+
+      menu.classList.add('view-hidden');
+      viewR2R2.classList.add('view-hidden');
+      viewR2R3.classList.add('view-hidden');
+
+      if (category === 'r2-r2') {
+        viewR2R2.classList.remove('view-hidden');
+      } else if (category === 'r2-r3') {
+        viewR2R3.classList.remove('view-hidden');
+      }
+
+      window.dispatchEvent(new Event('resize'));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function backToMainMenu() {
+      document.getElementById('view-r2-r2').classList.add('view-hidden');
+      document.getElementById('view-r2-r3').classList.add('view-hidden');
+      document.getElementById('main-menu-screen').classList.remove('view-hidden');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function initMainMenu() {
+      const btnR2R2 = document.getElementById('btn-open-r2-r2');
+      const btnR2R3 = document.getElementById('btn-open-r2-r3');
+
+      if (btnR2R2) btnR2R2.addEventListener('click', () => openCategoryView('r2-r2'));
+      if (btnR2R3) btnR2R3.addEventListener('click', () => openCategoryView('r2-r3'));
+    }
+    /* ==========================================================================
+       FONDO FLUIDO INTERACTIVO (NÚCLEO, IMAGEN Y TRANSFORMACIONES LINEALES)
+       ========================================================================== */
+    /* ==========================================================================
+       FONDO FLUIDO INTERACTIVO (COBERTURA TOTAL Y COLISIÓN PRECISA POR TEXTO)
+       ========================================================================== */
+    function initMenuBg() {
+      const canvas = document.getElementById('menu-bg-canvas');
+      const menuSection = document.getElementById('main-menu-screen');
+      if (!canvas || !menuSection) return;
+
+      const ctx = canvas.getContext('2d');
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      let dpr = window.devicePixelRatio || 1;
+
+      const symbols = [
+        'nu T', 'im T', 'nu(T)', 'im', 'T(v⃗)', 'ℝ²', 'ℝ³',
+        'A·x⃗ = 0⃗', 'dim', 'λ', 'î', 'ĵ', '→', '0⃗',
+        'v⃗', 'w⃗', 'T', '⊕', '∈', 'det(A)', '[T]',
+        'T: ℝ² → ℝ³', 'T: ℝ² → ℝ²', 'nul(A)', 'rang(A)'
+      ];
+
+      const palette = [
+        'rgba(24, 197, 217, 0.88)',  // Cian neón
+        'rgba(79, 125, 243, 0.88)',  // Azul neón
+        'rgba(168, 85, 247, 0.85)',  // Púrpura neón
+        'rgba(56, 189, 248, 0.72)',  // Celeste
+        'rgba(129, 140, 248, 0.68)'  // Índigo
+      ];
+
+      const mouse = {
+        x: -9999,
+        y: -9999,
+        vx: 0,
+        vy: 0,
+        active: false
+      };
+
+      let particles = [];
+
+      function resizeMenuCanvas() {
+        const prevW = width || window.innerWidth;
+        const prevH = height || window.innerHeight;
+
+        width = window.innerWidth;
+        height = window.innerHeight;
+        dpr = window.devicePixelRatio || 1;
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        ctx.fillStyle = '#0b0c10';
+        ctx.fillRect(0, 0, width, height);
+
+        if (particles.length > 0 && prevW > 0 && prevH > 0) {
+          for (let i = 0; i < particles.length; i++) {
+            particles[i].x = (particles[i].x / prevW) * width;
+            particles[i].y = (particles[i].y / prevH) * height;
+          }
+        }
+      }
+
+      function createParticles() {
+        particles = [];
+        // Distribución en cuadrícula uniforme para cubrir centro y ambos laterales
+        const cols = width < 768 ? 7 : 12;
+        const rows = width < 768 ? 7 : 8;
+        const cellW = width / cols;
+        const cellH = height / rows;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const text = symbols[Math.floor(Math.random() * symbols.length)];
+            const isBold = Math.random() > 0.4;
+            const size = Math.floor(14 + Math.random() * 13);
+            const font = `${isBold ? 'italic bold' : 'italic'} ${size}px "STIX Two Text", "Cambria Math", serif`;
+
+            ctx.font = font;
+            const textWidth = ctx.measureText(text).width;
+
+            const x = c * cellW + Math.random() * Math.max(10, cellW - textWidth * 0.4);
+            const y = r * cellH + size + Math.random() * Math.max(10, cellH - size);
+
+            particles.push({
+              text,
+              x,
+              y,
+              width: textWidth,
+              size,
+              vx: (Math.random() - 0.5) * 0.2,
+              vy: (Math.random() - 0.5) * 0.2,
+              phase: Math.random() * Math.PI * 2,
+              font,
+              color: palette[Math.floor(Math.random() * palette.length)]
+            });
+          }
+        }
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        if (menuSection.classList.contains('view-hidden')) return;
+
+        const nx = e.clientX;
+        const ny = e.clientY;
+
+        if (mouse.active) {
+          mouse.vx = (nx - mouse.x) * 0.4;
+          mouse.vy = (ny - mouse.y) * 0.4;
+        }
+        mouse.x = nx;
+        mouse.y = ny;
+        mouse.active = true;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.vx = 0;
+        mouse.vy = 0;
+      });
+
+      window.addEventListener('resize', () => {
+        if (!menuSection.classList.contains('view-hidden')) {
+          resizeMenuCanvas();
+        }
+      });
+
+      function animateMenuBg() {
+        requestAnimationFrame(animateMenuBg);
+        if (menuSection.classList.contains('view-hidden')) return;
+
+        // Estela fluida tipo agua
+        ctx.fillStyle = 'rgba(11, 12, 16, 0.23)';
+        ctx.fillRect(0, 0, width, height);
+
+        const radius = 145;
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.phase += 0.012;
+
+          // Flotación suave en el agua
+          p.vx += Math.cos(p.phase) * 0.0035;
+          p.vy += Math.sin(p.phase) * 0.0035;
+
+          // Detección contra toda la caja del símbolo (no solo una esquina)
+          if (mouse.active) {
+            const boxLeft = p.x;
+            const boxRight = p.x + p.width;
+            const boxTop = p.y - p.size * 0.85;
+            const boxBottom = p.y + p.size * 0.2;
+
+            const closestX = Math.max(boxLeft, Math.min(mouse.x, boxRight));
+            const closestY = Math.max(boxTop, Math.min(mouse.y, boxBottom));
+            const edgeDist = Math.hypot(closestX - mouse.x, closestY - mouse.y);
+
+            if (edgeDist < radius) {
+              const centerX = p.x + p.width * 0.5;
+              const centerY = p.y - p.size * 0.35;
+              let dx = centerX - mouse.x;
+              let dy = centerY - mouse.y;
+              const centerDist = Math.hypot(dx, dy) || 1;
+
+              dx /= centerDist;
+              dy /= centerDist;
+
+              const force = Math.pow(1 - edgeDist / radius, 1.7);
+              p.vx += dx * force * 2.4 + mouse.vx * force * 0.22;
+              p.vy += dy * force * 2.4 + mouse.vy * force * 0.22;
+            }
+          }
+
+          // Fricción viscosa: frena suave y conserva la posición desplazada
+          p.vx *= 0.935;
+          p.vy *= 0.935;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Envoltura continua en bordes laterales y verticales
+          if (p.x + p.width < -10) p.x = width + 5;
+          if (p.x > width + 10) p.x = -p.width - 5;
+          if (p.y < -10) p.y = height + p.size;
+          if (p.y - p.size > height + 10) p.y = 5;
+
+          ctx.font = p.font;
+          ctx.fillStyle = p.color;
+          ctx.fillText(p.text, p.x, p.y);
+        }
+
+        mouse.vx *= 0.85;
+        mouse.vy *= 0.85;
+      }
+
+      resizeMenuCanvas();
+      createParticles();
+      animateMenuBg();
+    }
+    /* ==========================================================================
+       2. MÓDULOS DE EJERCICIOS (PEGAR NUEVAS FUNCIONES DE EJERCICIOS AQUÍ ABAJO)
+       ========================================================================== */
+/* ==========================================================================
+       MÓDULO 1: NÚCLEO E IMAGEN DE TRANSFORMACIÓN LINEAL (R² -> R²)
+       ========================================================================== */
+   const stateEx1 = {
+      a: 2,
+      b: 4,
+      c: 1,
+      d: 2,
+      x: 1.0,
+      y: 1.5,
+      scaleKer: 36,
+      scaleImg: 36,
+      maxRange: 5,
+      dragging: false
+    };
+
+    function syncSliderBoundsEx1() {
+      const sliderX = document.getElementById('ex1-slider-x');
+      const sliderY = document.getElementById('ex1-slider-y');
+      if (!sliderX || !sliderY) return;
+
+      const dynamicMax = Math.max(5, Math.min(20, Math.floor(195 / stateEx1.scaleKer)));
+      stateEx1.maxRange = dynamicMax;
+
+      sliderX.min = -dynamicMax;
+      sliderX.max = dynamicMax;
+      sliderY.min = -dynamicMax;
+      sliderY.max = dynamicMax;
+    }
+
+    function zoomEx1(target, factor) {
+      if (target === 'ker') {
+        stateEx1.scaleKer = Math.max(12, Math.min(72, stateEx1.scaleKer * factor));
+        syncSliderBoundsEx1();
+      } else if (target === 'img') {
+        stateEx1.scaleImg = Math.max(12, Math.min(72, stateEx1.scaleImg * factor));
+      }
+      updateEx1();
+    }
+
+    function resetZoomEx1(target) {
+      if (target === 'ker') {
+        stateEx1.scaleKer = 36;
+        syncSliderBoundsEx1();
+      } else if (target === 'img') {
+        stateEx1.scaleImg = 36;
+      }
+      updateEx1();
+    }
+
+    function renderFormulaInputsEx1() {
+      const container = document.getElementById('ex1-dynamic-formula');
+      const modeEl = document.getElementById('ex1-structure-mode');
+      if (!container || !modeEl) return;
+
+      const mode = modeEl.value;
+      const { a, b, c, d } = stateEx1;
+
+      if (mode === 'matrix') {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <span class="comp-x-color" style="font-weight:700;">x</span>
+              <span class="comp-y-color" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.45rem; padding:0.25rem 0.35rem;">
+              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}" title="a">
+              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}" title="b">
+              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}" title="c">
+              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}" title="d">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <span class="comp-x-color" style="font-weight:700;">x</span>
+              <span class="comp-y-color" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      } else if (mode === 'columns') {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <span class="comp-x-color" style="font-weight:700;">x</span>
+              <span class="comp-y-color" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <span class="comp-x-color" style="font-weight:700;">x</span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}" title="a">
+              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}" title="c">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>+</span>
+          <span class="comp-y-color" style="font-weight:700;">y</span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}" title="b">
+              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}" title="d">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <span class="comp-x-color" style="font-weight:700;">x</span>
+              <span class="comp-y-color" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex1-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex1-col-stack">
+              <div>
+                <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}">
+                <span class="comp-x-color" style="font-weight:700;">x</span> +
+                <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}">
+                <span class="comp-y-color" style="font-weight:700;">y</span>
+              </div>
+              <div>
+                <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}">
+                <span class="comp-x-color" style="font-weight:700;">x</span> +
+                <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}">
+                <span class="comp-y-color" style="font-weight:700;">y</span>
+              </div>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      }
+
+      const scheduleDrawEx1 = createSmoothRenderer(updateEx1);
+      ['ex1-a', 'ex1-b', 'ex1-c', 'ex1-d'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', scheduleDrawEx1);
+      });
+    }
+
+    function changeStructureEx1() {
+      renderFormulaInputsEx1();
+      updateEx1();
+    }
+
+    function setPresetEx1(a, b, c, d) {
+      stateEx1.a = a;
+      stateEx1.b = b;
+      stateEx1.c = c;
+      stateEx1.d = d;
+      renderFormulaInputsEx1();
+      updateEx1();
+    }
+
+    function updateEx1() {
+      const elA = document.getElementById('ex1-a');
+      const elB = document.getElementById('ex1-b');
+      const elC = document.getElementById('ex1-c');
+      const elD = document.getElementById('ex1-d');
+
+      const a = elA ? (parseFloat(elA.value) || 0) : stateEx1.a;
+      const b = elB ? (parseFloat(elB.value) || 0) : stateEx1.b;
+      const c = elC ? (parseFloat(elC.value) || 0) : stateEx1.c;
+      const d = elD ? (parseFloat(elD.value) || 0) : stateEx1.d;
+
+      const sliderX = document.getElementById('ex1-slider-x');
+      const sliderY = document.getElementById('ex1-slider-y');
+      if (!sliderX || !sliderY) return;
+
+      const x = Math.round(parseFloat(sliderX.value) * 10) / 10;
+      const y = Math.round(parseFloat(sliderY.value) * 10) / 10;
+
+      stateEx1.a = a;
+      stateEx1.b = b;
+      stateEx1.c = c;
+      stateEx1.d = d;
+      stateEx1.x = x;
+      stateEx1.y = y;
+
+      document.getElementById('ex1-val-x').textContent = x.toFixed(1);
+      document.getElementById('ex1-val-y').textContent = y.toFixed(1);
+
+      drawEx1();
+    }
+
+    function drawEx1() {
+      const viewKer = setupHiDPICanvas('canvas1_ker', stateEx1.scaleKer);
+      const viewImg = setupHiDPICanvas('canvas1_img', stateEx1.scaleImg);
+      if (!viewKer || !viewImg) return;
+
+      const { a, b, c, d, x, y } = stateEx1;
+
+      const tx = Math.round((a * x + b * y) * 1e6) / 1e6;
+      const ty = Math.round((c * x + d * y) * 1e6) / 1e6;
+      const det = Math.round((a * d - b * c) * 1e6) / 1e6;
+
+      const isZeroMatrix = (a === 0 && b === 0 && c === 0 && d === 0);
+      const isRank1 = (!isZeroMatrix && det === 0);
+      const isRank2 = (det !== 0);
+
+      const isExactZeroOutput = (tx === 0 && ty === 0);
+      let isKernelValid = false;
+
+      if (isRank2) {
+        isKernelValid = (x === 0 && y === 0);
+      } else {
+        isKernelValid = isExactZeroOutput && (x !== 0 || y !== 0);
+      }
+
+      /* 1. PANEL IZQUIERDO: DOMINIO Y NÚCLEO nu T */
+      drawBaseGrid(viewKer, true);
+
+      if (isKernelValid) {
+        const ctxK = viewKer.ctx;
+        ctxK.save();
+        if (isZeroMatrix) {
+          ctxK.fillStyle = 'rgba(16, 185, 129, 0.10)';
+          ctxK.fillRect(0, 0, viewKer.width, viewKer.height);
+        } else if (isRank1) {
+          const dirX = (Math.abs(a) + Math.abs(b) > 0) ? -b : -d;
+          const dirY = (Math.abs(a) + Math.abs(b) > 0) ? a : c;
+          const norm = Math.hypot(dirX, dirY) || 1;
+          const ux = (dirX / norm) * 50;
+          const uy = (dirY / norm) * 50;
+
+          const pStart = mathToScreen(-ux, -uy, viewKer.origin, viewKer.scale);
+          const pEnd = mathToScreen(ux, uy, viewKer.origin, viewKer.scale);
+
+          ctxK.strokeStyle = '#10b981';
+          ctxK.lineWidth = 2.5;
+          ctxK.setLineDash([7, 5]);
+          ctxK.beginPath();
+          ctxK.moveTo(pStart.px, pStart.py);
+          ctxK.lineTo(pEnd.px, pEnd.py);
+          ctxK.stroke();
+        }
+        ctxK.restore();
+      }
+
+      const p0 = mathToScreen(0, 0, viewKer.origin, viewKer.scale);
+      const pxComp = mathToScreen(x, 0, viewKer.origin, viewKer.scale);
+      const pVec = mathToScreen(x, y, viewKer.origin, viewKer.scale);
+
+      viewKer.ctx.save();
+      viewKer.ctx.setLineDash([4, 4]);
+      viewKer.ctx.lineWidth = 2;
+
+      if (x !== 0) {
+        viewKer.ctx.strokeStyle = '#18c5d9';
+        viewKer.ctx.beginPath();
+        viewKer.ctx.moveTo(p0.px, p0.py);
+        viewKer.ctx.lineTo(pxComp.px, pxComp.py);
+        viewKer.ctx.stroke();
+      }
+
+      if (y !== 0) {
+        viewKer.ctx.strokeStyle = '#f06565';
+        viewKer.ctx.beginPath();
+        viewKer.ctx.moveTo(pxComp.px, pxComp.py);
+        viewKer.ctx.lineTo(pVec.px, pVec.py);
+        viewKer.ctx.stroke();
+      }
+      viewKer.ctx.restore();
+
+      const vecColor = isKernelValid ? '#10b981' : '#4f7df3';
+      drawVector(viewKer, x, y, vecColor, 'v⃗');
+
+      viewKer.ctx.save();
+      viewKer.ctx.beginPath();
+      viewKer.ctx.arc(pVec.px, pVec.py, 7, 0, Math.PI * 2);
+      viewKer.ctx.fillStyle = isKernelValid ? '#10b981' : '#f06565';
+      viewKer.ctx.fill();
+      viewKer.ctx.lineWidth = 2;
+      viewKer.ctx.strokeStyle = '#ffffff';
+      viewKer.ctx.stroke();
+      viewKer.ctx.restore();
+
+      const statusBox = document.getElementById('ex1-status-box');
+      const eliotToast = document.getElementById('eliot-toast-1');
+      const eliotText = document.getElementById('eliot-msg-text-1');
+
+      let kernelDesc = '';
+      if (isZeroMatrix) {
+        kernelDesc = 'nu T = ℝ² (Todo el plano)';
+      } else if (isRank2) {
+        kernelDesc = 'nu T = { (0, 0) } (Solo el origen)';
+      } else {
+        if (Math.abs(b) > 0) {
+          const slope = Math.round((-a / b) * 100) / 100;
+          kernelDesc = `Recta: y = ${slope}x`;
+        } else {
+          kernelDesc = 'Recta: x = 0';
+        }
+      }
+
+      if (isKernelValid) {
+        statusBox.className = 'ex1-status-box is-valid';
+        statusBox.innerHTML = `
+          <div><strong>✓ ¡NÚCLEO ENCONTRADO CON PRECISIÓN EXACTA!</strong></div>
+          <div style="margin-top:0.35rem;">
+            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${x.toFixed(1)}</span>, <span class="comp-y-color">${y.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0)
+          </div>
+          <div>Subespacio: <strong>${kernelDesc}</strong></div>
+        `;
+        eliotText.textContent = isRank2
+          ? '¡Exacto! Como det(A) ≠ 0, el origen (0,0) es el único vector en nu T.'
+          : `¡Excelente! v = (${x.toFixed(1)}, ${y.toFixed(1)}) colapsa exactamente al vector nulo.`;
+        eliotToast.classList.add('visible');
+      } else {
+        statusBox.className = 'ex1-status-box is-invalid';
+        const hintMsg = (!isRank2 && x === 0 && y === 0)
+          ? 'El origen (0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
+          : 'Ajusta los deslizadores o arrastra el punto hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0).';
+        statusBox.innerHTML = `
+          <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
+          <div style="margin-top:0.35rem;">
+            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${x.toFixed(1)}</span>, <span class="comp-y-color">${y.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="comp-x-color">${tx.toFixed(1)}</span>, <span class="comp-y-color">${ty.toFixed(1)}</span>)
+          </div>
+          <div style="opacity:0.88;">${hintMsg}</div>
+        `;
+        eliotToast.classList.remove('visible');
+      }
+
+      /* 2. PANEL DERECHO: CODOMINIO E IMAGEN im T */
+      drawBaseGrid(viewImg, true);
+
+      const ctxI = viewImg.ctx;
+      ctxI.save();
+      if (isRank2) {
+        const gridSpan = Math.ceil(320 / stateEx1.scaleImg);
+        drawTransformedGrid(viewImg, [[a, b], [c, d]], 'rgba(168, 85, 247, 0.22)', gridSpan);
+        drawUnitSquare(viewImg, [[a, b], [c, d]], 'rgba(168, 85, 247, 0.14)', '#a855f7');
+      } else if (isRank1) {
+        const colX = (Math.abs(a) + Math.abs(c) > 0) ? a : b;
+        const colY = (Math.abs(a) + Math.abs(c) > 0) ? c : d;
+        const norm = Math.hypot(colX, colY) || 1;
+        const ux = (colX / norm) * 50;
+        const uy = (colY / norm) * 50;
+
+        const pStart = mathToScreen(-ux, -uy, viewImg.origin, viewImg.scale);
+        const pEnd = mathToScreen(ux, uy, viewImg.origin, viewImg.scale);
+
+        ctxI.strokeStyle = '#a855f7';
+        ctxI.lineWidth = 3.5;
+        ctxI.beginPath();
+        ctxI.moveTo(pStart.px, pStart.py);
+        ctxI.lineTo(pEnd.px, pEnd.py);
+        ctxI.stroke();
+      }
+      ctxI.restore();
+
+      drawVector(viewImg, a, c, '#18c5d9', 'T(î)', 0, 0, true);
+      drawVector(viewImg, b, d, '#f06565', 'T(ĵ)', 0, 0, true);
+
+      const ip0 = mathToScreen(0, 0, viewImg.origin, viewImg.scale);
+      const ipx = mathToScreen(tx, 0, viewImg.origin, viewImg.scale);
+      const ipv = mathToScreen(tx, ty, viewImg.origin, viewImg.scale);
+
+      ctxI.save();
+      ctxI.setLineDash([4, 4]);
+      ctxI.lineWidth = 2;
+      if (tx !== 0) {
+        ctxI.strokeStyle = '#18c5d9';
+        ctxI.beginPath();
+        ctxI.moveTo(ip0.px, ip0.py);
+        ctxI.lineTo(ipx.px, ipx.py);
+        ctxI.stroke();
+      }
+      if (ty !== 0) {
+        ctxI.strokeStyle = '#f06565';
+        ctxI.beginPath();
+        ctxI.moveTo(ipx.px, ipx.py);
+        ctxI.lineTo(ipv.px, ipv.py);
+        ctxI.stroke();
+      }
+      ctxI.restore();
+
+      if (tx !== 0 || ty !== 0) {
+        drawVector(viewImg, tx, ty, '#10b981', 'T(v⃗)');
+      } else {
+        ctxI.save();
+        ctxI.beginPath();
+        ctxI.arc(ip0.px, ip0.py, 6, 0, Math.PI * 2);
+        ctxI.fillStyle = '#10b981';
+        ctxI.fill();
+        ctxI.restore();
+      }
+
+      let rank = isZeroMatrix ? 0 : (isRank1 ? 1 : 2);
+      let nullity = 2 - rank;
+      let imgDesc = '';
+      let imgBasisHTML = '';
+
+      if (rank === 0) {
+        imgDesc = 'im T = { <span class="vec-arrow">0</span> } (Solo el origen)';
+        imgBasisHTML = 'Base = ∅';
+      } else if (rank === 1) {
+        const colX = (Math.abs(a) + Math.abs(c) > 0) ? a : b;
+        const colY = (Math.abs(a) + Math.abs(c) > 0) ? c : d;
+        imgDesc = colX !== 0
+          ? `Recta: y = ${Math.round((colY / colX) * 100) / 100}x`
+          : 'Recta: x = 0';
+        imgBasisHTML = `Base = { (${colX}, ${colY})ᵀ }`;
+      } else {
+        imgDesc = 'im T = ℝ² (Todo el plano)';
+        imgBasisHTML = `Base = { (${a}, ${c})ᵀ, (${b}, ${d})ᵀ }`;
+      }
+
+      document.getElementById('ex1-img-readout').innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+          <div class="ex1-col-equation" style="font-size:0.98rem;">
+            <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+            <div class="ex1-bracket-box">
+              <span class="matrix-bracket left"></span>
+              <div class="col-vector-cells">
+                <span class="comp-x-color">${tx.toFixed(1)}</span>
+                <span class="comp-y-color">${ty.toFixed(1)}</span>
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          </div>
+          <div style="font-size:0.82rem;">
+            <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgDesc}</span></div>
+            <div><strong>${imgBasisHTML}</strong></div>
+          </div>
+        </div>
+        <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
+          Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${rank} + ${nullity} = 2</strong>
+        </div>
+      `;
+    }
+
+    function initEx1() {
+      const canvasKer = document.getElementById('canvas1_ker');
+      const canvasImg = document.getElementById('canvas1_img');
+      if (!canvasKer) return;
+
+      const scheduleDrawEx1 = createSmoothRenderer(updateEx1);
+
+      const sliderX = document.getElementById('ex1-slider-x');
+      const sliderY = document.getElementById('ex1-slider-y');
+      if (sliderX) sliderX.addEventListener('input', scheduleDrawEx1);
+      if (sliderY) sliderY.addEventListener('input', scheduleDrawEx1);
+
+      function handlePointerMoveEx1(clientX, clientY) {
+        const rect = canvasKer.getBoundingClientRect();
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+        const mathPt = screenToMath(px, py, origin, stateEx1.scaleKer);
+
+        const limit = stateEx1.maxRange;
+        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * 2) / 2));
+        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * 2) / 2));
+
+        sliderX.value = clampedX;
+        sliderY.value = clampedY;
+        scheduleDrawEx1();
+      }
+
+      canvasKer.addEventListener('pointerdown', (e) => {
+        stateEx1.dragging = true;
+        canvasKer.setPointerCapture(e.pointerId);
+        handlePointerMoveEx1(e.clientX, e.clientY);
+      });
+
+      canvasKer.addEventListener('pointermove', (e) => {
+        if (!stateEx1.dragging) return;
+        handlePointerMoveEx1(e.clientX, e.clientY);
+      });
+
+      canvasKer.addEventListener('pointerup', (e) => {
+        stateEx1.dragging = false;
+        if (canvasKer.hasPointerCapture(e.pointerId)) {
+          canvasKer.releasePointerCapture(e.pointerId);
+        }
+      });
+
+      // Zoom fluido con la rueda del ratón en ambas gráficas
+      canvasKer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx1('ker', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
+
+      if (canvasImg) {
+        canvasImg.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          zoomEx1('img', e.deltaY < 0 ? 1.12 : 0.89);
+        }, { passive: false });
+      }
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => scheduleDrawEx1());
+        ro.observe(canvasKer);
+      }
+
+      window.addEventListener('resize', scheduleDrawEx1);
+      syncSliderBoundsEx1();
+      renderFormulaInputsEx1();
+      updateEx1();
+    }
+    /* ==========================================================================
+       MÓDULO 2: NÚCLEO 2D E IMAGEN 3D CON RELIEVE Y RASTREO (R² -> R³)
+       ========================================================================== */
+   /* ==========================================================================
+       MÓDULO 2: NÚCLEO 2D E IMAGEN 3D CON RELIEVE, GIRO CONTINUO Y RASTREO (R² -> R³)
+       ========================================================================== */
+    const stateEx2 = {
+      a1: 1, b1: 2,
+      a2: 2, b2: 4,
+      a3: -1, b3: -2,
+      x: 1.0,
+      y: 1.0,
+      scaleKer: 36,
+      maxRange: 5,
+      zoom3D: 38,
+      yaw: -0.62,
+      pitch: 0.42,
+      autoSpin: false,
+      spinRafId: null,
+      dragging2D: false,
+      dragging3D: false,
+      lastMouseX: 0,
+      lastMouseY: 0,
+      traceEnabled: false,
+      traces: [],
+      currentStroke: null,
+      hoveredTrace2D: null,
+      hoveredTrace3D: null,
+      projectedTrace3D: []
+    };
+
+    function syncSliderBoundsEx2() {
+      const sliderX = document.getElementById('ex2-slider-x');
+      const sliderY = document.getElementById('ex2-slider-y');
+      if (!sliderX || !sliderY) return;
+
+      const dynamicMax = Math.max(5, Math.min(20, Math.floor(195 / stateEx2.scaleKer)));
+      stateEx2.maxRange = dynamicMax;
+      sliderX.min = -dynamicMax;
+      sliderX.max = dynamicMax;
+      sliderY.min = -dynamicMax;
+      sliderY.max = dynamicMax;
+    }
+
+    function setSpinStateEx2(active) {
+      stateEx2.autoSpin = active;
+      const btn = document.getElementById('ex2-btn-spin');
+      if (btn) btn.classList.toggle('active', active);
+
+      if (active && !stateEx2.spinRafId) {
+        const stepSpin = () => {
+          if (!stateEx2.autoSpin) {
+            stateEx2.spinRafId = null;
+            return;
+          }
+          const viewR2R3 = document.getElementById('view-r2-r3');
+          if (viewR2R3 && !viewR2R3.classList.contains('view-hidden') && !stateEx2.dragging3D) {
+            stateEx2.yaw += 0.0055;
+            drawEx2();
+          }
+          stateEx2.spinRafId = requestAnimationFrame(stepSpin);
+        };
+        stateEx2.spinRafId = requestAnimationFrame(stepSpin);
+      } else if (!active && stateEx2.spinRafId) {
+        cancelAnimationFrame(stateEx2.spinRafId);
+        stateEx2.spinRafId = null;
+      }
+    }
+
+    function toggleSpinEx2() {
+      setSpinStateEx2(!stateEx2.autoSpin);
+    }
+
+    function zoomEx2(target, factor) {
+      if (target === 'ker') {
+        stateEx2.scaleKer = Math.max(12, Math.min(72, stateEx2.scaleKer * factor));
+        syncSliderBoundsEx2();
+      } else if (target === 'img') {
+        stateEx2.zoom3D = Math.max(14, Math.min(90, stateEx2.zoom3D * factor));
+      }
+      updateEx2();
+    }
+
+    function resetZoomEx2(target) {
+      if (target === 'ker') {
+        stateEx2.scaleKer = 36;
+        syncSliderBoundsEx2();
+      } else if (target === 'img') {
+        stateEx2.zoom3D = 38;
+        stateEx2.yaw = -0.62;
+        stateEx2.pitch = 0.42;
+      }
+      updateEx2();
+    }
+
+    function toggleTraceEx2() {
+      const chk = document.getElementById('ex2-trace-active');
+      stateEx2.traceEnabled = chk ? chk.checked : false;
+      if (stateEx2.traceEnabled) {
+        stateEx2.traces.push([{ x: stateEx2.x, y: stateEx2.y }]);
+      }
+      updateEx2();
+    }
+
+    function undoTraceEx2() {
+      if (stateEx2.traces.length > 0) {
+        stateEx2.traces.pop();
+        stateEx2.hoveredTrace2D = null;
+        stateEx2.hoveredTrace3D = null;
+        updateEx2();
+      }
+    }
+
+    function clearTraceEx2() {
+      stateEx2.traces = [];
+      stateEx2.currentStroke = null;
+      stateEx2.hoveredTrace2D = null;
+      stateEx2.hoveredTrace3D = null;
+      updateEx2();
+    }
+
+    function recordTracePointEx2(x, y, isNewStroke = false) {
+      if (!stateEx2.traceEnabled) return;
+      if (isNewStroke || stateEx2.traces.length === 0) {
+        stateEx2.currentStroke = [{ x, y }];
+        stateEx2.traces.push(stateEx2.currentStroke);
+      } else {
+        const stroke = stateEx2.traces[stateEx2.traces.length - 1];
+        const last = stroke[stroke.length - 1];
+        if (!last || last.x !== x || last.y !== y) {
+          stroke.push({ x, y });
+        }
+      }
+    }
+
+    function renderFormulaInputsEx2() {
+      const container = document.getElementById('ex2-dynamic-formula');
+      const modeEl = document.getElementById('ex2-structure-mode');
+      if (!container || !modeEl) return;
+
+      const mode = modeEl.value;
+      const { a1, b1, a2, b2, a3, b3 } = stateEx2;
+
+      if (mode === 'matrix') {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <span class="ex2-cx" style="font-weight:700;">x</span>
+              <span class="ex2-cy" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.4rem; padding:0.25rem 0.35rem;">
+              <input type="number" step="0.5" id="ex2-a1" class="ex2-coeff-input" value="${a1}">
+              <input type="number" step="0.5" id="ex2-b1" class="ex2-coeff-input" value="${b1}">
+              <input type="number" step="0.5" id="ex2-a2" class="ex2-coeff-input" value="${a2}">
+              <input type="number" step="0.5" id="ex2-b2" class="ex2-coeff-input" value="${b2}">
+              <input type="number" step="0.5" id="ex2-a3" class="ex2-coeff-input" value="${a3}">
+              <input type="number" step="0.5" id="ex2-b3" class="ex2-coeff-input" value="${b3}">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <span class="ex2-cx" style="font-weight:700;">x</span>
+              <span class="ex2-cy" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      } else if (mode === 'columns') {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <span class="ex2-cx" style="font-weight:700;">x</span>
+              <span class="ex2-cy" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <span class="ex2-cx" style="font-weight:700;">x</span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <input type="number" step="0.5" id="ex2-a1" class="ex2-coeff-input" value="${a1}">
+              <input type="number" step="0.5" id="ex2-a2" class="ex2-coeff-input" value="${a2}">
+              <input type="number" step="0.5" id="ex2-a3" class="ex2-coeff-input" value="${a3}">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>+</span>
+          <span class="ex2-cy" style="font-weight:700;">y</span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <input type="number" step="0.5" id="ex2-b1" class="ex2-coeff-input" value="${b1}">
+              <input type="number" step="0.5" id="ex2-b2" class="ex2-coeff-input" value="${b2}">
+              <input type="number" step="0.5" id="ex2-b3" class="ex2-coeff-input" value="${b3}">
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <span class="ex2-cx" style="font-weight:700;">x</span>
+              <span class="ex2-cy" style="font-weight:700;">y</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex2-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex2-col-stack">
+              <div>
+                <input type="number" step="0.5" id="ex2-a1" class="ex2-coeff-input" value="${a1}">
+                <span class="ex2-cx" style="font-weight:700;">x</span> +
+                <input type="number" step="0.5" id="ex2-b1" class="ex2-coeff-input" value="${b1}">
+                <span class="ex2-cy" style="font-weight:700;">y</span>
+              </div>
+              <div>
+                <input type="number" step="0.5" id="ex2-a2" class="ex2-coeff-input" value="${a2}">
+                <span class="ex2-cx" style="font-weight:700;">x</span> +
+                <input type="number" step="0.5" id="ex2-b2" class="ex2-coeff-input" value="${b2}">
+                <span class="ex2-cy" style="font-weight:700;">y</span>
+              </div>
+              <div>
+                <input type="number" step="0.5" id="ex2-a3" class="ex2-coeff-input" value="${a3}">
+                <span class="ex2-cx" style="font-weight:700;">x</span> +
+                <input type="number" step="0.5" id="ex2-b3" class="ex2-coeff-input" value="${b3}">
+                <span class="ex2-cy" style="font-weight:700;">y</span>
+              </div>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      }
+
+      const scheduleDrawEx2 = createSmoothRenderer(updateEx2);
+      ['ex2-a1', 'ex2-b1', 'ex2-a2', 'ex2-b2', 'ex2-a3', 'ex2-b3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', scheduleDrawEx2);
+      });
+    }
+
+    function changeStructureEx2() {
+      renderFormulaInputsEx2();
+      updateEx2();
+    }
+
+    function setPresetEx2(a1, b1, a2, b2, a3, b3) {
+      stateEx2.a1 = a1; stateEx2.b1 = b1;
+      stateEx2.a2 = a2; stateEx2.b2 = b2;
+      stateEx2.a3 = a3; stateEx2.b3 = b3;
+      renderFormulaInputsEx2();
+      updateEx2();
+    }
+
+    function updateEx2() {
+      const readVal = (id, fallback) => {
+        const el = document.getElementById(id);
+        return el ? (parseFloat(el.value) || 0) : fallback;
+      };
+
+      stateEx2.a1 = readVal('ex2-a1', stateEx2.a1);
+      stateEx2.b1 = readVal('ex2-b1', stateEx2.b1);
+      stateEx2.a2 = readVal('ex2-a2', stateEx2.a2);
+      stateEx2.b2 = readVal('ex2-b2', stateEx2.b2);
+      stateEx2.a3 = readVal('ex2-a3', stateEx2.a3);
+      stateEx2.b3 = readVal('ex2-b3', stateEx2.b3);
+
+      const sliderX = document.getElementById('ex2-slider-x');
+      const sliderY = document.getElementById('ex2-slider-y');
+      if (!sliderX || !sliderY) return;
+
+      const x = Math.round(parseFloat(sliderX.value) * 10) / 10;
+      const y = Math.round(parseFloat(sliderY.value) * 10) / 10;
+
+      if (stateEx2.traceEnabled && (x !== stateEx2.x || y !== stateEx2.y)) {
+        recordTracePointEx2(x, y, false);
+      }
+
+      stateEx2.x = x;
+      stateEx2.y = y;
+
+      document.getElementById('ex2-val-x').textContent = x.toFixed(1);
+      document.getElementById('ex2-val-y').textContent = y.toFixed(1);
+
+      drawEx2();
+    }
+
+    function project3DEx2(x, y, z, width, height, zoom, yaw, pitch) {
+      const cosY = Math.cos(yaw);
+      const sinY = Math.sin(yaw);
+      const x1 = x * cosY - z * sinY;
+      const z1 = x * sinY + z * cosY;
+
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
+      const y2 = y * cosP - z1 * sinP;
+      const z2 = y * sinP + z1 * cosP;
+
+      const fov = 18;
+      const persp = fov / (fov + z2 * 0.45);
+
+      return {
+        px: width / 2 + x1 * zoom * persp,
+        py: height / 2 - y2 * zoom * persp,
+        depth: z2,
+        scale: persp
+      };
+    }
+
+    function draw3DArrowRelief(ctx, p1, p2, baseColor, lightColor, darkColor, thickness = 4.5, label = '') {
+      const dx = p2.px - p1.px;
+      const dy = p2.py - p1.py;
+      const len = Math.hypot(dx, dy);
+      if (len < 2) return;
+
+      const angle = Math.atan2(dy, dx);
+      const nx = -Math.sin(angle);
+      const ny = Math.cos(angle);
+      const headLen = Math.min(16, Math.max(9, len * 0.28));
+      const headHalfW = thickness * 1.65;
+
+      const shaftEndX = p2.px - Math.cos(angle) * (headLen * 0.85);
+      const shaftEndY = p2.py - Math.sin(angle) * (headLen * 0.85);
+
+      ctx.save();
+      const grad = ctx.createLinearGradient(
+        p1.px + nx * thickness, p1.py + ny * thickness,
+        p1.px - nx * thickness, p1.py - ny * thickness
+      );
+      grad.addColorStop(0, lightColor);
+      grad.addColorStop(0.5, baseColor);
+      grad.addColorStop(1, darkColor);
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = thickness;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(p1.px, p1.py);
+      ctx.lineTo(shaftEndX, shaftEndY);
+      ctx.stroke();
+
+      const baseCenterX = p2.px - Math.cos(angle) * headLen;
+      const baseCenterY = p2.py - Math.sin(angle) * headLen;
+      const leftCornerX = baseCenterX + nx * headHalfW;
+      const leftCornerY = baseCenterY + ny * headHalfW;
+      const rightCornerX = baseCenterX - nx * headHalfW;
+      const rightCornerY = baseCenterY - ny * headHalfW;
+
+      ctx.fillStyle = lightColor;
+      ctx.beginPath();
+      ctx.moveTo(p2.px, p2.py);
+      ctx.lineTo(leftCornerX, leftCornerY);
+      ctx.lineTo(baseCenterX, baseCenterY);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = darkColor;
+      ctx.beginPath();
+      ctx.moveTo(p2.px, p2.py);
+      ctx.lineTo(baseCenterX, baseCenterY);
+      ctx.lineTo(rightCornerX, rightCornerY);
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = 'italic bold 13px "STIX Two Text", "Cambria Math", serif';
+        const lx = p2.px + Math.cos(angle) * 14;
+        const ly = p2.py + Math.sin(angle) * 14;
+        ctx.fillStyle = lightColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, lx, ly);
+      }
+      ctx.restore();
+    }
+
+    function draw3DSphereRelief(ctx, pt, radius, lightColor, baseColor, darkColor) {
+      ctx.save();
+      const grad = ctx.createRadialGradient(
+        pt.px - radius * 0.35, pt.py - radius * 0.35, radius * 0.1,
+        pt.px, pt.py, radius
+      );
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(0.3, lightColor);
+      grad.addColorStop(0.75, baseColor);
+      grad.addColorStop(1, darkColor);
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(pt.px, pt.py, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawTraceTooltipEx2(ctx, canvasW, canvasH, px, py, segments) {
+      ctx.save();
+      ctx.font = 'bold 12px "JetBrains Mono", monospace';
+      let totalW = 0;
+      const measured = segments.map(seg => {
+        const w = ctx.measureText(seg.text).width;
+        totalW += w;
+        return { ...seg, w };
+      });
+
+      const padX = 9;
+      const boxW = totalW + padX * 2;
+      const boxH = 26;
+
+      let bx = px + 12;
+      let by = py - boxH - 10;
+      if (bx + boxW > canvasW - 8) bx = px - boxW - 12;
+      if (bx < 8) bx = 8;
+      if (by < 8) by = py + 14;
+      if (by + boxH > canvasH - 8) by = canvasH - boxH - 8;
+
+      ctx.fillStyle = 'rgba(11, 12, 16, 0.92)';
+      ctx.beginPath();
+      ctx.roundRect(bx, by, boxW, boxH, 7);
+      ctx.fill();
+
+      ctx.strokeStyle = '#ec4899';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      let curX = bx + padX;
+      const textY = by + boxH / 2 + 1;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      for (const seg of measured) {
+        ctx.fillStyle = seg.color;
+        ctx.fillText(seg.text, curX, textY);
+        curX += seg.w;
+      }
+      ctx.restore();
+    }
+
+    function drawEx2() {
+      const viewKer = setupHiDPICanvas('canvas2_ker', stateEx2.scaleKer);
+      const viewImg = setupHiDPICanvas('canvas2_img', 1);
+      if (!viewKer || !viewImg) return;
+
+      const { a1, b1, a2, b2, a3, b3, x, y } = stateEx2;
+
+      const tx = Math.round((a1 * x + b1 * y) * 1e6) / 1e6;
+      const ty = Math.round((a2 * x + b2 * y) * 1e6) / 1e6;
+      const tz = Math.round((a3 * x + b3 * y) * 1e6) / 1e6;
+
+      const crossX = a2 * b3 - a3 * b2;
+      const crossY = a3 * b1 - a1 * b3;
+      const crossZ = a1 * b2 - a2 * b1;
+      const crossNormSq = Math.round((crossX * crossX + crossY * crossY + crossZ * crossZ) * 1e6) / 1e6;
+
+      const isZeroMatrix = (a1 === 0 && b1 === 0 && a2 === 0 && b2 === 0 && a3 === 0 && b3 === 0);
+      const rank = isZeroMatrix ? 0 : (crossNormSq > 1e-9 ? 2 : 1);
+      const nullity = 2 - rank;
+
+      const isExactZeroOutput = (tx === 0 && ty === 0 && tz === 0);
+      const isKernelValid = (rank === 2)
+        ? (x === 0 && y === 0)
+        : (isExactZeroOutput && (x !== 0 || y !== 0));
+
+      /* ========================================================
+         1. PANEL IZQUIERDO: DOMINIO 2D (nu T + RASTREO)
+         ======================================================== */
+      drawBaseGrid(viewKer, true);
+      const ctxK = viewKer.ctx;
+
+      if (isKernelValid) {
+        ctxK.save();
+        if (rank === 0) {
+          ctxK.fillStyle = 'rgba(16, 185, 129, 0.10)';
+          ctxK.fillRect(0, 0, viewKer.width, viewKer.height);
+        } else if (rank === 1) {
+          let dirX = -b1, dirY = a1;
+          if (Math.abs(dirX) + Math.abs(dirY) < 1e-6) { dirX = -b2; dirY = a2; }
+          if (Math.abs(dirX) + Math.abs(dirY) < 1e-6) { dirX = -b3; dirY = a3; }
+          const n = Math.hypot(dirX, dirY) || 1;
+          const pS = mathToScreen(-(dirX / n) * 50, -(dirY / n) * 50, viewKer.origin, viewKer.scale);
+          const pE = mathToScreen((dirX / n) * 50, (dirY / n) * 50, viewKer.origin, viewKer.scale);
+
+          ctxK.strokeStyle = '#10b981';
+          ctxK.lineWidth = 2.5;
+          ctxK.setLineDash([7, 5]);
+          ctxK.beginPath();
+          ctxK.moveTo(pS.px, pS.py);
+          ctxK.lineTo(pE.px, pE.py);
+          ctxK.stroke();
+        }
+        ctxK.restore();
+      }
+
+      if (stateEx2.traces.length > 0) {
+        ctxK.save();
+        ctxK.strokeStyle = '#ec4899';
+        ctxK.lineWidth = 2.5;
+        ctxK.lineCap = 'round';
+        ctxK.lineJoin = 'round';
+
+        for (const stroke of stateEx2.traces) {
+          if (stroke.length === 0) continue;
+          ctxK.beginPath();
+          stroke.forEach((pt, idx) => {
+            const sp = mathToScreen(pt.x, pt.y, viewKer.origin, viewKer.scale);
+            if (idx === 0) ctxK.moveTo(sp.px, sp.py);
+            else ctxK.lineTo(sp.px, sp.py);
+          });
+          ctxK.stroke();
+
+          for (const pt of stroke) {
+            const sp = mathToScreen(pt.x, pt.y, viewKer.origin, viewKer.scale);
+            ctxK.fillStyle = '#f472b6';
+            ctxK.beginPath();
+            ctxK.arc(sp.px, sp.py, 3.4, 0, Math.PI * 2);
+            ctxK.fill();
+          }
+        }
+        ctxK.restore();
+      }
+
+      const p0 = mathToScreen(0, 0, viewKer.origin, viewKer.scale);
+      const pxComp = mathToScreen(x, 0, viewKer.origin, viewKer.scale);
+      const pVec = mathToScreen(x, y, viewKer.origin, viewKer.scale);
+
+      ctxK.save();
+      ctxK.setLineDash([4, 4]);
+      ctxK.lineWidth = 2;
+      if (x !== 0) {
+        ctxK.strokeStyle = '#18c5d9';
+        ctxK.beginPath();
+        ctxK.moveTo(p0.px, p0.py);
+        ctxK.lineTo(pxComp.px, pxComp.py);
+        ctxK.stroke();
+      }
+      if (y !== 0) {
+        ctxK.strokeStyle = '#f06565';
+        ctxK.beginPath();
+        ctxK.moveTo(pxComp.px, pxComp.py);
+        ctxK.lineTo(pVec.px, pVec.py);
+        ctxK.stroke();
+      }
+      ctxK.restore();
+
+      drawVector(viewKer, x, y, isKernelValid ? '#10b981' : '#4f7df3', 'v⃗');
+
+      ctxK.save();
+      ctxK.beginPath();
+      ctxK.arc(pVec.px, pVec.py, 7, 0, Math.PI * 2);
+      ctxK.fillStyle = isKernelValid ? '#10b981' : '#f06565';
+      ctxK.fill();
+      ctxK.lineWidth = 2;
+      ctxK.strokeStyle = '#ffffff';
+      ctxK.stroke();
+      ctxK.restore();
+
+      // Etiqueta flotante si el cursor está sobre un punto de rastreo en 2D
+      if (stateEx2.hoveredTrace2D) {
+        const hp = stateEx2.hoveredTrace2D;
+        const sp = mathToScreen(hp.x, hp.y, viewKer.origin, viewKer.scale);
+
+        ctxK.save();
+        ctxK.beginPath();
+        ctxK.arc(sp.px, sp.py, 6.5, 0, Math.PI * 2);
+        ctxK.fillStyle = '#ec4899';
+        ctxK.fill();
+        ctxK.lineWidth = 2;
+        ctxK.strokeStyle = '#ffffff';
+        ctxK.stroke();
+        ctxK.restore();
+
+        drawTraceTooltipEx2(ctxK, viewKer.width, viewKer.height, sp.px, sp.py, [
+          { text: 'v = (', color: '#f1f5f9' },
+          { text: hp.x.toFixed(1), color: '#18c5d9' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: hp.y.toFixed(1), color: '#f06565' },
+          { text: ')', color: '#f1f5f9' }
+        ]);
+      }
+
+      const statusBox = document.getElementById('ex2-status-box');
+      const eliotToast = document.getElementById('eliot-toast-2');
+      const eliotText = document.getElementById('eliot-msg-text-2');
+
+      if (isKernelValid) {
+        statusBox.className = 'ex2-status-box is-valid';
+        statusBox.innerHTML = `
+          <div><strong>✓ ¡NÚCLEO ENCONTRADO EN ℝ²!</strong></div>
+          <div style="margin-top:0.3rem;">
+            <span class="vec-arrow">v</span> = (<span class="ex2-cx">${x.toFixed(1)}</span>, <span class="ex2-cy">${y.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0)
+          </div>
+          <div>Nulidad: <strong>dim(nu T) = ${nullity}</strong></div>
+        `;
+        eliotText.textContent = rank === 2
+          ? '¡Exacto! Las columnas son independientes, así que nu T = {(0,0)}.'
+          : `¡Genial! v = (${x.toFixed(1)}, ${y.toFixed(1)}) se transforma en el origen (0,0,0) de ℝ³.`;
+        eliotToast.classList.add('visible');
+      } else {
+        statusBox.className = 'ex2-status-box is-invalid';
+        const hint = (rank < 2 && x === 0 && y === 0)
+          ? 'El origen (0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
+          : 'Ajusta <span class="math-var">x</span>, <span class="math-var">y</span> hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0).';
+        statusBox.innerHTML = `
+          <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
+          <div style="margin-top:0.3rem;">
+            T(<span class="vec-arrow">v</span>) = (<span class="ex2-cx">${tx.toFixed(1)}</span>, <span class="ex2-cy">${ty.toFixed(1)}</span>, <span class="ex2-cz">${tz.toFixed(1)}</span>)
+          </div>
+          <div style="opacity:0.88;">${hint}</div>
+        `;
+        eliotToast.classList.remove('visible');
+      }
+
+      /* ========================================================
+         2. PANEL DERECHO: CODOMINIO 3D (im T, 3 COMPONENTES Y RASTRO)
+         ======================================================== */
+      const { ctx: ctx3, width: w3, height: h3 } = viewImg;
+      ctx3.clearRect(0, 0, w3, h3);
+
+      const proj = (px, py, pz) => project3DEx2(px, py, pz, w3, h3, stateEx2.zoom3D, stateEx2.yaw, stateEx2.pitch);
+
+      // Rejilla del plano horizontal XZ (y = 0)
+      ctx3.save();
+      ctx3.strokeStyle = 'rgba(34, 39, 54, 0.55)';
+      ctx3.lineWidth = 1;
+      for (let g = -5; g <= 5; g++) {
+        const aP = proj(g, 0, -5);
+        const bP = proj(g, 0, 5);
+        ctx3.beginPath(); ctx3.moveTo(aP.px, aP.py); ctx3.lineTo(bP.px, bP.py); ctx3.stroke();
+
+        const cP = proj(-5, 0, g);
+        const dP = proj(5, 0, g);
+        ctx3.beginPath(); ctx3.moveTo(cP.px, cP.py); ctx3.lineTo(dP.px, dP.py); ctx3.stroke();
+      }
+      ctx3.restore();
+
+      // Subespacio im T en 3D
+      if (rank === 2) {
+        const n1 = Math.hypot(a1, a2, a3) || 1;
+        const n2 = Math.hypot(b1, b2, b3) || 1;
+        const s = 4.2;
+        const u = [a1 / n1 * s, a2 / n1 * s, a3 / n1 * s];
+        const v = [b1 / n2 * s, b2 / n2 * s, b3 / n2 * s];
+
+        const cA = proj(-u[0] - v[0], -u[1] - v[1], -u[2] - v[2]);
+        const cB = proj(u[0] - v[0], u[1] - v[1], u[2] - v[2]);
+        const cC = proj(u[0] + v[0], u[1] + v[1], u[2] + v[2]);
+        const cD = proj(-u[0] + v[0], -u[1] + v[1], -u[2] + v[2]);
+
+        ctx3.save();
+        ctx3.beginPath();
+        ctx3.moveTo(cA.px, cA.py);
+        ctx3.lineTo(cB.px, cB.py);
+        ctx3.lineTo(cC.px, cC.py);
+        ctx3.lineTo(cD.px, cD.py);
+        ctx3.closePath();
+        ctx3.fillStyle = 'rgba(168, 85, 247, 0.13)';
+        ctx3.fill();
+        ctx3.strokeStyle = 'rgba(168, 85, 247, 0.5)';
+        ctx3.lineWidth = 1.2;
+        ctx3.stroke();
+        ctx3.restore();
+      } else if (rank === 1) {
+        const cx = (Math.hypot(a1, a2, a3) > 1e-6) ? a1 : b1;
+        const cy = (Math.hypot(a1, a2, a3) > 1e-6) ? a2 : b2;
+        const cz = (Math.hypot(a1, a2, a3) > 1e-6) ? a3 : b3;
+        const n = Math.hypot(cx, cy, cz) || 1;
+        const l1 = proj(-(cx / n) * 8, -(cy / n) * 8, -(cz / n) * 8);
+        const l2 = proj((cx / n) * 8, (cy / n) * 8, (cz / n) * 8);
+
+        ctx3.save();
+        ctx3.strokeStyle = 'rgba(168, 85, 247, 0.65)';
+        ctx3.lineWidth = 2.5;
+        ctx3.setLineDash([6, 4]);
+        ctx3.beginPath();
+        ctx3.moveTo(l1.px, l1.py);
+        ctx3.lineTo(l2.px, l2.py);
+        ctx3.stroke();
+        ctx3.restore();
+      }
+
+      // Ejes 3D (X, Y, Z)
+      const axisLen = 6.2;
+      const axes = [
+        { from: [-axisLen, 0, 0], to: [axisLen, 0, 0], label: 'x', color: '#64748b' },
+        { from: [0, -axisLen, 0], to: [0, axisLen, 0], label: 'y', color: '#64748b' },
+        { from: [0, 0, -axisLen], to: [0, 0, axisLen], label: 'z', color: '#64748b' }
+      ];
+
+      ctx3.save();
+      axes.forEach(ax => {
+        const pStart = proj(...ax.from);
+        const pEnd = proj(...ax.to);
+        ctx3.strokeStyle = ax.color;
+        ctx3.lineWidth = 1.4;
+        ctx3.beginPath();
+        ctx3.moveTo(pStart.px, pStart.py);
+        ctx3.lineTo(pEnd.px, pEnd.py);
+        ctx3.stroke();
+
+        const ang = Math.atan2(pEnd.py - pStart.py, pEnd.px - pStart.px);
+        ctx3.fillStyle = ax.color;
+        ctx3.beginPath();
+        ctx3.moveTo(pEnd.px, pEnd.py);
+        ctx3.lineTo(pEnd.px - 8 * Math.cos(ang - 0.4), pEnd.py - 8 * Math.sin(ang - 0.4));
+        ctx3.lineTo(pEnd.px - 8 * Math.cos(ang + 0.4), pEnd.py - 8 * Math.sin(ang + 0.4));
+        ctx3.closePath();
+        ctx3.fill();
+
+        ctx3.font = 'italic bold 14px "STIX Two Text", "Cambria Math", serif';
+        ctx3.fillStyle = '#94a3b8';
+        ctx3.fillText(ax.label, pEnd.px + Math.cos(ang) * 12, pEnd.py + Math.sin(ang) * 12);
+      });
+      ctx3.restore();
+
+      // Rastro 3D con registro de puntos proyectados para detección al pasar el cursor
+      stateEx2.projectedTrace3D = [];
+      let activeHovered3DItem = null;
+
+      if (stateEx2.traces.length > 0) {
+        for (const stroke of stateEx2.traces) {
+          if (stroke.length === 0) continue;
+          const pts3D = stroke.map(pt => {
+            const px3 = Math.round((a1 * pt.x + b1 * pt.y) * 1e6) / 1e6;
+            const py3 = Math.round((a2 * pt.x + b2 * pt.y) * 1e6) / 1e6;
+            const pz3 = Math.round((a3 * pt.x + b3 * pt.y) * 1e6) / 1e6;
+            const p = proj(px3, py3, pz3);
+            const item = {
+              x: pt.x,
+              y: pt.y,
+              tx: px3,
+              ty: py3,
+              tz: pz3,
+              p,
+              floor: proj(px3, 0, pz3)
+            };
+            stateEx2.projectedTrace3D.push(item);
+
+            if (
+              stateEx2.hoveredTrace3D &&
+              stateEx2.hoveredTrace3D.x === pt.x &&
+              stateEx2.hoveredTrace3D.y === pt.y
+            ) {
+              activeHovered3DItem = item;
+            }
+            return item;
+          });
+
+          ctx3.save();
+          ctx3.strokeStyle = 'rgba(236, 72, 153, 0.25)';
+          ctx3.lineWidth = 1;
+          ctx3.setLineDash([2, 3]);
+          for (const item of pts3D) {
+            ctx3.beginPath();
+            ctx3.moveTo(item.floor.px, item.floor.py);
+            ctx3.lineTo(item.p.px, item.p.py);
+            ctx3.stroke();
+          }
+          ctx3.restore();
+
+          ctx3.save();
+          ctx3.strokeStyle = '#ec4899';
+          ctx3.lineWidth = 3;
+          ctx3.lineCap = 'round';
+          ctx3.lineJoin = 'round';
+          ctx3.beginPath();
+          pts3D.forEach((item, idx) => {
+            if (idx === 0) ctx3.moveTo(item.p.px, item.p.py);
+            else ctx3.lineTo(item.p.px, item.p.py);
+          });
+          ctx3.stroke();
+          ctx3.restore();
+
+          for (const item of pts3D) {
+            draw3DSphereRelief(ctx3, item.p, 4.3, '#f9a8d4', '#ec4899', '#831843');
+          }
+        }
+      }
+
+      // 3 COMPONENTES SEPARADAS EN R³ CON RELIEVE + CAJA DE PROYECCIÓN 3D
+      const o3 = proj(0, 0, 0);
+      const pTx = proj(tx, 0, 0);
+      const pTy = proj(0, ty, 0);
+      const pTz = proj(0, 0, tz);
+
+      const pTxy = proj(tx, ty, 0);
+      const pTxz = proj(tx, 0, tz);
+      const pTyz = proj(0, ty, tz);
+      const pTxyz = proj(tx, ty, tz);
+
+      ctx3.save();
+      ctx3.setLineDash([3, 4]);
+      ctx3.lineWidth = 1.25;
+
+      ctx3.strokeStyle = 'rgba(24, 197, 217, 0.55)';
+      ctx3.beginPath();
+      ctx3.moveTo(pTy.px, pTy.py); ctx3.lineTo(pTxy.px, pTxy.py);
+      ctx3.moveTo(pTz.px, pTz.py); ctx3.lineTo(pTxz.px, pTxz.py);
+      ctx3.moveTo(pTyz.px, pTyz.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
+      ctx3.stroke();
+
+      ctx3.strokeStyle = 'rgba(240, 101, 101, 0.55)';
+      ctx3.beginPath();
+      ctx3.moveTo(pTx.px, pTx.py); ctx3.lineTo(pTxy.px, pTxy.py);
+      ctx3.moveTo(pTz.px, pTz.py); ctx3.lineTo(pTyz.px, pTyz.py);
+      ctx3.moveTo(pTxz.px, pTxz.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
+      ctx3.stroke();
+
+      ctx3.strokeStyle = 'rgba(168, 85, 247, 0.55)';
+      ctx3.beginPath();
+      ctx3.moveTo(pTx.px, pTx.py); ctx3.lineTo(pTxz.px, pTxz.py);
+      ctx3.moveTo(pTy.px, pTy.py); ctx3.lineTo(pTyz.px, pTyz.py);
+      ctx3.moveTo(pTxy.px, pTxy.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
+      ctx3.stroke();
+      ctx3.restore();
+
+      if (tx !== 0) {
+        draw3DArrowRelief(ctx3, o3, pTx, '#18c5d9', '#67e8f9', '#0e7490', 3.6, `Tx (${tx.toFixed(1)})`);
+      }
+      if (ty !== 0) {
+        draw3DArrowRelief(ctx3, o3, pTy, '#f06565', '#fca5a5', '#991b1b', 3.6, `Ty (${ty.toFixed(1)})`);
+      }
+      if (tz !== 0) {
+        draw3DArrowRelief(ctx3, o3, pTz, '#a855f7', '#d8b4fe', '#6b21a8', 3.6, `Tz (${tz.toFixed(1)})`);
+      }
+
+      if (tx !== 0 || ty !== 0 || tz !== 0) {
+        draw3DArrowRelief(ctx3, o3, pTxyz, '#10b981', '#6ee7b7', '#047857', 5.2, 'T(v⃗)');
+        draw3DSphereRelief(ctx3, pTxyz, 6.2, '#a7f3d0', '#10b981', '#064e3b');
+      } else {
+        draw3DSphereRelief(ctx3, o3, 6.5, '#a7f3d0', '#10b981', '#064e3b');
+      }
+
+      // Etiqueta flotante si el cursor está sobre un punto de rastreo en 3D
+      if (activeHovered3DItem) {
+        ctx3.save();
+        ctx3.beginPath();
+        ctx3.arc(activeHovered3DItem.p.px, activeHovered3DItem.p.py, 7.5, 0, Math.PI * 2);
+        ctx3.strokeStyle = '#ffffff';
+        ctx3.lineWidth = 2;
+        ctx3.stroke();
+        ctx3.restore();
+
+        drawTraceTooltipEx2(ctx3, w3, h3, activeHovered3DItem.p.px, activeHovered3DItem.p.py, [
+          { text: `T(${activeHovered3DItem.x.toFixed(1)}, ${activeHovered3DItem.y.toFixed(1)}) = (`, color: '#f1f5f9' },
+          { text: activeHovered3DItem.tx.toFixed(1), color: '#18c5d9' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: activeHovered3DItem.ty.toFixed(1), color: '#f06565' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: activeHovered3DItem.tz.toFixed(1), color: '#a855f7' },
+          { text: ')', color: '#f1f5f9' }
+        ]);
+      }
+
+      const imgSubspaceDesc = rank === 0
+        ? 'im T = { <span class="vec-arrow">0</span> } (Origen en ℝ³)'
+        : (rank === 1 ? 'Recta en ℝ³ (dim = 1)' : 'Plano en ℝ³ (dim = 2)');
+
+      document.getElementById('ex2-img-readout').innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+          <div class="ex2-col-equation" style="font-size:0.98rem;">
+            <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+            <div class="ex2-bracket-box">
+              <span class="matrix-bracket left"></span>
+              <div class="col-vector-cells">
+                <span class="ex2-cx">${tx.toFixed(1)}</span>
+                <span class="ex2-cy">${ty.toFixed(1)}</span>
+                <span class="ex2-cz">${tz.toFixed(1)}</span>
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          </div>
+          <div style="font-size:0.82rem;">
+            <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgSubspaceDesc}</span></div>
+            <div><strong>Base im T:</strong> { (${a1}, ${a2}, ${a3})ᵀ${rank === 2 ? `, (${b1}, ${b2}, ${b3})ᵀ` : ''} }</div>
+          </div>
+        </div>
+        <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
+          Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${rank} + ${nullity} = 2</strong>
+        </div>
+      `;
+    }
+
+    function initEx2() {
+      const canvasKer = document.getElementById('canvas2_ker');
+      const canvasImg = document.getElementById('canvas2_img');
+      if (!canvasKer || !canvasImg) return;
+
+      const scheduleDrawEx2 = createSmoothRenderer(updateEx2);
+
+      const sliderX = document.getElementById('ex2-slider-x');
+      const sliderY = document.getElementById('ex2-slider-y');
+      if (sliderX) sliderX.addEventListener('input', scheduleDrawEx2);
+      if (sliderY) sliderY.addEventListener('input', scheduleDrawEx2);
+
+      function handlePointer2D(clientX, clientY, isNewStroke = false) {
+        const rect = canvasKer.getBoundingClientRect();
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+        const mathPt = screenToMath(px, py, origin, stateEx2.scaleKer);
+
+        const limit = stateEx2.maxRange;
+        const stepFactor = stateEx2.traceEnabled ? 10 : 2;
+        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * stepFactor) / stepFactor));
+        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * stepFactor) / stepFactor));
+
+        if (stateEx2.traceEnabled) {
+          recordTracePointEx2(clampedX, clampedY, isNewStroke);
+        }
+
+        sliderX.value = clampedX;
+        sliderY.value = clampedY;
+        stateEx2.x = clampedX;
+        stateEx2.y = clampedY;
+        document.getElementById('ex2-val-x').textContent = clampedX.toFixed(1);
+        document.getElementById('ex2-val-y').textContent = clampedY.toFixed(1);
+        drawEx2();
+      }
+
+      function detectHoverTrace2D(clientX, clientY) {
+        if (stateEx2.traces.length === 0) {
+          if (stateEx2.hoveredTrace2D) {
+            stateEx2.hoveredTrace2D = null;
+            scheduleDrawEx2();
+          }
+          return;
+        }
+        const rect = canvasKer.getBoundingClientRect();
+        const mx = clientX - rect.left;
+        const my = clientY - rect.top;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+
+        let best = null;
+        let bestDist = 13;
+
+        for (const stroke of stateEx2.traces) {
+          for (const pt of stroke) {
+            const sp = mathToScreen(pt.x, pt.y, origin, stateEx2.scaleKer);
+            const d = Math.hypot(mx - sp.px, my - sp.py);
+            if (d < bestDist) {
+              bestDist = d;
+              best = { x: pt.x, y: pt.y };
+            }
+          }
+        }
+
+        const changed = (!best && stateEx2.hoveredTrace2D) ||
+                        (best && (!stateEx2.hoveredTrace2D || best.x !== stateEx2.hoveredTrace2D.x || best.y !== stateEx2.hoveredTrace2D.y));
+        stateEx2.hoveredTrace2D = best;
+        if (changed) scheduleDrawEx2();
+      }
+
+      function detectHoverTrace3D(clientX, clientY) {
+        if (stateEx2.projectedTrace3D.length === 0) {
+          if (stateEx2.hoveredTrace3D) {
+            stateEx2.hoveredTrace3D = null;
+            if (!stateEx2.autoSpin) scheduleDrawEx2();
+          }
+          return;
+        }
+        const rect = canvasImg.getBoundingClientRect();
+        const mx = clientX - rect.left;
+        const my = clientY - rect.top;
+
+        let best = null;
+        let bestDist = 14;
+
+        for (const item of stateEx2.projectedTrace3D) {
+          const d = Math.hypot(mx - item.p.px, my - item.p.py);
+          if (d < bestDist) {
+            bestDist = d;
+            best = { x: item.x, y: item.y };
+          }
+        }
+
+        const changed = (!best && stateEx2.hoveredTrace3D) ||
+                        (best && (!stateEx2.hoveredTrace3D || best.x !== stateEx2.hoveredTrace3D.x || best.y !== stateEx2.hoveredTrace3D.y));
+        stateEx2.hoveredTrace3D = best;
+        if (changed && !stateEx2.autoSpin) scheduleDrawEx2();
+      }
+
+      canvasKer.addEventListener('pointerdown', (e) => {
+        stateEx2.dragging2D = true;
+        canvasKer.setPointerCapture(e.pointerId);
+        handlePointer2D(e.clientX, e.clientY, true);
+      });
+
+      canvasKer.addEventListener('pointermove', (e) => {
+        if (stateEx2.dragging2D) {
+          handlePointer2D(e.clientX, e.clientY, false);
+        } else {
+          detectHoverTrace2D(e.clientX, e.clientY);
+        }
+      });
+
+      canvasKer.addEventListener('pointerup', (e) => {
+        stateEx2.dragging2D = false;
+        if (canvasKer.hasPointerCapture(e.pointerId)) {
+          canvasKer.releasePointerCapture(e.pointerId);
+        }
+      });
+
+      canvasKer.addEventListener('pointerleave', () => {
+        if (stateEx2.hoveredTrace2D) {
+          stateEx2.hoveredTrace2D = null;
+          scheduleDrawEx2();
+        }
+      });
+
+      canvasKer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx2('ker', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
+
+      // El giro automático NO se apaga al hacer clic en el 3D; solo se detiene al volver a pulsar "⟳ Girar"
+      canvasImg.addEventListener('pointerdown', (e) => {
+        stateEx2.dragging3D = true;
+        stateEx2.lastMouseX = e.clientX;
+        stateEx2.lastMouseY = e.clientY;
+        canvasImg.setPointerCapture(e.pointerId);
+      });
+
+      canvasImg.addEventListener('pointermove', (e) => {
+        if (stateEx2.dragging3D) {
+          const dx = e.clientX - stateEx2.lastMouseX;
+          const dy = e.clientY - stateEx2.lastMouseY;
+          stateEx2.lastMouseX = e.clientX;
+          stateEx2.lastMouseY = e.clientY;
+
+          stateEx2.yaw += dx * 0.009;
+          stateEx2.pitch = Math.max(-1.45, Math.min(1.45, stateEx2.pitch + dy * 0.009));
+          scheduleDrawEx2();
+        } else {
+          detectHoverTrace3D(e.clientX, e.clientY);
+        }
+      });
+
+      canvasImg.addEventListener('pointerup', (e) => {
+        stateEx2.dragging3D = false;
+        if (canvasImg.hasPointerCapture(e.pointerId)) {
+          canvasImg.releasePointerCapture(e.pointerId);
+        }
+      });
+
+      canvasImg.addEventListener('pointerleave', () => {
+        if (stateEx2.hoveredTrace3D) {
+          stateEx2.hoveredTrace3D = null;
+          if (!stateEx2.autoSpin) scheduleDrawEx2();
+        }
+      });
+
+      canvasImg.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx2('img', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => scheduleDrawEx2());
+        ro.observe(canvasKer);
+        ro.observe(canvasImg);
+      }
+
+      window.addEventListener('resize', scheduleDrawEx2);
+      syncSliderBoundsEx2();
+      renderFormulaInputsEx2();
+      updateEx2();
+    }
+    /* ==========================================================================
+       3. INICIALIZACIÓN GLOBAL (PEGAR LLAMADAS initExN() AQUÍ DENTRO)
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+        initMainMenu();
+        initMenuBg();
+        initEx1();
+        initEx2();
+        
+      // Pegar aquí las inicializaciones de cada ejercicio (ej. initEx1();)
+    });
+  </script>
+</body>
+</html>
