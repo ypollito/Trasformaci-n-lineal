@@ -576,7 +576,262 @@
       z-index: 1;
     }
   </style>
+  <style>
+  /* ==========================================================================
+     ESTILOS EXCLUSIVOS DEL MÓDULO 3 (R³ -> R³)
+     ========================================================================== */
+  .ex3-dual-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 1080px) {
+    .ex3-dual-panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ex3-subpanel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ex3-subpanel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .ex3-subpanel-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .ex3-formula-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ex3-col-equation {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'STIX Two Text', 'Cambria Math', serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+
+  .ex3-bracket-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .ex3-col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.36rem;
+    padding: 0.25rem 0.35rem;
+    text-align: center;
+  }
+
+  .ex3-coeff-input {
+    width: 48px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.2rem 0.15rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .ex3-coeff-input:focus {
+    border-color: var(--neon-cyan);
+  }
+
+  .ex3-cx { color: #18c5d9 !important; }
+  .ex3-cy { color: #f06565 !important; }
+  .ex3-cz { color: #a855f7 !important; }
+
+  .ex3-slider-x::-webkit-slider-thumb {
+    background: #18c5d9 !important;
+    box-shadow: 0 0 10px rgba(24, 197, 217, 0.8) !important;
+  }
+  .ex3-slider-y::-webkit-slider-thumb {
+    background: #f06565 !important;
+    box-shadow: 0 0 10px rgba(240, 101, 101, 0.8) !important;
+  }
+  .ex3-slider-z::-webkit-slider-thumb {
+    background: #a855f7 !important;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.85) !important;
+  }
+
+  .ex3-trace-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .ex3-trace-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ex3-trace-toggle input[type="checkbox"] {
+    accent-color: #a855f7;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .ex3-mini-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.32rem 0.65rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .ex3-mini-btn:hover {
+    border-color: var(--neon-purple);
+    background: rgba(168, 85, 247, 0.16);
+  }
+
+  .ex3-status-box {
+    border-radius: 10px;
+    padding: 0.9rem 1.05rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .ex3-status-box.is-invalid {
+    background: rgba(240, 101, 101, 0.09);
+    border: 1px solid rgba(240, 101, 101, 0.55);
+    color: #fca5a5;
+  }
+
+  .ex3-status-box.is-valid {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.7);
+    color: #6ee7b7;
+  }
+
+  .ex3-zoom-controls {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(17, 19, 26, 0.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.25rem;
+    z-index: 4;
+  }
+
+  .ex3-zoom-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 0.45rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .ex3-zoom-btn:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(24, 197, 217, 0.15);
+    color: var(--neon-cyan);
+  }
+
+  .ex3-eliot-toast {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    max-width: 255px;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(17, 19, 26, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(16, 185, 129, 0.75);
+    border-radius: 12px;
+    padding: 0.55rem 0.8rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 5;
+  }
+
+  .ex3-eliot-toast.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .ex3-canvas-3d canvas {
+    height: 430px !important;
+    cursor: grab;
+  }
+
+  .ex3-canvas-3d canvas:active {
+    cursor: grabbing;
+  }
+</style>
 </head>
+
 <body>
  
 <!-- PANTALLA PRINCIPAL -->
@@ -596,6 +851,11 @@
       <div class="menu-option-card">
         <button type="button" id="btn-open-r2-r3" class="btn-purple-option">
           Ejercicios de <span class="math-font">ℝ²</span> a <span class="math-font">ℝ³</span>
+        </button>
+      </div>
+      <div class="menu-option-card">
+        <button type="button" id="btn-open-r3-r3" class="btn-purple-option">
+          Ejercicios de <span class="math-font">ℝ³</span> a <span class="math-font">ℝ³</span>
         </button>
       </div>
     </div>
@@ -832,16 +1092,10 @@
 
   
 <article class="exercise-card" id="ex1-card">
-  <div class="card-header">
-    <div class="card-title-group">
-      <span class="badge badge-purple">EJERCICIO 01 • ℝ² → ℝ²</span>
-      <h2>Núcleo e Imagen de una Transformación Lineal en el Plano</h2>
-      <p>Edita la transformación en forma columna, busca con precisión exacta un vector del núcleo <span class="math-font">nu <span class="math-var">T</span></span> y observa su proyección en la imagen <span class="math-font">im <span class="math-var">T</span></span>.</p>
-    </div>
-  </div>
-
-  <!-- BARRA DE FÓRMULA EDITABLE CON SELECTOR DE ESTRUCTURA -->
-  <div class="ex1-formula-bar">
+  
+<!-- DOS PANELES: NÚCLEO E IMAGEN -->
+ <!-- BARRA DE FÓRMULA EDITABLE CON SELECTOR DE ESTRUCTURA -->
+  <div class="ex1-formula-bar" style="display:flex; flex-direction:column; align-items:stretch; gap:0.9rem; background:var(--bg-elevated); border:1px solid var(--border-color); border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.5rem;">
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem;">
       <div style="display:flex; align-items:center; gap:0.5rem;">
         <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Estructura en <span class="math-font">ℝ²</span>:</span>
@@ -862,22 +1116,21 @@
 
     <div id="ex1-dynamic-formula" class="ex1-col-equation" style="justify-content:center; padding:0.35rem 0;"></div>
   </div>
-
-  <!-- DOS PANELES: NÚCLEO E IMAGEN -->
   <div class="ex1-dual-panels">
 
     <!-- PANEL 1: NÚCLEO nu T -->
     <section class="ex1-subpanel">
       <div class="ex1-subpanel-header">
         <h3 class="ex1-subpanel-title">1. Núcleo <span class="math-font" style="color: var(--neon-cyan);">nu <span class="math-var">T</span></span> — Dominio <span class="math-font">ℝ²</span></h3>
-        <span class="badge badge-cyan math-font">T(<span class="vec-arrow">v</span>) = <span class="vec-arrow">0</span></span>
+        <span class="badge badge-cyan math-font">T(<span class="math-var">k</span><span class="vec-arrow">v</span>) = <span class="vec-arrow">0</span></span>
       </div>
 
       <div class="canvas-wrapper ex1-canvas-box">
         <canvas id="canvas1_ker"></canvas>
+
         <div class="ex1-zoom-controls">
           <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('ker', 1.25)" title="Acercar">+</button>
-          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('ker', 0.8)" title="Alejar (ver más plano)">−</button>
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('ker', 0.8)" title="Alejar">−</button>
           <button type="button" class="ex1-zoom-btn" onclick="resetZoomEx1('ker')" title="Restablecer vista">1:1</button>
         </div>
 
@@ -910,20 +1163,34 @@
         </div>
 
         <div class="canvas-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">nu <span class="math-var">T</span></span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="math-var">k</span><span class="vec-arrow">v</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">î</span> / Comp. <span class="math-var">x</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">ĵ</span> / Comp. <span class="math-var">y</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span>Base</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro</span>
         </div>
       </div>
 
+      <!-- Barra de Rastreo (Dibujar Rastro, Deshacer, Limpiar) -->
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.6rem; background:var(--bg-main); border:1px solid var(--border-color); border-radius:10px; padding:0.65rem 0.85rem;">
+        <label style="display:inline-flex; align-items:center; gap:0.5rem; font-size:0.82rem; font-weight:700; color:var(--text-primary); cursor:pointer; user-select:none;">
+          <input type="checkbox" id="ex1-trace-active" onchange="toggleTraceEx1()" style="accent-color:#a855f7; width:16px; height:16px; cursor:pointer;">
+          <span>Dibujar Rastro (<span class="math-font">ℝ² → ℝ²</span>)</span>
+        </label>
+        <div class="btn-group">
+          <button type="button" class="btn" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="undoTraceEx1()">↶ Deshacer</button>
+          <button type="button" class="btn" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="clearTraceEx1()">Limpiar</button>
+        </div>
+      </div>
+
+      <!-- Deslizadores de paso 0.1 y Multiplicador Escalar k -->
       <div class="control-group" style="display:flex; flex-direction:column; gap:0.85rem;">
         <div>
           <div class="control-label">
             <span class="comp-x-color" style="font-weight:700;">Componente <span class="math-var">x</span></span>
             <span id="ex1-val-x" class="control-value comp-x-color">1.0</span>
           </div>
-          <input type="range" id="ex1-slider-x" class="ex1-slider-x" min="-5" max="5" step="0.5" value="1">
+          <input type="range" id="ex1-slider-x" class="ex1-slider-x" min="-5" max="5" step="0.1" value="1">
         </div>
 
         <div>
@@ -931,7 +1198,15 @@
             <span class="comp-y-color" style="font-weight:700;">Componente <span class="math-var">y</span></span>
             <span id="ex1-val-y" class="control-value comp-y-color">1.5</span>
           </div>
-          <input type="range" id="ex1-slider-y" class="ex1-slider-y" min="-5" max="5" step="0.5" value="1.5">
+          <input type="range" id="ex1-slider-y" class="ex1-slider-y" min="-5" max="5" step="0.1" value="1.5">
+        </div>
+
+        <div style="padding-top:0.55rem; border-top:1px solid var(--border-color);">
+          <div class="control-label">
+            <span style="color:#a855f7; font-weight:700;">Escalar <span class="math-var">k</span> (misma dirección: <span class="math-var">k</span><span class="vec-arrow">v</span>)</span>
+            <span id="ex1-val-k" class="control-value" style="color:#a855f7;">1.0×</span>
+          </div>
+          <input type="range" id="ex1-slider-k" min="-3" max="3" step="0.1" value="1" style="accent-color:#a855f7;">
         </div>
       </div>
 
@@ -947,17 +1222,19 @@
 
       <div class="canvas-wrapper ex1-canvas-box">
         <canvas id="canvas1_img"></canvas>
+
         <div class="ex1-zoom-controls">
           <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('img', 1.25)" title="Acercar">+</button>
-          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('img', 0.8)" title="Alejar (ver más plano)">−</button>
+          <button type="button" class="ex1-zoom-btn" onclick="zoomEx1('img', 0.8)" title="Alejar">−</button>
           <button type="button" class="ex1-zoom-btn" onclick="resetZoomEx1('img')" title="Restablecer vista">1:1</button>
         </div>
 
         <div class="canvas-legend">
           <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-font">im <span class="math-var">T</span></span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="math-var">k</span><span class="vec-arrow">v</span>)</span></span>
           <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">T(î)</span> / Comp. 1</span>
           <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">T(ĵ)</span> / Comp. 2</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro</span>
         </div>
       </div>
 
@@ -965,7 +1242,7 @@
     </section>
 
   </div>
-</article>
+  </article>
 
     </main>
   </div>
@@ -1255,7 +1532,7 @@
     <div class="card-title-group">
       <span class="badge badge-purple">EJERCICIO 02 • ℝ² → ℝ³</span>
       <h2>Núcleo 2D e Imagen Espacial 3D de una Transformación Lineal</h2>
-      <p>Edita la transformación en columnas, encuentra el núcleo <span class="math-font">nu <span class="math-var">T</span></span> en <span class="math-font">ℝ²</span> o activa el <strong>Modo Rastreo</strong> para dibujar trayectorias y ver su proyección con relieve en <span class="math-font">ℝ³</span>.</p>
+      <p>Edita la transformación, encuentra el núcleo <span class="math-font">nu <span class="math-var">T</span></span> en <span class="math-font">ℝ²</span> o activa <strong>Dibujar Rastro</strong> en el panel 3D para trazar puntos directamente en el espacio.</p>
     </div>
   </div>
 
@@ -1281,10 +1558,10 @@
     <div id="ex2-dynamic-formula" class="ex2-col-equation" style="justify-content:center; padding:0.35rem 0;"></div>
   </div>
 
-  <!-- DOS PANELES: DOMINIO 2D (nu T + RASTREO) E IMAGEN 3D (im T) -->
+  <!-- DOS PANELES: DOMINIO 2D (nu T) E IMAGEN 3D (im T + RASTREO Y GIRO) -->
   <div class="ex2-dual-panels">
 
-    <!-- PANEL 1: NÚCLEO nu T Y RASTREO EN R² -->
+    <!-- PANEL 1: NÚCLEO nu T EN R² -->
     <section class="ex2-subpanel">
       <div class="ex2-subpanel-header">
         <h3 class="ex2-subpanel-title">1. Dominio <span class="math-font">ℝ²</span> — Núcleo <span class="math-font" style="color: var(--neon-cyan);">nu <span class="math-var">T</span></span></h3>
@@ -1295,13 +1572,11 @@
         <canvas id="canvas2_ker"></canvas>
 
         <div class="ex2-zoom-controls">
-          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 1.2)" title="Acercar 3D">+</button>
-          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('img', 0.83)" title="Alejar 3D">−</button>
-          <button type="button" id="ex2-btn-spin" class="ex2-zoom-btn" onclick="toggleSpinEx2()" title="Girar lentamente en 3D">⟳ Girar</button>
-          <button type="button" class="ex2-zoom-btn" onclick="resetZoomEx2('img')" title="Centrar vista 3D">Centrar</button>
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('ker', 1.25)" title="Acercar">+</button>
+          <button type="button" class="ex2-zoom-btn" onclick="zoomEx2('ker', 0.8)" title="Alejar">−</button>
+          <button type="button" class="ex2-zoom-btn" onclick="resetZoomEx2('ker')" title="Restablecer vista">1:1</button>
         </div>
 
-        <!-- Notificación flotante no intrusiva de Eliot -->
         <div id="eliot-toast-2" class="ex2-eliot-toast" aria-live="polite">
           <svg style="width:44px; height:44px; flex-shrink:0;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <rect x="42" y="6" width="16" height="9" rx="3" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2"/>
@@ -1334,19 +1609,6 @@
           <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
           <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
           <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro</span>
-        </div>
-      </div>
-
-      <!-- Controles de Rastreo (Dibujar Rastro, Deshacer, Limpiar) -->
-      <div class="ex2-trace-bar">
-        <label class="ex2-trace-toggle">
-          <input type="checkbox" id="ex2-trace-active" onchange="toggleTraceEx2()">
-          <span>Dibujar Rastro (<span class="math-font">ℝ² → ℝ³</span>)</span>
-        </label>
-        <div class="btn-group">
-          <button type="button" class="ex2-mini-btn" onclick="undoTraceEx2()">↶ Deshacer</button>
-          <button type="button" class="ex2-mini-btn" onclick="clearTraceEx2()">Limpiar</button>
         </div>
       </div>
 
@@ -1377,7 +1639,7 @@
     <section class="ex2-subpanel">
       <div class="ex2-subpanel-header">
         <h3 class="ex2-subpanel-title">2. Codominio <span class="math-font">ℝ³</span> — Imagen <span class="math-font" style="color: var(--neon-purple);">im <span class="math-var">T</span></span></h3>
-        <span class="badge badge-purple math-font">Arrastra para rotar 3D</span>
+        <span class="badge badge-purple math-font">Vector resultante T(<span class="vec-arrow">v</span>)</span>
       </div>
 
       <div class="canvas-wrapper ex2-canvas-3d">
@@ -1390,11 +1652,22 @@
         </div>
 
         <div class="canvas-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span>Comp. <span class="math-var">x</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span>Comp. <span class="math-var">y</span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span>Comp. <span class="math-var">z</span> / <span class="math-font">im <span class="math-var">T</span></span></span>
-          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+          <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span> resultante</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-font">im <span class="math-var">T</span></span></span>
           <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro 3D</span>
+        </div>
+      </div>
+
+      <!-- Barra de Rastreo y Giro en la sección 3D -->
+      <div class="ex2-trace-bar">
+        <label class="ex2-trace-toggle">
+          <input type="checkbox" id="ex2-trace-active" onchange="toggleTraceEx2()">
+          <span>Dibujar Rastro en 3D</span>
+        </label>
+        <div class="btn-group">
+          <button type="button" id="ex2-btn-spin" class="ex2-zoom-btn" onclick="toggleSpinEx2()" title="Girar lentamente en 3D">⟳ Girar</button>
+          <button type="button" class="ex2-mini-btn" onclick="undoTraceEx2()">↶ Deshacer</button>
+          <button type="button" class="ex2-mini-btn" onclick="clearTraceEx2()">Limpiar</button>
         </div>
       </div>
 
@@ -1405,6 +1678,183 @@
   </div>
 </article>
 
+    </main>
+  </div>
+  <!-- VISTA DE EJERCICIOS: R3 -> R3 -->
+  <div id="view-r3-r3" class="view-hidden">
+    <header class="app-header">
+      <div class="header-inner">
+        <div>
+          <button type="button" class="btn-back-menu" onclick="backToMainMenu()">← Volver al inicio</button>
+        </div>
+        <span class="header-tag">// ÁLGEBRA 2 • TRANSFORMACIONES LINEALES</span>
+        <h2 class="header-title">Ejercicios de <span class="math-font" style="-webkit-text-fill-color: #a855f7;">ℝ³</span> a <span class="math-font" style="-webkit-text-fill-color: #18c5d9;">ℝ³</span></h2>
+      </div>
+    </header>
+
+    <main class="container" id="exercises-r3-r3-container">
+      <article class="exercise-card" id="ex3-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="badge badge-purple">EJERCICIO 03 • ℝ³ → ℝ³</span>
+            <h2>Núcleo e Imagen Espacial 3D de un Endomorfismo Lineal</h2>
+            <p>Edita la transformación en <span class="math-font">ℝ³</span>, explora ambos espacios tridimensionales rotando la cámara y activa <strong>Dibujar Rastro</strong> para proyectar trayectorias espaciales en tiempo real.</p>
+          </div>
+        </div>
+
+        <!-- BARRA DE FÓRMULA EDITABLE CON SELECTOR DE ESTRUCTURA -->
+        <div class="ex3-formula-bar">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">Estructura <span class="math-font">ℝ³ → ℝ³</span>:</span>
+              <select id="ex3-structure-mode" onchange="changeStructureEx3()" style="background:var(--bg-main); color:var(--neon-cyan); border:1px solid var(--border-color); border-radius:8px; padding:0.35rem 0.65rem; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; outline:none; cursor:pointer;">
+                <option value="equations">1. Ecuaciones por componente</option>
+                <option value="matrix">2. Forma matricial A·v⃗ (3×3)</option>
+                <option value="columns">3. Combinación lineal x·T(î) + y·T(ĵ) + z·T(k̂)</option>
+              </select>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn" onclick="setPresetEx3(1, 0, -1, 0, 1, -1, 1, 1, -2)">Recta en nu T (Predet.)</button>
+              <button type="button" class="btn" onclick="setPresetEx3(1, 1, 1, 2, 2, 2, -1, -1, -1)">Plano en nu T (dim = 2)</button>
+              <button type="button" class="btn" onclick="setPresetEx3(1.5, 0.5, 0, 0, 1.5, 0.5, 0.5, 0, 1.5)">Inyectiva (nu T = {0⃗})</button>
+              <button type="button" class="btn" onclick="setPresetEx3(0, 0, 0, 0, 0, 0, 0, 0, 0)">Nula (nu T = ℝ³)</button>
+            </div>
+          </div>
+
+          <div id="ex3-dynamic-formula" class="ex3-col-equation" style="justify-content:center; padding:0.35rem 0;"></div>
+        </div>
+
+        <!-- DOS PANELES 3D: DOMINIO (nu T) Y CODOMINIO (im T) -->
+        <div class="ex3-dual-panels">
+
+          <!-- PANEL 1: DOMINIO 3D Y NÚCLEO nu T -->
+          <section class="ex3-subpanel">
+            <div class="ex3-subpanel-header">
+              <h3 class="ex3-subpanel-title">1. Dominio <span class="math-font">ℝ³</span> — Núcleo <span class="math-font" style="color: var(--neon-cyan);">nu <span class="math-var">T</span></span></h3>
+              <span class="badge badge-cyan math-font">T(<span class="vec-arrow">v</span>) = <span class="vec-arrow">0</span></span>
+            </div>
+
+            <div class="canvas-wrapper ex3-canvas-3d">
+              <canvas id="canvas3_ker"></canvas>
+
+              <div class="ex3-zoom-controls">
+                <button type="button" class="ex3-zoom-btn" onclick="zoomEx3('ker', 1.2)" title="Acercar 3D">+</button>
+                <button type="button" class="ex3-zoom-btn" onclick="zoomEx3('ker', 0.83)" title="Alejar 3D">−</button>
+                <button type="button" class="ex3-zoom-btn" onclick="resetZoomEx3('ker')" title="Centrar vista 3D">Centrar</button>
+              </div>
+
+              <!-- Notificación flotante de Eliot -->
+              <div id="eliot-toast-3" class="ex3-eliot-toast" aria-live="polite">
+                <svg style="width:44px; height:44px; flex-shrink:0;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="42" y="6" width="16" height="9" rx="3" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2"/>
+                  <rect x="45" y="13" width="10" height="5" fill="#1e293b"/>
+                  <rect x="12" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+                  <rect x="78" y="38" width="10" height="24" rx="5" fill="#a855f7"/>
+                  <rect x="18" y="18" width="64" height="56" rx="24" fill="#f8fafc" stroke="#3b82f6" stroke-width="3"/>
+                  <rect x="24" y="25" width="52" height="40" rx="16" fill="#0b0f19"/>
+                  <path d="M31 35 Q37 31 43 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <path d="M57 35 Q63 31 69 35" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <circle cx="37" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+                  <circle cx="35" cy="43" r="2" fill="#ffffff"/>
+                  <circle cx="63" cy="45" r="7.5" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+                  <circle cx="61" cy="43" r="2" fill="#ffffff"/>
+                  <path d="M44 54 Q50 61 56 54 Z" fill="#f472b6" stroke="#38bdf8" stroke-width="1.5"/>
+                  <circle cx="13" cy="76" r="9" fill="#f8fafc" stroke="#3b82f6" stroke-width="2.5"/>
+                  <line x1="8" y1="68" x2="6" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="13" y1="67" x2="13" y2="60" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="18" y1="68" x2="20" y2="62" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                  <rect x="30" y="75" width="40" height="20" rx="8" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2.5"/>
+                  <rect x="42" y="80" width="16" height="10" rx="4" fill="#a855f7"/>
+                </svg>
+                <div style="font-size:0.78rem; line-height:1.35; color:#f1f5f9;">
+                  <strong style="display:block; color:#10b981; font-family:'JetBrains Mono',monospace; font-size:0.74rem;">Eliot dice:</strong>
+                  <span id="eliot-msg-text-3">¡Exacto! El vector espacial colapsa al origen (0, 0, 0).</span>
+                </div>
+              </div>
+
+              <div class="canvas-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">x</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">y</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-var">z</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">nu <span class="math-var">T</span></span></span>
+              </div>
+            </div>
+
+            <!-- Deslizadores X, Y, Z -->
+            <div class="control-group" style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div>
+                <div class="control-label">
+                  <span class="ex3-cx" style="font-weight:700;">Componente <span class="math-var">x</span></span>
+                  <span id="ex3-val-x" class="control-value ex3-cx">1.5</span>
+                </div>
+                <input type="range" id="ex3-slider-x" class="ex3-slider-x" min="-5" max="5" step="0.1" value="1.5">
+              </div>
+
+              <div>
+                <div class="control-label">
+                  <span class="ex3-cy" style="font-weight:700;">Componente <span class="math-var">y</span></span>
+                  <span id="ex3-val-y" class="control-value ex3-cy">1.0</span>
+                </div>
+                <input type="range" id="ex3-slider-y" class="ex3-slider-y" min="-5" max="5" step="0.1" value="1.0">
+              </div>
+
+              <div>
+                <div class="control-label">
+                  <span class="ex3-cz" style="font-weight:700;">Componente <span class="math-var">z</span></span>
+                  <span id="ex3-val-z" class="control-value ex3-cz">0.5</span>
+                </div>
+                <input type="range" id="ex3-slider-z" class="ex3-slider-z" min="-5" max="5" step="0.1" value="0.5">
+              </div>
+            </div>
+
+            <!-- Caja de validación del núcleo -->
+            <div id="ex3-status-box" class="ex3-status-box is-invalid"></div>
+          </section>
+
+          <!-- PANEL 2: CODOMINIO 3D E IMAGEN im T -->
+          <section class="ex3-subpanel">
+            <div class="ex3-subpanel-header">
+              <h3 class="ex3-subpanel-title">2. Codominio <span class="math-font">ℝ³</span> — Imagen <span class="math-font" style="color: var(--neon-purple);">im <span class="math-var">T</span></span></h3>
+              <span class="badge badge-purple math-font">Gen{T(î), T(ĵ), T(k̂)}</span>
+            </div>
+
+            <div class="canvas-wrapper ex3-canvas-3d">
+              <canvas id="canvas3_img"></canvas>
+
+              <div class="ex3-zoom-controls">
+                <button type="button" class="ex3-zoom-btn" onclick="zoomEx3('img', 1.2)" title="Acercar 3D">+</button>
+                <button type="button" class="ex3-zoom-btn" onclick="zoomEx3('img', 0.83)" title="Alejar 3D">−</button>
+                <button type="button" class="ex3-zoom-btn" onclick="resetZoomEx3('img')" title="Centrar vista 3D">Centrar</button>
+              </div>
+
+              <div class="canvas-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-font">im <span class="math-var">T</span></span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro 3D</span>
+              </div>
+            </div>
+
+            <!-- Barra de Rastreo y Giro sincronizada -->
+            <div class="ex3-trace-bar">
+              <label class="ex3-trace-toggle">
+          <input type="checkbox" id="ex3-trace-active" onchange="toggleTraceEx3()">
+        <span>Dibujar Rastro (clic en Imagen 3D)</span>
+        </label>
+              <div class="btn-group">
+                <button type="button" id="ex3-btn-spin" class="ex3-zoom-btn" onclick="toggleSpinEx3()" title="Girar lentamente en 3D">⟳ Girar</button>
+                <button type="button" class="ex3-mini-btn" onclick="undoTraceEx3()">↶ Deshacer</button>
+                <button type="button" class="ex3-mini-btn" onclick="clearTraceEx3()">Limpiar</button>
+              </div>
+            </div>
+
+            <!-- Lectura en columnas de T(v) en R³ y Teorema Rango-Nulidad -->
+            <div id="ex3-img-readout" class="math-readout" style="border-left-color: var(--neon-purple);"></div>
+          </section>
+
+        </div>
+      </article>
     </main>
   </div>
  
@@ -1683,15 +2133,31 @@
       const menu = document.getElementById('main-menu-screen');
       const viewR2R2 = document.getElementById('view-r2-r2');
       const viewR2R3 = document.getElementById('view-r2-r3');
+      const viewR3R3 = document.getElementById('view-r3-r3');
 
       menu.classList.add('view-hidden');
       viewR2R2.classList.add('view-hidden');
       viewR2R3.classList.add('view-hidden');
+      if (viewR3R3) viewR3R3.classList.add('view-hidden');
 
       if (category === 'r2-r2') {
         viewR2R2.classList.remove('view-hidden');
+        if (typeof updateEx1 === 'function') {
+          updateEx1();
+          requestAnimationFrame(updateEx1);
+        }
       } else if (category === 'r2-r3') {
         viewR2R3.classList.remove('view-hidden');
+        if (typeof updateEx2 === 'function') {
+          updateEx2();
+          requestAnimationFrame(updateEx2);
+        }
+      } else if (category === 'r3-r3' && viewR3R3) {
+        viewR3R3.classList.remove('view-hidden');
+        if (typeof updateEx3 === 'function') {
+          updateEx3();
+          requestAnimationFrame(updateEx3);
+        }
       }
 
       window.dispatchEvent(new Event('resize'));
@@ -1701,6 +2167,8 @@
     function backToMainMenu() {
       document.getElementById('view-r2-r2').classList.add('view-hidden');
       document.getElementById('view-r2-r3').classList.add('view-hidden');
+      const viewR3R3 = document.getElementById('view-r3-r3');
+      if (viewR3R3) viewR3R3.classList.add('view-hidden');
       document.getElementById('main-menu-screen').classList.remove('view-hidden');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -1708,9 +2176,11 @@
     function initMainMenu() {
       const btnR2R2 = document.getElementById('btn-open-r2-r2');
       const btnR2R3 = document.getElementById('btn-open-r2-r3');
+      const btnR3R3 = document.getElementById('btn-open-r3-r3');
 
       if (btnR2R2) btnR2R2.addEventListener('click', () => openCategoryView('r2-r2'));
       if (btnR2R3) btnR2R3.addEventListener('click', () => openCategoryView('r2-r3'));
+      if (btnR3R3) btnR3R3.addEventListener('click', () => openCategoryView('r3-r3'));
     }
     /* ==========================================================================
        FONDO FLUIDO INTERACTIVO (NÚCLEO, IMAGEN Y TRANSFORMACIONES LINEALES)
@@ -1917,17 +2387,30 @@
 /* ==========================================================================
        MÓDULO 1: NÚCLEO E IMAGEN DE TRANSFORMACIÓN LINEAL (R² -> R²)
        ========================================================================== */
-   const stateEx1 = {
+  
+/* ==========================================================================
+       MÓDULO 1: NÚCLEO E IMAGEN DE TRANSFORMACIÓN LINEAL (R² -> R²)
+       ========================================================================== */
+    /* ==========================================================================
+       MÓDULO 1: NÚCLEO E IMAGEN EN EL PLANO (R² -> R²)
+       ========================================================================== */
+    const stateEx1 = {
       a: 2,
       b: 4,
       c: 1,
       d: 2,
       x: 1.0,
       y: 1.5,
+      k: 1.0,
       scaleKer: 36,
       scaleImg: 36,
       maxRange: 5,
-      dragging: false
+      dragging: false,
+      traceEnabled: false,
+      traces: [],
+      currentStroke: null,
+      hoveredTraceKer: null,
+      hoveredTraceImg: null
     };
 
     function syncSliderBoundsEx1() {
@@ -1935,7 +2418,7 @@
       const sliderY = document.getElementById('ex1-slider-y');
       if (!sliderX || !sliderY) return;
 
-      const dynamicMax = Math.max(5, Math.min(20, Math.floor(195 / stateEx1.scaleKer)));
+      const dynamicMax = Math.max(5, Math.min(14, Math.floor(195 / stateEx1.scaleKer)));
       stateEx1.maxRange = dynamicMax;
 
       sliderX.min = -dynamicMax;
@@ -1946,10 +2429,10 @@
 
     function zoomEx1(target, factor) {
       if (target === 'ker') {
-        stateEx1.scaleKer = Math.max(12, Math.min(72, stateEx1.scaleKer * factor));
+        stateEx1.scaleKer = Math.max(20, Math.min(72, stateEx1.scaleKer * factor));
         syncSliderBoundsEx1();
       } else if (target === 'img') {
-        stateEx1.scaleImg = Math.max(12, Math.min(72, stateEx1.scaleImg * factor));
+        stateEx1.scaleImg = Math.max(20, Math.min(72, stateEx1.scaleImg * factor));
       }
       updateEx1();
     }
@@ -1962,6 +2445,47 @@
         stateEx1.scaleImg = 36;
       }
       updateEx1();
+    }
+
+    function toggleTraceEx1() {
+      const chk = document.getElementById('ex1-trace-active');
+      stateEx1.traceEnabled = chk ? chk.checked : false;
+      updateEx1();
+    }
+
+    function undoTraceEx1() {
+      if (stateEx1.traces.length > 0) {
+        stateEx1.traces.pop();
+        stateEx1.hoveredTraceKer = null;
+        stateEx1.hoveredTraceImg = null;
+        updateEx1();
+      }
+    }
+
+    function clearTraceEx1() {
+      stateEx1.traces = [];
+      stateEx1.currentStroke = null;
+      stateEx1.hoveredTraceKer = null;
+      stateEx1.hoveredTraceImg = null;
+      updateEx1();
+    }
+
+    function recordTracePointEx1(vx, vy, isNewStroke = false) {
+      if (!stateEx1.traceEnabled) return;
+      const pt = {
+        vx: Math.round(vx * 100) / 100,
+        vy: Math.round(vy * 100) / 100
+      };
+      if (isNewStroke || stateEx1.traces.length === 0) {
+        stateEx1.currentStroke = [pt];
+        stateEx1.traces.push(stateEx1.currentStroke);
+      } else {
+        const stroke = stateEx1.traces[stateEx1.traces.length - 1];
+        const last = stroke[stroke.length - 1];
+        if (!last || last.vx !== pt.vx || last.vy !== pt.vy) {
+          stroke.push(pt);
+        }
+      }
     }
 
     function renderFormulaInputsEx1() {
@@ -1987,10 +2511,10 @@
           <div class="ex1-bracket-box">
             <span class="matrix-bracket left"></span>
             <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.45rem; padding:0.25rem 0.35rem;">
-              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}" title="a">
-              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}" title="b">
-              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}" title="c">
-              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}" title="d">
+              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}">
+              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}">
+              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}">
+              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}">
             </div>
             <span class="matrix-bracket right"></span>
           </div>
@@ -2019,8 +2543,8 @@
           <div class="ex1-bracket-box">
             <span class="matrix-bracket left"></span>
             <div class="ex1-col-stack">
-              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}" title="a">
-              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}" title="c">
+              <input type="number" step="0.5" id="ex1-a" class="ex1-coeff-input" value="${a}">
+              <input type="number" step="0.5" id="ex1-c" class="ex1-coeff-input" value="${c}">
             </div>
             <span class="matrix-bracket right"></span>
           </div>
@@ -2029,8 +2553,8 @@
           <div class="ex1-bracket-box">
             <span class="matrix-bracket left"></span>
             <div class="ex1-col-stack">
-              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}" title="b">
-              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}" title="d">
+              <input type="number" step="0.5" id="ex1-b" class="ex1-coeff-input" value="${b}">
+              <input type="number" step="0.5" id="ex1-d" class="ex1-coeff-input" value="${d}">
             </div>
             <span class="matrix-bracket right"></span>
           </div>
@@ -2102,10 +2626,12 @@
 
       const sliderX = document.getElementById('ex1-slider-x');
       const sliderY = document.getElementById('ex1-slider-y');
+      const sliderK = document.getElementById('ex1-slider-k');
       if (!sliderX || !sliderY) return;
 
       const x = Math.round(parseFloat(sliderX.value) * 10) / 10;
       const y = Math.round(parseFloat(sliderY.value) * 10) / 10;
+      const k = sliderK ? (Math.round(parseFloat(sliderK.value) * 10) / 10) : stateEx1.k;
 
       stateEx1.a = a;
       stateEx1.b = b;
@@ -2113,11 +2639,83 @@
       stateEx1.d = d;
       stateEx1.x = x;
       stateEx1.y = y;
+      stateEx1.k = k;
 
-      document.getElementById('ex1-val-x').textContent = x.toFixed(1);
-      document.getElementById('ex1-val-y').textContent = y.toFixed(1);
+      const valX = document.getElementById('ex1-val-x');
+      const valY = document.getElementById('ex1-val-y');
+      const valK = document.getElementById('ex1-val-k');
+      if (valX) valX.textContent = x.toFixed(1);
+      if (valY) valY.textContent = y.toFixed(1);
+      if (valK) valK.textContent = `${k.toFixed(1)}×`;
 
       drawEx1();
+    }
+
+    function drawTraceTooltipEx1(ctx, canvasW, canvasH, px, py, segments) {
+      ctx.save();
+      ctx.font = 'bold 12px "JetBrains Mono", monospace';
+      let totalW = 0;
+      const measured = segments.map(seg => {
+        const w = ctx.measureText(seg.text).width;
+        totalW += w;
+        return { ...seg, w };
+      });
+
+      const padX = 9;
+      const boxW = totalW + padX * 2;
+      const boxH = 26;
+
+      let bx = px + 12;
+      let by = py - boxH - 10;
+      if (bx + boxW > canvasW - 8) bx = px - boxW - 12;
+      if (bx < 8) bx = 8;
+      if (by < 8) by = py + 14;
+      if (by + boxH > canvasH - 8) by = canvasH - boxH - 8;
+
+      ctx.fillStyle = 'rgba(11, 12, 16, 0.92)';
+      ctx.beginPath();
+      ctx.roundRect(bx, by, boxW, boxH, 7);
+      ctx.fill();
+
+      ctx.strokeStyle = '#ec4899';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      let curX = bx + padX;
+      const textY = by + boxH / 2 + 1;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      for (const seg of measured) {
+        ctx.fillStyle = seg.color;
+        ctx.fillText(seg.text, curX, textY);
+        curX += seg.w;
+      }
+      ctx.restore();
+    }
+
+  function drawParallelogramEx1(view, v1, v2, fillColor, strokeColor) {
+      const { ctx, origin, scale } = view;
+      const p0 = mathToScreen(0, 0, origin, scale);
+      const p1 = mathToScreen(v1[0], v1[1], origin, scale);
+      const p12 = mathToScreen(v1[0] + v2[0], v1[1] + v2[1], origin, scale);
+      const p2 = mathToScreen(v2[0], v2[1], origin, scale);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(p0.px, p0.py);
+      ctx.lineTo(p1.px, p1.py);
+      ctx.lineTo(p12.px, p12.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.closePath();
+
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+      ctx.restore();
     }
 
     function drawEx1() {
@@ -2126,9 +2724,13 @@
       if (!viewKer || !viewImg) return;
 
       const { a, b, c, d, x, y } = stateEx1;
+      const k = typeof stateEx1.k === 'number' ? stateEx1.k : 1;
 
-      const tx = Math.round((a * x + b * y) * 1e6) / 1e6;
-      const ty = Math.round((c * x + d * y) * 1e6) / 1e6;
+      const vx = Math.round(x * k * 100) / 100;
+      const vy = Math.round(y * k * 100) / 100;
+
+      const tx = Math.round((a * vx + b * vy) * 1e6) / 1e6;
+      const ty = Math.round((c * vx + d * vy) * 1e6) / 1e6;
       const det = Math.round((a * d - b * c) * 1e6) / 1e6;
 
       const isZeroMatrix = (a === 0 && b === 0 && c === 0 && d === 0);
@@ -2139,16 +2741,21 @@
       let isKernelValid = false;
 
       if (isRank2) {
-        isKernelValid = (x === 0 && y === 0);
+        isKernelValid = (vx === 0 && vy === 0);
       } else {
-        isKernelValid = isExactZeroOutput && (x !== 0 || y !== 0);
+        isKernelValid = isExactZeroOutput && (vx !== 0 || vy !== 0);
       }
 
       /* 1. PANEL IZQUIERDO: DOMINIO Y NÚCLEO nu T */
       drawBaseGrid(viewKer, true);
+      const ctxK = viewKer.ctx;
+
+      // Sombra morada (cuadrado unitario) entre î = (1,0) y ĵ = (0,1)
+      drawParallelogramEx1(viewKer, [1, 0], [0, 1], 'rgba(168, 85, 247, 0.20)', '#a855f7');
+      drawVector(viewKer, 1, 0, '#18c5d9', 'î', 0, 0, true);
+      drawVector(viewKer, 0, 1, '#f06565', 'ĵ', 0, 0, true);
 
       if (isKernelValid) {
-        const ctxK = viewKer.ctx;
         ctxK.save();
         if (isZeroMatrix) {
           ctxK.fillStyle = 'rgba(16, 185, 129, 0.10)';
@@ -2174,43 +2781,79 @@
         ctxK.restore();
       }
 
+      if (Array.isArray(stateEx1.traces) && stateEx1.traces.length > 0) {
+        ctxK.save();
+        ctxK.strokeStyle = '#ec4899';
+        ctxK.lineWidth = 2.5;
+        ctxK.lineCap = 'round';
+        ctxK.lineJoin = 'round';
+
+        for (const stroke of stateEx1.traces) {
+          if (stroke.length === 0) continue;
+          ctxK.beginPath();
+          stroke.forEach((pt, idx) => {
+            const sp = mathToScreen(pt.vx, pt.vy, viewKer.origin, viewKer.scale);
+            if (idx === 0) ctxK.moveTo(sp.px, sp.py);
+            else ctxK.lineTo(sp.px, sp.py);
+          });
+          ctxK.stroke();
+
+          for (const pt of stroke) {
+            const sp = mathToScreen(pt.vx, pt.vy, viewKer.origin, viewKer.scale);
+            ctxK.fillStyle = '#f472b6';
+            ctxK.beginPath();
+            ctxK.arc(sp.px, sp.py, 3.4, 0, Math.PI * 2);
+            ctxK.fill();
+          }
+        }
+        ctxK.restore();
+      }
+
       const p0 = mathToScreen(0, 0, viewKer.origin, viewKer.scale);
-      const pxComp = mathToScreen(x, 0, viewKer.origin, viewKer.scale);
-      const pVec = mathToScreen(x, y, viewKer.origin, viewKer.scale);
+      const pxComp = mathToScreen(vx, 0, viewKer.origin, viewKer.scale);
+      const pScaled = mathToScreen(vx, vy, viewKer.origin, viewKer.scale);
+      const pBase = mathToScreen(x, y, viewKer.origin, viewKer.scale);
 
-      viewKer.ctx.save();
-      viewKer.ctx.setLineDash([4, 4]);
-      viewKer.ctx.lineWidth = 2;
+      ctxK.save();
+      ctxK.setLineDash([4, 4]);
+      ctxK.lineWidth = 2;
 
-      if (x !== 0) {
-        viewKer.ctx.strokeStyle = '#18c5d9';
-        viewKer.ctx.beginPath();
-        viewKer.ctx.moveTo(p0.px, p0.py);
-        viewKer.ctx.lineTo(pxComp.px, pxComp.py);
-        viewKer.ctx.stroke();
+      if (vx !== 0) {
+        ctxK.strokeStyle = '#18c5d9';
+        ctxK.beginPath();
+        ctxK.moveTo(p0.px, p0.py);
+        ctxK.lineTo(pxComp.px, pxComp.py);
+        ctxK.stroke();
       }
 
-      if (y !== 0) {
-        viewKer.ctx.strokeStyle = '#f06565';
-        viewKer.ctx.beginPath();
-        viewKer.ctx.moveTo(pxComp.px, pxComp.py);
-        viewKer.ctx.lineTo(pVec.px, pVec.py);
-        viewKer.ctx.stroke();
+      if (vy !== 0) {
+        ctxK.strokeStyle = '#f06565';
+        ctxK.beginPath();
+        ctxK.moveTo(pxComp.px, pxComp.py);
+        ctxK.lineTo(pScaled.px, pScaled.py);
+        ctxK.stroke();
       }
-      viewKer.ctx.restore();
+      ctxK.restore();
 
       const vecColor = isKernelValid ? '#10b981' : '#4f7df3';
-      drawVector(viewKer, x, y, vecColor, 'v⃗');
+      if (k !== 1) {
+        drawVector(viewKer, x, y, 'rgba(148, 163, 184, 0.65)', 'v⃗', 0, 0, true);
+        if (vx !== 0 || vy !== 0) {
+          drawVector(viewKer, vx, vy, vecColor, `${k.toFixed(1)}v⃗`);
+        }
+      } else {
+        drawVector(viewKer, x, y, vecColor, 'v⃗');
+      }
 
-      viewKer.ctx.save();
-      viewKer.ctx.beginPath();
-      viewKer.ctx.arc(pVec.px, pVec.py, 7, 0, Math.PI * 2);
-      viewKer.ctx.fillStyle = isKernelValid ? '#10b981' : '#f06565';
-      viewKer.ctx.fill();
-      viewKer.ctx.lineWidth = 2;
-      viewKer.ctx.strokeStyle = '#ffffff';
-      viewKer.ctx.stroke();
-      viewKer.ctx.restore();
+      ctxK.save();
+      ctxK.beginPath();
+      ctxK.arc(pBase.px, pBase.py, 7, 0, Math.PI * 2);
+      ctxK.fillStyle = isKernelValid ? '#10b981' : '#f06565';
+      ctxK.fill();
+      ctxK.lineWidth = 2;
+      ctxK.strokeStyle = '#ffffff';
+      ctxK.stroke();
+      ctxK.restore();
 
       const statusBox = document.getElementById('ex1-status-box');
       const eliotToast = document.getElementById('eliot-toast-1');
@@ -2235,23 +2878,23 @@
         statusBox.innerHTML = `
           <div><strong>✓ ¡NÚCLEO ENCONTRADO CON PRECISIÓN EXACTA!</strong></div>
           <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${x.toFixed(1)}</span>, <span class="comp-y-color">${y.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0)
+            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${vx.toFixed(1)}</span>, <span class="comp-y-color">${vy.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0)
           </div>
           <div>Subespacio: <strong>${kernelDesc}</strong></div>
         `;
         eliotText.textContent = isRank2
           ? '¡Exacto! Como det(A) ≠ 0, el origen (0,0) es el único vector en nu T.'
-          : `¡Excelente! v = (${x.toFixed(1)}, ${y.toFixed(1)}) colapsa exactamente al vector nulo.`;
+          : `¡Excelente! v = (${vx.toFixed(1)}, ${vy.toFixed(1)}) colapsa exactamente al vector nulo.`;
         eliotToast.classList.add('visible');
       } else {
         statusBox.className = 'ex1-status-box is-invalid';
-        const hintMsg = (!isRank2 && x === 0 && y === 0)
+        const hintMsg = (!isRank2 && vx === 0 && vy === 0)
           ? 'El origen (0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
           : 'Ajusta los deslizadores o arrastra el punto hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0).';
         statusBox.innerHTML = `
           <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
           <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${x.toFixed(1)}</span>, <span class="comp-y-color">${y.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="comp-x-color">${tx.toFixed(1)}</span>, <span class="comp-y-color">${ty.toFixed(1)}</span>)
+            <span class="vec-arrow">v</span> = (<span class="comp-x-color">${vx.toFixed(1)}</span>, <span class="comp-y-color">${vy.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="comp-x-color">${tx.toFixed(1)}</span>, <span class="comp-y-color">${ty.toFixed(1)}</span>)
           </div>
           <div style="opacity:0.88;">${hintMsg}</div>
         `;
@@ -2260,13 +2903,11 @@
 
       /* 2. PANEL DERECHO: CODOMINIO E IMAGEN im T */
       drawBaseGrid(viewImg, true);
-
       const ctxI = viewImg.ctx;
-      ctxI.save();
+
+      // Sombra morada (paralelogramo generado) entre T(î) y T(ĵ)
       if (isRank2) {
-        const gridSpan = Math.ceil(320 / stateEx1.scaleImg);
-        drawTransformedGrid(viewImg, [[a, b], [c, d]], 'rgba(168, 85, 247, 0.22)', gridSpan);
-        drawUnitSquare(viewImg, [[a, b], [c, d]], 'rgba(168, 85, 247, 0.14)', '#a855f7');
+        drawParallelogramEx1(viewImg, [a, c], [b, d], 'rgba(168, 85, 247, 0.22)', '#a855f7');
       } else if (isRank1) {
         const colX = (Math.abs(a) + Math.abs(c) > 0) ? a : b;
         const colY = (Math.abs(a) + Math.abs(c) > 0) ? c : d;
@@ -2277,14 +2918,47 @@
         const pStart = mathToScreen(-ux, -uy, viewImg.origin, viewImg.scale);
         const pEnd = mathToScreen(ux, uy, viewImg.origin, viewImg.scale);
 
+        ctxI.save();
         ctxI.strokeStyle = '#a855f7';
         ctxI.lineWidth = 3.5;
         ctxI.beginPath();
         ctxI.moveTo(pStart.px, pStart.py);
         ctxI.lineTo(pEnd.px, pEnd.py);
         ctxI.stroke();
+        ctxI.restore();
       }
-      ctxI.restore();
+
+      if (Array.isArray(stateEx1.traces) && stateEx1.traces.length > 0) {
+        ctxI.save();
+        ctxI.strokeStyle = '#ec4899';
+        ctxI.lineWidth = 2.5;
+        ctxI.lineCap = 'round';
+        ctxI.lineJoin = 'round';
+
+        for (const stroke of stateEx1.traces) {
+          if (stroke.length === 0) continue;
+          ctxI.beginPath();
+          stroke.forEach((pt, idx) => {
+            const ptx = a * pt.vx + b * pt.vy;
+            const pty = c * pt.vx + d * pt.vy;
+            const sp = mathToScreen(ptx, pty, viewImg.origin, viewImg.scale);
+            if (idx === 0) ctxI.moveTo(sp.px, sp.py);
+            else ctxI.lineTo(sp.px, sp.py);
+          });
+          ctxI.stroke();
+
+          for (const pt of stroke) {
+            const ptx = a * pt.vx + b * pt.vy;
+            const pty = c * pt.vx + d * pt.vy;
+            const sp = mathToScreen(ptx, pty, viewImg.origin, viewImg.scale);
+            ctxI.fillStyle = '#f472b6';
+            ctxI.beginPath();
+            ctxI.arc(sp.px, sp.py, 3.4, 0, Math.PI * 2);
+            ctxI.fill();
+          }
+        }
+        ctxI.restore();
+      }
 
       drawVector(viewImg, a, c, '#18c5d9', 'T(î)', 0, 0, true);
       drawVector(viewImg, b, d, '#f06565', 'T(ĵ)', 0, 0, true);
@@ -2313,7 +2987,7 @@
       ctxI.restore();
 
       if (tx !== 0 || ty !== 0) {
-        drawVector(viewImg, tx, ty, '#10b981', 'T(v⃗)');
+        drawVector(viewImg, tx, ty, '#10b981', k !== 1 ? 'T(kv⃗)' : 'T(v⃗)');
       } else {
         ctxI.save();
         ctxI.beginPath();
@@ -2376,10 +3050,12 @@
 
       const sliderX = document.getElementById('ex1-slider-x');
       const sliderY = document.getElementById('ex1-slider-y');
+      const sliderK = document.getElementById('ex1-slider-k');
       if (sliderX) sliderX.addEventListener('input', scheduleDrawEx1);
       if (sliderY) sliderY.addEventListener('input', scheduleDrawEx1);
+      if (sliderK) sliderK.addEventListener('input', scheduleDrawEx1);
 
-      function handlePointerMoveEx1(clientX, clientY) {
+      function handlePointerMoveEx1(clientX, clientY, isNewStroke = false) {
         const rect = canvasKer.getBoundingClientRect();
         const px = clientX - rect.left;
         const py = clientY - rect.top;
@@ -2387,23 +3063,51 @@
         const mathPt = screenToMath(px, py, origin, stateEx1.scaleKer);
 
         const limit = stateEx1.maxRange;
-        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * 2) / 2));
-        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * 2) / 2));
+        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * 10) / 10));
+        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * 10) / 10));
 
         sliderX.value = clampedX;
         sliderY.value = clampedY;
+        stateEx1.x = clampedX;
+        stateEx1.y = clampedY;
+        recordTracePointEx1(clampedX * stateEx1.k, clampedY * stateEx1.k, isNewStroke);
         scheduleDrawEx1();
       }
 
       canvasKer.addEventListener('pointerdown', (e) => {
         stateEx1.dragging = true;
         canvasKer.setPointerCapture(e.pointerId);
-        handlePointerMoveEx1(e.clientX, e.clientY);
+        handlePointerMoveEx1(e.clientX, e.clientY, true);
       });
 
       canvasKer.addEventListener('pointermove', (e) => {
-        if (!stateEx1.dragging) return;
-        handlePointerMoveEx1(e.clientX, e.clientY);
+        if (stateEx1.dragging) {
+          handlePointerMoveEx1(e.clientX, e.clientY, false);
+          return;
+        }
+        if (stateEx1.traces.length === 0) return;
+
+        const rect = canvasKer.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+
+        let best = null;
+        let bestDist = 12;
+        for (const stroke of stateEx1.traces) {
+          for (const pt of stroke) {
+            const sp = mathToScreen(pt.vx, pt.vy, origin, stateEx1.scaleKer);
+            const d = Math.hypot(mx - sp.px, my - sp.py);
+            if (d < bestDist) {
+              bestDist = d;
+              best = pt;
+            }
+          }
+        }
+        if (best !== stateEx1.hoveredTraceKer) {
+          stateEx1.hoveredTraceKer = best;
+          scheduleDrawEx1();
+        }
       });
 
       canvasKer.addEventListener('pointerup', (e) => {
@@ -2413,13 +3117,39 @@
         }
       });
 
-      // Zoom fluido con la rueda del ratón en ambas gráficas
       canvasKer.addEventListener('wheel', (e) => {
         e.preventDefault();
         zoomEx1('ker', e.deltaY < 0 ? 1.12 : 0.89);
       }, { passive: false });
 
       if (canvasImg) {
+        canvasImg.addEventListener('pointermove', (e) => {
+          if (stateEx1.traces.length === 0) return;
+          const rect = canvasImg.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const my = e.clientY - rect.top;
+          const origin = { x: rect.width / 2, y: rect.height / 2 };
+
+          let best = null;
+          let bestDist = 12;
+          for (const stroke of stateEx1.traces) {
+            for (const pt of stroke) {
+              const ptx = stateEx1.a * pt.vx + stateEx1.b * pt.vy;
+              const pty = stateEx1.c * pt.vx + stateEx1.d * pt.vy;
+              const sp = mathToScreen(ptx, pty, origin, stateEx1.scaleImg);
+              const d = Math.hypot(mx - sp.px, my - sp.py);
+              if (d < bestDist) {
+                bestDist = d;
+                best = pt;
+              }
+            }
+          }
+          if (best !== stateEx1.hoveredTraceImg) {
+            stateEx1.hoveredTraceImg = best;
+            scheduleDrawEx1();
+          }
+        });
+
         canvasImg.addEventListener('wheel', (e) => {
           e.preventDefault();
           zoomEx1('img', e.deltaY < 0 ? 1.12 : 0.89);
@@ -2429,6 +3159,7 @@
       if (typeof ResizeObserver !== 'undefined') {
         const ro = new ResizeObserver(() => scheduleDrawEx1());
         ro.observe(canvasKer);
+        if (canvasImg) ro.observe(canvasImg);
       }
 
       window.addEventListener('resize', scheduleDrawEx1);
@@ -2441,6 +3172,9 @@
        ========================================================================== */
    /* ==========================================================================
        MÓDULO 2: NÚCLEO 2D E IMAGEN 3D CON RELIEVE, GIRO CONTINUO Y RASTREO (R² -> R³)
+       ========================================================================== */
+    /* ==========================================================================
+       MÓDULO 2: NÚCLEO 2D E IMAGEN 3D CON RASTREO DIRECTO EN 3D (R² -> R³)
        ========================================================================== */
     const stateEx2 = {
       a1: 1, b1: 2,
@@ -2457,12 +3191,12 @@
       spinRafId: null,
       dragging2D: false,
       dragging3D: false,
+      drawingTrace3D: false,
       lastMouseX: 0,
       lastMouseY: 0,
       traceEnabled: false,
-      traces: [],
-      currentStroke: null,
-      hoveredTrace2D: null,
+      traces3D: [], // Cada trazo es [{x, y, z}, ...]
+      currentStroke3D: null,
       hoveredTrace3D: null,
       projectedTrace3D: []
     };
@@ -2472,7 +3206,7 @@
       const sliderY = document.getElementById('ex2-slider-y');
       if (!sliderX || !sliderY) return;
 
-      const dynamicMax = Math.max(5, Math.min(20, Math.floor(195 / stateEx2.scaleKer)));
+      const dynamicMax = Math.max(5, Math.min(14, Math.floor(195 / stateEx2.scaleKer)));
       stateEx2.maxRange = dynamicMax;
       sliderX.min = -dynamicMax;
       sliderX.max = dynamicMax;
@@ -2511,7 +3245,7 @@
 
     function zoomEx2(target, factor) {
       if (target === 'ker') {
-        stateEx2.scaleKer = Math.max(12, Math.min(72, stateEx2.scaleKer * factor));
+        stateEx2.scaleKer = Math.max(20, Math.min(72, stateEx2.scaleKer * factor));
         syncSliderBoundsEx2();
       } else if (target === 'img') {
         stateEx2.zoom3D = Math.max(14, Math.min(90, stateEx2.zoom3D * factor));
@@ -2533,40 +3267,39 @@
 
     function toggleTraceEx2() {
       const chk = document.getElementById('ex2-trace-active');
+      const canvasImg = document.getElementById('canvas2_img');
       stateEx2.traceEnabled = chk ? chk.checked : false;
-      if (stateEx2.traceEnabled) {
-        stateEx2.traces.push([{ x: stateEx2.x, y: stateEx2.y }]);
+      if (canvasImg) {
+        canvasImg.style.cursor = stateEx2.traceEnabled ? 'crosshair' : 'grab';
       }
       updateEx2();
     }
 
     function undoTraceEx2() {
-      if (stateEx2.traces.length > 0) {
-        stateEx2.traces.pop();
-        stateEx2.hoveredTrace2D = null;
+      if (stateEx2.traces3D.length > 0) {
+        stateEx2.traces3D.pop();
         stateEx2.hoveredTrace3D = null;
         updateEx2();
       }
     }
 
     function clearTraceEx2() {
-      stateEx2.traces = [];
-      stateEx2.currentStroke = null;
-      stateEx2.hoveredTrace2D = null;
+      stateEx2.traces3D = [];
+      stateEx2.currentStroke3D = null;
       stateEx2.hoveredTrace3D = null;
       updateEx2();
     }
 
-    function recordTracePointEx2(x, y, isNewStroke = false) {
+    function recordTracePoint3DEx2(pt3, isNewStroke = false) {
       if (!stateEx2.traceEnabled) return;
-      if (isNewStroke || stateEx2.traces.length === 0) {
-        stateEx2.currentStroke = [{ x, y }];
-        stateEx2.traces.push(stateEx2.currentStroke);
+      if (isNewStroke || stateEx2.traces3D.length === 0) {
+        stateEx2.currentStroke3D = [pt3];
+        stateEx2.traces3D.push(stateEx2.currentStroke3D);
       } else {
-        const stroke = stateEx2.traces[stateEx2.traces.length - 1];
+        const stroke = stateEx2.traces3D[stateEx2.traces3D.length - 1];
         const last = stroke[stroke.length - 1];
-        if (!last || last.x !== x || last.y !== y) {
-          stroke.push({ x, y });
+        if (!last || last.x !== pt3.x || last.y !== pt3.y || last.z !== pt3.z) {
+          stroke.push(pt3);
         }
       }
     }
@@ -2725,10 +3458,6 @@
       const x = Math.round(parseFloat(sliderX.value) * 10) / 10;
       const y = Math.round(parseFloat(sliderY.value) * 10) / 10;
 
-      if (stateEx2.traceEnabled && (x !== stateEx2.x || y !== stateEx2.y)) {
-        recordTracePointEx2(x, y, false);
-      }
-
       stateEx2.x = x;
       stateEx2.y = y;
 
@@ -2757,6 +3486,28 @@
         py: height / 2 - y2 * zoom * persp,
         depth: z2,
         scale: persp
+      };
+    }
+
+    /* Proyección inversa desde pantalla hacia el plano 3D centrado en el origen */
+    function screenTo3DEx2(px, py, width, height, zoom, yaw, pitch) {
+      const x1 = (px - width / 2) / zoom;
+      const y2 = -(py - height / 2) / zoom;
+
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
+      const y = y2 * cosP;
+      const z1 = -y2 * sinP;
+
+      const cosY = Math.cos(yaw);
+      const sinY = Math.sin(yaw);
+      const x = x1 * cosY + z1 * sinY;
+      const z = -x1 * sinY + z1 * cosY;
+
+      return {
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10,
+        z: Math.round(z * 10) / 10
       };
     }
 
@@ -2913,7 +3664,7 @@
         : (isExactZeroOutput && (x !== 0 || y !== 0));
 
       /* ========================================================
-         1. PANEL IZQUIERDO: DOMINIO 2D (nu T + RASTREO)
+         1. PANEL IZQUIERDO: DOMINIO 2D (nu T)
          ======================================================== */
       drawBaseGrid(viewKer, true);
       const ctxK = viewKer.ctx;
@@ -2938,34 +3689,6 @@
           ctxK.moveTo(pS.px, pS.py);
           ctxK.lineTo(pE.px, pE.py);
           ctxK.stroke();
-        }
-        ctxK.restore();
-      }
-
-      if (stateEx2.traces.length > 0) {
-        ctxK.save();
-        ctxK.strokeStyle = '#ec4899';
-        ctxK.lineWidth = 2.5;
-        ctxK.lineCap = 'round';
-        ctxK.lineJoin = 'round';
-
-        for (const stroke of stateEx2.traces) {
-          if (stroke.length === 0) continue;
-          ctxK.beginPath();
-          stroke.forEach((pt, idx) => {
-            const sp = mathToScreen(pt.x, pt.y, viewKer.origin, viewKer.scale);
-            if (idx === 0) ctxK.moveTo(sp.px, sp.py);
-            else ctxK.lineTo(sp.px, sp.py);
-          });
-          ctxK.stroke();
-
-          for (const pt of stroke) {
-            const sp = mathToScreen(pt.x, pt.y, viewKer.origin, viewKer.scale);
-            ctxK.fillStyle = '#f472b6';
-            ctxK.beginPath();
-            ctxK.arc(sp.px, sp.py, 3.4, 0, Math.PI * 2);
-            ctxK.fill();
-          }
         }
         ctxK.restore();
       }
@@ -3005,30 +3728,6 @@
       ctxK.stroke();
       ctxK.restore();
 
-      // Etiqueta flotante si el cursor está sobre un punto de rastreo en 2D
-      if (stateEx2.hoveredTrace2D) {
-        const hp = stateEx2.hoveredTrace2D;
-        const sp = mathToScreen(hp.x, hp.y, viewKer.origin, viewKer.scale);
-
-        ctxK.save();
-        ctxK.beginPath();
-        ctxK.arc(sp.px, sp.py, 6.5, 0, Math.PI * 2);
-        ctxK.fillStyle = '#ec4899';
-        ctxK.fill();
-        ctxK.lineWidth = 2;
-        ctxK.strokeStyle = '#ffffff';
-        ctxK.stroke();
-        ctxK.restore();
-
-        drawTraceTooltipEx2(ctxK, viewKer.width, viewKer.height, sp.px, sp.py, [
-          { text: 'v = (', color: '#f1f5f9' },
-          { text: hp.x.toFixed(1), color: '#18c5d9' },
-          { text: ', ', color: '#f1f5f9' },
-          { text: hp.y.toFixed(1), color: '#f06565' },
-          { text: ')', color: '#f1f5f9' }
-        ]);
-      }
-
       const statusBox = document.getElementById('ex2-status-box');
       const eliotToast = document.getElementById('eliot-toast-2');
       const eliotText = document.getElementById('eliot-msg-text-2');
@@ -3062,7 +3761,7 @@
       }
 
       /* ========================================================
-         2. PANEL DERECHO: CODOMINIO 3D (im T, 3 COMPONENTES Y RASTRO)
+         2. PANEL DERECHO: CODOMINIO 3D (im T, T(v) Y RASTRO DIRECTO 3D)
          ======================================================== */
       const { ctx: ctx3, width: w3, height: h3 } = viewImg;
       ctx3.clearRect(0, 0, w3, h3);
@@ -3163,33 +3862,29 @@
       });
       ctx3.restore();
 
-      // Rastro 3D con registro de puntos proyectados para detección al pasar el cursor
+      // Rastro 3D dibujado directamente en el lienzo 3D
       stateEx2.projectedTrace3D = [];
       let activeHovered3DItem = null;
 
-      if (stateEx2.traces.length > 0) {
-        for (const stroke of stateEx2.traces) {
+      if (stateEx2.traces3D.length > 0) {
+        for (const stroke of stateEx2.traces3D) {
           if (stroke.length === 0) continue;
           const pts3D = stroke.map(pt => {
-            const px3 = Math.round((a1 * pt.x + b1 * pt.y) * 1e6) / 1e6;
-            const py3 = Math.round((a2 * pt.x + b2 * pt.y) * 1e6) / 1e6;
-            const pz3 = Math.round((a3 * pt.x + b3 * pt.y) * 1e6) / 1e6;
-            const p = proj(px3, py3, pz3);
+            const p = proj(pt.x, pt.y, pt.z);
             const item = {
               x: pt.x,
               y: pt.y,
-              tx: px3,
-              ty: py3,
-              tz: pz3,
+              z: pt.z,
               p,
-              floor: proj(px3, 0, pz3)
+              floor: proj(pt.x, 0, pt.z)
             };
             stateEx2.projectedTrace3D.push(item);
 
             if (
               stateEx2.hoveredTrace3D &&
               stateEx2.hoveredTrace3D.x === pt.x &&
-              stateEx2.hoveredTrace3D.y === pt.y
+              stateEx2.hoveredTrace3D.y === pt.y &&
+              stateEx2.hoveredTrace3D.z === pt.z
             ) {
               activeHovered3DItem = item;
             }
@@ -3197,7 +3892,7 @@
           });
 
           ctx3.save();
-          ctx3.strokeStyle = 'rgba(236, 72, 153, 0.25)';
+          ctx3.strokeStyle = 'rgba(236, 72, 153, 0.28)';
           ctx3.lineWidth = 1;
           ctx3.setLineDash([2, 3]);
           for (const item of pts3D) {
@@ -3227,52 +3922,9 @@
         }
       }
 
-      // 3 COMPONENTES SEPARADAS EN R³ CON RELIEVE + CAJA DE PROYECCIÓN 3D
+      // ÚNICAMENTE EL VECTOR RESULTANTE T(v⃗) EN R³ CON RELIEVE
       const o3 = proj(0, 0, 0);
-      const pTx = proj(tx, 0, 0);
-      const pTy = proj(0, ty, 0);
-      const pTz = proj(0, 0, tz);
-
-      const pTxy = proj(tx, ty, 0);
-      const pTxz = proj(tx, 0, tz);
-      const pTyz = proj(0, ty, tz);
       const pTxyz = proj(tx, ty, tz);
-
-      ctx3.save();
-      ctx3.setLineDash([3, 4]);
-      ctx3.lineWidth = 1.25;
-
-      ctx3.strokeStyle = 'rgba(24, 197, 217, 0.55)';
-      ctx3.beginPath();
-      ctx3.moveTo(pTy.px, pTy.py); ctx3.lineTo(pTxy.px, pTxy.py);
-      ctx3.moveTo(pTz.px, pTz.py); ctx3.lineTo(pTxz.px, pTxz.py);
-      ctx3.moveTo(pTyz.px, pTyz.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
-      ctx3.stroke();
-
-      ctx3.strokeStyle = 'rgba(240, 101, 101, 0.55)';
-      ctx3.beginPath();
-      ctx3.moveTo(pTx.px, pTx.py); ctx3.lineTo(pTxy.px, pTxy.py);
-      ctx3.moveTo(pTz.px, pTz.py); ctx3.lineTo(pTyz.px, pTyz.py);
-      ctx3.moveTo(pTxz.px, pTxz.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
-      ctx3.stroke();
-
-      ctx3.strokeStyle = 'rgba(168, 85, 247, 0.55)';
-      ctx3.beginPath();
-      ctx3.moveTo(pTx.px, pTx.py); ctx3.lineTo(pTxz.px, pTxz.py);
-      ctx3.moveTo(pTy.px, pTy.py); ctx3.lineTo(pTyz.px, pTyz.py);
-      ctx3.moveTo(pTxy.px, pTxy.py); ctx3.lineTo(pTxyz.px, pTxyz.py);
-      ctx3.stroke();
-      ctx3.restore();
-
-      if (tx !== 0) {
-        draw3DArrowRelief(ctx3, o3, pTx, '#18c5d9', '#67e8f9', '#0e7490', 3.6, `Tx (${tx.toFixed(1)})`);
-      }
-      if (ty !== 0) {
-        draw3DArrowRelief(ctx3, o3, pTy, '#f06565', '#fca5a5', '#991b1b', 3.6, `Ty (${ty.toFixed(1)})`);
-      }
-      if (tz !== 0) {
-        draw3DArrowRelief(ctx3, o3, pTz, '#a855f7', '#d8b4fe', '#6b21a8', 3.6, `Tz (${tz.toFixed(1)})`);
-      }
 
       if (tx !== 0 || ty !== 0 || tz !== 0) {
         draw3DArrowRelief(ctx3, o3, pTxyz, '#10b981', '#6ee7b7', '#047857', 5.2, 'T(v⃗)');
@@ -3292,12 +3944,12 @@
         ctx3.restore();
 
         drawTraceTooltipEx2(ctx3, w3, h3, activeHovered3DItem.p.px, activeHovered3DItem.p.py, [
-          { text: `T(${activeHovered3DItem.x.toFixed(1)}, ${activeHovered3DItem.y.toFixed(1)}) = (`, color: '#f1f5f9' },
-          { text: activeHovered3DItem.tx.toFixed(1), color: '#18c5d9' },
+          { text: 'P = (', color: '#f1f5f9' },
+          { text: activeHovered3DItem.x.toFixed(1), color: '#18c5d9' },
           { text: ', ', color: '#f1f5f9' },
-          { text: activeHovered3DItem.ty.toFixed(1), color: '#f06565' },
+          { text: activeHovered3DItem.y.toFixed(1), color: '#f06565' },
           { text: ', ', color: '#f1f5f9' },
-          { text: activeHovered3DItem.tz.toFixed(1), color: '#a855f7' },
+          { text: activeHovered3DItem.z.toFixed(1), color: '#a855f7' },
           { text: ')', color: '#f1f5f9' }
         ]);
       }
@@ -3343,7 +3995,8 @@
       if (sliderX) sliderX.addEventListener('input', scheduleDrawEx2);
       if (sliderY) sliderY.addEventListener('input', scheduleDrawEx2);
 
-      function handlePointer2D(clientX, clientY, isNewStroke = false) {
+      // Interacción 2D: únicamente mueve v = (x, y)
+      function handlePointer2D(clientX, clientY) {
         const rect = canvasKer.getBoundingClientRect();
         const px = clientX - rect.left;
         const py = clientY - rect.top;
@@ -3351,13 +4004,8 @@
         const mathPt = screenToMath(px, py, origin, stateEx2.scaleKer);
 
         const limit = stateEx2.maxRange;
-        const stepFactor = stateEx2.traceEnabled ? 10 : 2;
-        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * stepFactor) / stepFactor));
-        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * stepFactor) / stepFactor));
-
-        if (stateEx2.traceEnabled) {
-          recordTracePointEx2(clampedX, clampedY, isNewStroke);
-        }
+        const clampedX = Math.max(-limit, Math.min(limit, Math.round(mathPt.x * 2) / 2));
+        const clampedY = Math.max(-limit, Math.min(limit, Math.round(mathPt.y * 2) / 2));
 
         sliderX.value = clampedX;
         sliderY.value = clampedY;
@@ -3366,39 +4014,6 @@
         document.getElementById('ex2-val-x').textContent = clampedX.toFixed(1);
         document.getElementById('ex2-val-y').textContent = clampedY.toFixed(1);
         drawEx2();
-      }
-
-      function detectHoverTrace2D(clientX, clientY) {
-        if (stateEx2.traces.length === 0) {
-          if (stateEx2.hoveredTrace2D) {
-            stateEx2.hoveredTrace2D = null;
-            scheduleDrawEx2();
-          }
-          return;
-        }
-        const rect = canvasKer.getBoundingClientRect();
-        const mx = clientX - rect.left;
-        const my = clientY - rect.top;
-        const origin = { x: rect.width / 2, y: rect.height / 2 };
-
-        let best = null;
-        let bestDist = 13;
-
-        for (const stroke of stateEx2.traces) {
-          for (const pt of stroke) {
-            const sp = mathToScreen(pt.x, pt.y, origin, stateEx2.scaleKer);
-            const d = Math.hypot(mx - sp.px, my - sp.py);
-            if (d < bestDist) {
-              bestDist = d;
-              best = { x: pt.x, y: pt.y };
-            }
-          }
-        }
-
-        const changed = (!best && stateEx2.hoveredTrace2D) ||
-                        (best && (!stateEx2.hoveredTrace2D || best.x !== stateEx2.hoveredTrace2D.x || best.y !== stateEx2.hoveredTrace2D.y));
-        stateEx2.hoveredTrace2D = best;
-        if (changed) scheduleDrawEx2();
       }
 
       function detectHoverTrace3D(clientX, clientY) {
@@ -3420,12 +4035,12 @@
           const d = Math.hypot(mx - item.p.px, my - item.p.py);
           if (d < bestDist) {
             bestDist = d;
-            best = { x: item.x, y: item.y };
+            best = { x: item.x, y: item.y, z: item.z };
           }
         }
 
         const changed = (!best && stateEx2.hoveredTrace3D) ||
-                        (best && (!stateEx2.hoveredTrace3D || best.x !== stateEx2.hoveredTrace3D.x || best.y !== stateEx2.hoveredTrace3D.y));
+                        (best && (!stateEx2.hoveredTrace3D || best.x !== stateEx2.hoveredTrace3D.x || best.y !== stateEx2.hoveredTrace3D.y || best.z !== stateEx2.hoveredTrace3D.z));
         stateEx2.hoveredTrace3D = best;
         if (changed && !stateEx2.autoSpin) scheduleDrawEx2();
       }
@@ -3433,15 +4048,12 @@
       canvasKer.addEventListener('pointerdown', (e) => {
         stateEx2.dragging2D = true;
         canvasKer.setPointerCapture(e.pointerId);
-        handlePointer2D(e.clientX, e.clientY, true);
+        handlePointer2D(e.clientX, e.clientY);
       });
 
       canvasKer.addEventListener('pointermove', (e) => {
-        if (stateEx2.dragging2D) {
-          handlePointer2D(e.clientX, e.clientY, false);
-        } else {
-          detectHoverTrace2D(e.clientX, e.clientY);
-        }
+        if (!stateEx2.dragging2D) return;
+        handlePointer2D(e.clientX, e.clientY);
       });
 
       canvasKer.addEventListener('pointerup', (e) => {
@@ -3451,28 +4063,37 @@
         }
       });
 
-      canvasKer.addEventListener('pointerleave', () => {
-        if (stateEx2.hoveredTrace2D) {
-          stateEx2.hoveredTrace2D = null;
-          scheduleDrawEx2();
-        }
-      });
-
       canvasKer.addEventListener('wheel', (e) => {
         e.preventDefault();
         zoomEx2('ker', e.deltaY < 0 ? 1.12 : 0.89);
       }, { passive: false });
 
-      // El giro automático NO se apaga al hacer clic en el 3D; solo se detiene al volver a pulsar "⟳ Girar"
+      // Interacción 3D: dibuja rastreo si "Dibujar Rastro en 3D" está activo, o rota la vista
+      function placeTrace3DAtPointer(clientX, clientY, isNewStroke) {
+        const rect = canvasImg.getBoundingClientRect();
+        const mx = clientX - rect.left;
+        const my = clientY - rect.top;
+        const pt3 = screenTo3DEx2(mx, my, rect.width, rect.height, stateEx2.zoom3D, stateEx2.yaw, stateEx2.pitch);
+        recordTracePoint3DEx2(pt3, isNewStroke);
+        drawEx2();
+      }
+
       canvasImg.addEventListener('pointerdown', (e) => {
-        stateEx2.dragging3D = true;
-        stateEx2.lastMouseX = e.clientX;
-        stateEx2.lastMouseY = e.clientY;
         canvasImg.setPointerCapture(e.pointerId);
+        if (stateEx2.traceEnabled && !e.shiftKey && e.button === 0) {
+          stateEx2.drawingTrace3D = true;
+          placeTrace3DAtPointer(e.clientX, e.clientY, true);
+        } else {
+          stateEx2.dragging3D = true;
+          stateEx2.lastMouseX = e.clientX;
+          stateEx2.lastMouseY = e.clientY;
+        }
       });
 
       canvasImg.addEventListener('pointermove', (e) => {
-        if (stateEx2.dragging3D) {
+        if (stateEx2.drawingTrace3D) {
+          placeTrace3DAtPointer(e.clientX, e.clientY, false);
+        } else if (stateEx2.dragging3D) {
           const dx = e.clientX - stateEx2.lastMouseX;
           const dy = e.clientY - stateEx2.lastMouseY;
           stateEx2.lastMouseX = e.clientX;
@@ -3487,6 +4108,7 @@
       });
 
       canvasImg.addEventListener('pointerup', (e) => {
+        stateEx2.drawingTrace3D = false;
         stateEx2.dragging3D = false;
         if (canvasImg.hasPointerCapture(e.pointerId)) {
           canvasImg.releasePointerCapture(e.pointerId);
@@ -3517,6 +4139,1181 @@
       updateEx2();
     }
     /* ==========================================================================
+       MÓDULO 3: NÚCLEO E IMAGEN EN EL ESPACIO (R³ -> R³)
+       ========================================================================== */
+    const stateEx3 = {
+      m: [
+        [1, 0, -1],
+        [0, 1, -1],
+        [1, 1, -2]
+      ],
+      x: 1.5,
+      y: 1.0,
+      z: 0.5,
+      camKer: { yaw: 0.65, pitch: 0.42, scale: 34, dragging: false, lastX: 0, lastY: 0 },
+      camImg: { yaw: 0.65, pitch: 0.42, scale: 34, dragging: false, lastX: 0, lastY: 0 },
+      spinning: false,
+      spinRafId: null,
+      traceEnabled: false,
+      traces: [],
+      currentStroke: null,
+      hoveredTraceKer: null,
+      hoveredTraceImg: null
+    };
+
+    function setupHiDPI3DCanvasEx3(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return null;
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || canvas.clientWidth || 460;
+      const height = rect.height || canvas.clientHeight || 430;
+      const dpr = window.devicePixelRatio || 1;
+
+      if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+      }
+
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { canvas, ctx, width, height };
+    }
+
+    function project3DEx3(x, y, z, cam, width, height) {
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
+
+      // Sistema matemático derecho: X hacia frente-derecha, Y hacia fondo-derecha, Z hacia arriba
+      const rx = x * cosY - y * sinY;
+      const ry = x * sinY + y * cosY;
+      const rz = z;
+
+      const sx = rx;
+      const sy = ry * sinP - rz * cosP;
+      const depth = ry * cosP + rz * sinP;
+
+      return {
+        px: width / 2 + sx * cam.scale,
+        py: height / 2 + 18 + sy * cam.scale,
+        depth
+      };
+    }
+
+    function zoomEx3(target, factor) {
+      const cam = target === 'ker' ? stateEx3.camKer : stateEx3.camImg;
+      cam.scale = Math.max(14, Math.min(85, cam.scale * factor));
+      drawEx3();
+    }
+
+    function resetZoomEx3(target) {
+      const cam = target === 'ker' ? stateEx3.camKer : stateEx3.camImg;
+      cam.yaw = 0.65;
+      cam.pitch = 0.42;
+      cam.scale = 34;
+      drawEx3();
+    }
+
+    function toggleSpinEx3() {
+      stateEx3.spinning = !stateEx3.spinning;
+      const btn = document.getElementById('ex3-btn-spin');
+      if (btn) {
+        btn.style.borderColor = stateEx3.spinning ? 'var(--neon-cyan)' : '';
+        btn.style.color = stateEx3.spinning ? 'var(--neon-cyan)' : '';
+      }
+
+      if (stateEx3.spinning) {
+        const stepSpin = () => {
+          if (!stateEx3.spinning) return;
+          stateEx3.camKer.yaw += 0.008;
+          stateEx3.camImg.yaw += 0.008;
+          drawEx3();
+          stateEx3.spinRafId = requestAnimationFrame(stepSpin);
+        };
+        stateEx3.spinRafId = requestAnimationFrame(stepSpin);
+      } else if (stateEx3.spinRafId) {
+        cancelAnimationFrame(stateEx3.spinRafId);
+        stateEx3.spinRafId = null;
+      }
+    }
+
+   function toggleTraceEx3() {
+      const chk = document.getElementById('ex3-trace-active');
+      stateEx3.traceEnabled = chk ? chk.checked : false;
+      stateEx3.currentStroke = null;
+
+      const cImg = document.getElementById('canvas3_img');
+      if (cImg) {
+        cImg.style.cursor = stateEx3.traceEnabled ? 'crosshair' : 'grab';
+      }
+      drawEx3();
+    }
+
+    function undoTraceEx3() {
+      if (stateEx3.traces.length > 0) {
+        stateEx3.traces.pop();
+        stateEx3.hoveredTraceKer = null;
+        stateEx3.hoveredTraceImg = null;
+        drawEx3();
+      }
+    }
+
+    function clearTraceEx3() {
+      stateEx3.traces = [];
+      stateEx3.currentStroke = null;
+      stateEx3.hoveredTraceKer = null;
+      stateEx3.hoveredTraceImg = null;
+      drawEx3();
+    }
+
+    function recordTracePointEx3(x, y, z, isNewStroke = false) {
+      if (!stateEx3.traceEnabled) return;
+      const pt = {
+        x: Math.round(x * 100) / 100,
+        y: Math.round(y * 100) / 100,
+        z: Math.round(z * 100) / 100
+      };
+      if (isNewStroke || stateEx3.traces.length === 0) {
+        stateEx3.currentStroke = [pt];
+        stateEx3.traces.push(stateEx3.currentStroke);
+      } else {
+        const stroke = stateEx3.traces[stateEx3.traces.length - 1];
+        const last = stroke[stroke.length - 1];
+        if (!last || last.x !== pt.x || last.y !== pt.y || last.z !== pt.z) {
+          stroke.push(pt);
+        }
+      }
+    }
+
+    function renderFormulaInputsEx3() {
+      const container = document.getElementById('ex3-dynamic-formula');
+      const modeEl = document.getElementById('ex3-structure-mode');
+      if (!container || !modeEl) return;
+
+      const mode = modeEl.value;
+      const m = stateEx3.m;
+
+      if (mode === 'matrix') {
+        let cellsHTML = '';
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            cellsHTML += `<input type="number" step="0.5" id="ex3-m-${r}-${c}" class="ex3-coeff-input" value="${m[r][c]}">`;
+          }
+        }
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">
+              <span class="ex3-cx" style="font-weight:700;">x</span>
+              <span class="ex3-cy" style="font-weight:700;">y</span>
+              <span class="ex3-cz" style="font-weight:700;">z</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; padding:0.2rem 0.3rem;">
+              ${cellsHTML}
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">
+              <span class="ex3-cx" style="font-weight:700;">x</span>
+              <span class="ex3-cy" style="font-weight:700;">y</span>
+              <span class="ex3-cz" style="font-weight:700;">z</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      } else if (mode === 'columns') {
+        const varNames = [
+          { sym: 'x', cls: 'ex3-cx' },
+          { sym: 'y', cls: 'ex3-cy' },
+          { sym: 'z', cls: 'ex3-cz' }
+        ];
+        let colsHTML = '';
+        for (let c = 0; c < 3; c++) {
+          if (c > 0) colsHTML += `<span>+</span>`;
+          colsHTML += `
+            <span class="${varNames[c].cls}" style="font-weight:700;">${varNames[c].sym}</span>
+            <div class="ex3-bracket-box">
+              <span class="matrix-bracket left"></span>
+              <div class="ex3-col-stack">
+                <input type="number" step="0.5" id="ex3-m-0-${c}" class="ex3-coeff-input" value="${m[0][c]}">
+                <input type="number" step="0.5" id="ex3-m-1-${c}" class="ex3-coeff-input" value="${m[1][c]}">
+                <input type="number" step="0.5" id="ex3-m-2-${c}" class="ex3-coeff-input" value="${m[2][c]}">
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          `;
+        }
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">
+              <span class="ex3-cx" style="font-weight:700;">x</span>
+              <span class="ex3-cy" style="font-weight:700;">y</span>
+              <span class="ex3-cz" style="font-weight:700;">z</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          ${colsHTML}
+        `;
+      } else {
+        let rowsHTML = '';
+        for (let r = 0; r < 3; r++) {
+          rowsHTML += `
+            <div>
+              <input type="number" step="0.5" id="ex3-m-${r}-0" class="ex3-coeff-input" value="${m[r][0]}">
+              <span class="ex3-cx" style="font-weight:700;">x</span> +
+              <input type="number" step="0.5" id="ex3-m-${r}-1" class="ex3-coeff-input" value="${m[r][1]}">
+              <span class="ex3-cy" style="font-weight:700;">y</span> +
+              <input type="number" step="0.5" id="ex3-m-${r}-2" class="ex3-coeff-input" value="${m[r][2]}">
+              <span class="ex3-cz" style="font-weight:700;">z</span>
+            </div>
+          `;
+        }
+        container.innerHTML = `
+          <span><span class="math-var">T</span></span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">
+              <span class="ex3-cx" style="font-weight:700;">x</span>
+              <span class="ex3-cy" style="font-weight:700;">y</span>
+              <span class="ex3-cz" style="font-weight:700;">z</span>
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>=</span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">
+              ${rowsHTML}
+            </div>
+            <span class="matrix-bracket right"></span>
+          </div>
+        `;
+      }
+
+      const scheduleDrawEx3 = createSmoothRenderer(updateEx3);
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`ex3-m-${r}-${c}`);
+          if (el) el.addEventListener('input', scheduleDrawEx3);
+        }
+      }
+    }
+
+    function changeStructureEx3() {
+      renderFormulaInputsEx3();
+      updateEx3();
+    }
+
+    function setPresetEx3(a11, a12, a13, a21, a22, a23, a31, a32, a33) {
+      stateEx3.m = [
+        [a11, a12, a13],
+        [a21, a22, a23],
+        [a31, a32, a33]
+      ];
+      renderFormulaInputsEx3();
+      updateEx3();
+    }
+
+    function analyzeMatrix3x3Ex3(m) {
+      const EPS = 1e-7;
+      const R = m.map(row => [...row]);
+      const pivotCols = [];
+      let lead = 0;
+
+      for (let r = 0; r < 3 && lead < 3; r++) {
+        let i = r;
+        while (i < 3 && Math.abs(R[i][lead]) < EPS) i++;
+        if (i === 3) {
+          lead++;
+          r--;
+          continue;
+        }
+        [R[r], R[i]] = [R[i], R[r]];
+        const div = R[r][lead];
+        for (let j = 0; j < 3; j++) R[r][j] /= div;
+        for (let k = 0; k < 3; k++) {
+          if (k !== r && Math.abs(R[k][lead]) > EPS) {
+            const factor = R[k][lead];
+            for (let j = 0; j < 3; j++) R[k][j] -= factor * R[r][j];
+          }
+        }
+        pivotCols.push(lead);
+        lead++;
+      }
+
+      const rank = pivotCols.length;
+      const nullity = 3 - rank;
+      const freeCols = [0, 1, 2].filter(c => !pivotCols.includes(c));
+
+      const imgBasis = pivotCols.map(c => [m[0][c], m[1][c], m[2][c]]);
+      const kerBasis = freeCols.map(fc => {
+        const vec = [0, 0, 0];
+        vec[fc] = 1;
+        pivotCols.forEach((pc, rowIdx) => {
+          const val = -R[rowIdx][fc];
+          vec[pc] = Math.abs(val) < EPS ? 0 : Math.round(val * 100) / 100;
+        });
+        return vec;
+      });
+
+      const det =
+        m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) -
+        m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) +
+        m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+
+      return {
+        rank,
+        nullity,
+        imgBasis,
+        kerBasis,
+        det: Math.round(det * 1e6) / 1e6
+      };
+    }
+
+    function draw3DSceneBaseEx3(ctx, width, height, cam) {
+      ctx.clearRect(0, 0, width, height);
+
+      // Rejilla del plano suelo Z = 0
+      const gridRange = 4;
+      ctx.save();
+      for (let i = -gridRange; i <= gridRange; i++) {
+        const p1 = project3DEx3(i, -gridRange, 0, cam, width, height);
+        const p2 = project3DEx3(i, gridRange, 0, cam, width, height);
+        ctx.strokeStyle = i === 0 ? 'rgba(240, 101, 101, 0.35)' : 'rgba(148, 163, 184, 0.12)';
+        ctx.lineWidth = i === 0 ? 1.4 : 1;
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+
+        const p3 = project3DEx3(-gridRange, i, 0, cam, width, height);
+        const p4 = project3DEx3(gridRange, i, 0, cam, width, height);
+        ctx.strokeStyle = i === 0 ? 'rgba(24, 197, 217, 0.35)' : 'rgba(148, 163, 184, 0.12)';
+        ctx.lineWidth = i === 0 ? 1.4 : 1;
+        ctx.beginPath();
+        ctx.moveTo(p3.px, p3.py);
+        ctx.lineTo(p4.px, p4.py);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Ejes coordenados X (cian), Y (coral), Z (púrpura) con relieve y marcas
+      const axisLen = 4.6;
+      const axes = [
+        { dir: [1, 0, 0], color: '#18c5d9', label: 'X' },
+        { dir: [0, 1, 0], color: '#f06565', label: 'Y' },
+        { dir: [0, 0, 1], color: '#a855f7', label: 'Z' }
+      ];
+
+      axes.forEach(ax => {
+        const neg = project3DEx3(-ax.dir[0] * axisLen, -ax.dir[1] * axisLen, -ax.dir[2] * axisLen, cam, width, height);
+        const pos = project3DEx3(ax.dir[0] * axisLen, ax.dir[1] * axisLen, ax.dir[2] * axisLen, cam, width, height);
+
+        ctx.save();
+        ctx.strokeStyle = ax.color;
+        ctx.globalAlpha = 0.28;
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(neg.px, neg.py);
+        ctx.lineTo(pos.px, pos.py);
+        ctx.stroke();
+
+        const orig = project3DEx3(0, 0, 0, cam, width, height);
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 0.92;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(orig.px, orig.py);
+        ctx.lineTo(pos.px, pos.py);
+        ctx.stroke();
+
+        // Marcas numéricas en cada eje
+        for (let t = 1; t <= 4; t++) {
+          const tp = project3DEx3(ax.dir[0] * t, ax.dir[1] * t, ax.dir[2] * t, cam, width, height);
+          ctx.fillStyle = ax.color;
+          ctx.beginPath();
+          ctx.arc(tp.px, tp.py, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.fillStyle = ax.color;
+        ctx.fillText(ax.label, pos.px + 7, pos.py + 4);
+        ctx.restore();
+      });
+    }
+
+    function drawArrow3DEx3(ctx, width, height, cam, vec, color, label = '', dashed = false) {
+      const [vx, vy, vz] = vec;
+      if (Math.hypot(vx, vy, vz) < 1e-4) return;
+
+      const p0 = project3DEx3(0, 0, 0, cam, width, height);
+      const p1 = project3DEx3(vx, vy, vz, cam, width, height);
+
+      const dx = p1.px - p0.px;
+      const dy = p1.py - p0.py;
+      const len = Math.hypot(dx, dy);
+      if (len < 2) return;
+
+      const angle = Math.atan2(dy, dx);
+      const headLen = Math.min(13, len * 0.35);
+
+      ctx.save();
+      if (dashed) {
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.1;
+        ctx.beginPath();
+        ctx.moveTo(p0.px, p0.py);
+        ctx.lineTo(p1.px, p1.py);
+        ctx.stroke();
+      } else {
+        // Sombra de relieve del cuerpo 3D
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 5.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(p0.px + 1.5, p0.py + 2);
+        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.55) + 1.5, p1.py - Math.sin(angle) * (headLen * 0.55) + 2);
+        ctx.stroke();
+
+        // Cuerpo principal con relieve
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3.8;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(p0.px, p0.py);
+        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.55), p1.py - Math.sin(angle) * (headLen * 0.55));
+        ctx.stroke();
+
+        // Brillo especular central para efecto cilíndrico 3D
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.38)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(p0.px, p0.py);
+        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.65), p1.py - Math.sin(angle) * (headLen * 0.65));
+        ctx.stroke();
+      }
+
+      // Punta cónica 3D
+      ctx.setLineDash([]);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(p1.px, p1.py);
+      ctx.lineTo(p1.px - headLen * Math.cos(angle - Math.PI / 6.5), p1.py - headLen * Math.sin(angle - Math.PI / 6.5));
+      ctx.lineTo(p1.px - headLen * Math.cos(angle + Math.PI / 6.5), p1.py - headLen * Math.sin(angle + Math.PI / 6.5));
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = 'italic bold 13px "STIX Two Text", "Cambria Math", serif';
+        const metrics = ctx.measureText(label);
+        const boxW = metrics.width + 10;
+        const boxH = 20;
+        let lx = Math.max(8, Math.min(width - boxW - 8, p1.px + Math.cos(angle) * 16 - boxW / 2));
+        let ly = Math.max(8, Math.min(height - boxH - 8, p1.py + Math.sin(angle) * 16 - boxH / 2));
+
+        ctx.fillStyle = 'rgba(11, 12, 16, 0.88)';
+        ctx.beginPath();
+        ctx.roundRect(lx, ly, boxW, boxH, 5);
+        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, lx + boxW / 2, ly + boxH / 2 + 1);
+      }
+      ctx.restore();
+    }
+
+    function drawComponentBox3DEx3(ctx, width, height, cam, vec) {
+      const [vx, vy, vz] = vec;
+      const p000 = project3DEx3(0, 0, 0, cam, width, height);
+      const px00 = project3DEx3(vx, 0, 0, cam, width, height);
+      const pxy0 = project3DEx3(vx, vy, 0, cam, width, height);
+      const pxyz = project3DEx3(vx, vy, vz, cam, width, height);
+
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 1.8;
+
+      if (vx !== 0) {
+        ctx.strokeStyle = '#18c5d9';
+        ctx.beginPath();
+        ctx.moveTo(p000.px, p000.py);
+        ctx.lineTo(px00.px, px00.py);
+        ctx.stroke();
+      }
+      if (vy !== 0) {
+        ctx.strokeStyle = '#f06565';
+        ctx.beginPath();
+        ctx.moveTo(px00.px, px00.py);
+        ctx.lineTo(pxy0.px, pxy0.py);
+        ctx.stroke();
+      }
+      if (vz !== 0) {
+        ctx.strokeStyle = '#a855f7';
+        ctx.beginPath();
+        ctx.moveTo(pxy0.px, pxy0.py);
+        ctx.lineTo(pxyz.px, pxyz.py);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawParallelepiped3DEx3(ctx, width, height, cam, v1, v2, v3, fillColor, strokeColor) {
+      const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+      const c000 = [0, 0, 0];
+      const c100 = v1;
+      const c010 = v2;
+      const c001 = v3;
+      const c110 = add(v1, v2);
+      const c101 = add(v1, v3);
+      const c011 = add(v2, v3);
+      const c111 = add(c110, v3);
+
+      const verts = [c000, c100, c110, c010, c001, c101, c111, c011].map(v =>
+        project3DEx3(v[0], v[1], v[2], cam, width, height)
+      );
+
+      const faces = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+        [0, 1, 5, 4],
+        [2, 3, 7, 6],
+        [1, 2, 6, 5],
+        [0, 3, 7, 4]
+      ];
+
+      ctx.save();
+      faces.forEach(f => {
+        ctx.beginPath();
+        ctx.moveTo(verts[f[0]].px, verts[f[0]].py);
+        ctx.lineTo(verts[f[1]].px, verts[f[1]].py);
+        ctx.lineTo(verts[f[2]].px, verts[f[2]].py);
+        ctx.lineTo(verts[f[3]].px, verts[f[3]].py);
+        ctx.closePath();
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([4, 3]);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    function drawSubspace3DEx3(ctx, width, height, cam, basis, colorRgb, strokeHex) {
+      if (basis.length === 1) {
+        const [bx, by, bz] = basis[0];
+        const norm = Math.hypot(bx, by, bz) || 1;
+        const span = 5.5;
+        const ux = (bx / norm) * span;
+        const uy = (by / norm) * span;
+        const uz = (bz / norm) * span;
+        const pA = project3DEx3(-ux, -uy, -uz, cam, width, height);
+        const pB = project3DEx3(ux, uy, uz, cam, width, height);
+
+        ctx.save();
+        ctx.strokeStyle = strokeHex;
+        ctx.lineWidth = 3.2;
+        ctx.setLineDash([7, 5]);
+        ctx.beginPath();
+        ctx.moveTo(pA.px, pA.py);
+        ctx.lineTo(pB.px, pB.py);
+        ctx.stroke();
+        ctx.restore();
+      } else if (basis.length === 2) {
+        const u = basis[0];
+        const v = basis[1];
+        const nu = Math.hypot(...u) || 1;
+        const nv = Math.hypot(...v) || 1;
+        const s = 3.2;
+        const u1 = u.map(c => (c / nu) * s);
+        const v1 = v.map(c => (c / nv) * s);
+
+        const corners = [
+          [-u1[0] - v1[0], -u1[1] - v1[1], -u1[2] - v1[2]],
+          [ u1[0] - v1[0],  u1[1] - v1[1],  u1[2] - v1[2]],
+          [ u1[0] + v1[0],  u1[1] + v1[1],  u1[2] + v1[2]],
+          [-u1[0] + v1[0], -u1[1] + v1[1], -u1[2] + v1[2]]
+        ].map(pt => project3DEx3(pt[0], pt[1], pt[2], cam, width, height));
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(corners[0].px, corners[0].py);
+        ctx.lineTo(corners[1].px, corners[1].py);
+        ctx.lineTo(corners[2].px, corners[2].py);
+        ctx.lineTo(corners[3].px, corners[3].py);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(${colorRgb}, 0.16)`;
+        ctx.fill();
+        ctx.strokeStyle = strokeHex;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function drawTraces3DEx3(ctx, width, height, cam, transformFn) {
+      if (stateEx3.traces.length === 0) return;
+      ctx.save();
+      ctx.strokeStyle = '#ec4899';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (const stroke of stateEx3.traces) {
+        if (stroke.length === 0) continue;
+        ctx.beginPath();
+        stroke.forEach((pt, idx) => {
+          const [px3, py3, pz3] = transformFn(pt);
+          const sp = project3DEx3(px3, py3, pz3, cam, width, height);
+          if (idx === 0) ctx.moveTo(sp.px, sp.py);
+          else ctx.lineTo(sp.px, sp.py);
+        });
+        ctx.stroke();
+
+        for (const pt of stroke) {
+          const [px3, py3, pz3] = transformFn(pt);
+          const sp = project3DEx3(px3, py3, pz3, cam, width, height);
+          ctx.fillStyle = '#f472b6';
+          ctx.beginPath();
+          ctx.arc(sp.px, sp.py, 3.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    function updateEx3() {
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`ex3-m-${r}-${c}`);
+          if (el) stateEx3.m[r][c] = parseFloat(el.value) || 0;
+        }
+      }
+
+      const sx = document.getElementById('ex3-slider-x');
+      const sy = document.getElementById('ex3-slider-y');
+      const sz = document.getElementById('ex3-slider-z');
+      if (!sx || !sy || !sz) return;
+
+      const x = Math.round(parseFloat(sx.value) * 10) / 10;
+      const y = Math.round(parseFloat(sy.value) * 10) / 10;
+      const z = Math.round(parseFloat(sz.value) * 10) / 10;
+
+      stateEx3.x = x;
+      stateEx3.y = y;
+      stateEx3.z = z;
+
+      document.getElementById('ex3-val-x').textContent = x.toFixed(1);
+      document.getElementById('ex3-val-y').textContent = y.toFixed(1);
+      document.getElementById('ex3-val-z').textContent = z.toFixed(1);
+
+      recordTracePointEx3(x, y, z, false);
+      drawEx3();
+    }
+
+    function drawEx3() {
+      const viewKer = setupHiDPI3DCanvasEx3('canvas3_ker');
+      const viewImg = setupHiDPI3DCanvasEx3('canvas3_img');
+      if (!viewKer || !viewImg) return;
+
+      const { m, x, y, z, camKer, camImg } = stateEx3;
+      const tx = Math.round((m[0][0] * x + m[0][1] * y + m[0][2] * z) * 1e6) / 1e6;
+      const ty = Math.round((m[1][0] * x + m[1][1] * y + m[1][2] * z) * 1e6) / 1e6;
+      const tz = Math.round((m[2][0] * x + m[2][1] * y + m[2][2] * z) * 1e6) / 1e6;
+
+      const info = analyzeMatrix3x3Ex3(m);
+      const isZeroOutput = (tx === 0 && ty === 0 && tz === 0);
+      const isKernelValid = info.nullity === 0
+        ? (x === 0 && y === 0 && z === 0)
+        : (isZeroOutput && (x !== 0 || y !== 0 || z !== 0));
+
+      /* 1. ESCENA 3D IZQUIERDA: DOMINIO R³ Y NÚCLEO nu T */
+      const ctxK = viewKer.ctx;
+      draw3DSceneBaseEx3(ctxK, viewKer.width, viewKer.height, camKer);
+
+      // Cubo unitario de referencia en el dominio
+      drawParallelepiped3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [1, 0, 0], [0, 1, 0], [0, 0, 1], 'rgba(168, 85, 247, 0.06)', 'rgba(168, 85, 247, 0.35)');
+
+      // Subespacio nu T en esmeralda
+      if (info.nullity === 1 || info.nullity === 2) {
+        drawSubspace3DEx3(ctxK, viewKer.width, viewKer.height, camKer, info.kerBasis, '16, 185, 129', '#10b981');
+      } else if (info.nullity === 3) {
+        ctxK.save();
+        ctxK.fillStyle = 'rgba(16, 185, 129, 0.07)';
+        ctxK.fillRect(0, 0, viewKer.width, viewKer.height);
+        ctxK.restore();
+      }
+
+      drawTraces3DEx3(ctxK, viewKer.width, viewKer.height, camKer, pt => [pt.x, pt.y, pt.z]);
+      drawComponentBox3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [x, y, z]);
+      drawArrow3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [x, y, z], isKernelValid ? '#10b981' : '#4f7df3', 'v⃗', false);
+
+      // Punto de vértice de v⃗
+      const pTipKer = project3DEx3(x, y, z, camKer, viewKer.width, viewKer.height);
+      ctxK.save();
+      ctxK.beginPath();
+      ctxK.arc(pTipKer.px, pTipKer.py, 5.5, 0, Math.PI * 2);
+      ctxK.fillStyle = isKernelValid ? '#10b981' : '#f06565';
+      ctxK.fill();
+      ctxK.lineWidth = 1.8;
+      ctxK.strokeStyle = '#ffffff';
+      ctxK.stroke();
+      ctxK.restore();
+
+      if (stateEx3.hoveredTraceKer) {
+        const hp = stateEx3.hoveredTraceKer;
+        const sp = project3DEx3(hp.x, hp.y, hp.z, camKer, viewKer.width, viewKer.height);
+        drawTraceTooltipEx1(ctxK, viewKer.width, viewKer.height, sp.px, sp.py, [
+          { text: 'v = (', color: '#f1f5f9' },
+          { text: hp.x.toFixed(1), color: '#18c5d9' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: hp.y.toFixed(1), color: '#f06565' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: hp.z.toFixed(1), color: '#a855f7' },
+          { text: ')', color: '#f1f5f9' }
+        ]);
+      }
+
+      /* 2. ESCENA 3D DERECHA: CODOMINIO R³ E IMAGEN im T */
+      const ctxI = viewImg.ctx;
+      draw3DSceneBaseEx3(ctxI, viewImg.width, viewImg.height, camImg);
+
+      const col1 = [m[0][0], m[1][0], m[2][0]];
+      const col2 = [m[0][1], m[1][1], m[2][1]];
+      const col3 = [m[0][2], m[1][2], m[2][2]];
+
+      if (info.rank === 3) {
+        drawParallelepiped3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col1, col2, col3, 'rgba(168, 85, 247, 0.14)', '#a855f7');
+      } else if (info.rank === 1 || info.rank === 2) {
+        drawSubspace3DEx3(ctxI, viewImg.width, viewImg.height, camImg, info.imgBasis, '168, 85, 247', '#a855f7');
+      }
+
+      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col1, '#18c5d9', 'T(î)', true);
+      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col2, '#f06565', 'T(ĵ)', true);
+      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col3, '#a855f7', 'T(k̂)', true);
+
+      drawTraces3DEx3(ctxI, viewImg.width, viewImg.height, camImg, pt => [
+        m[0][0] * pt.x + m[0][1] * pt.y + m[0][2] * pt.z,
+        m[1][0] * pt.x + m[1][1] * pt.y + m[1][2] * pt.z,
+        m[2][0] * pt.x + m[2][1] * pt.y + m[2][2] * pt.z
+      ]);
+
+      drawComponentBox3DEx3(ctxI, viewImg.width, viewImg.height, camImg, [tx, ty, tz]);
+      if (tx !== 0 || ty !== 0 || tz !== 0) {
+        drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, [tx, ty, tz], '#10b981', 'T(v⃗)', false);
+      } else {
+        const origI = project3DEx3(0, 0, 0, camImg, viewImg.width, viewImg.height);
+        ctxI.save();
+        ctxI.beginPath();
+        ctxI.arc(origI.px, origI.py, 6.5, 0, Math.PI * 2);
+        ctxI.fillStyle = '#10b981';
+        ctxI.fill();
+        ctxI.restore();
+      }
+
+      if (stateEx3.hoveredTraceImg) {
+        const hp = stateEx3.hoveredTraceImg;
+        const htx = m[0][0] * hp.x + m[0][1] * hp.y + m[0][2] * hp.z;
+        const hty = m[1][0] * hp.x + m[1][1] * hp.y + m[1][2] * hp.z;
+        const htz = m[2][0] * hp.x + m[2][1] * hp.y + m[2][2] * hp.z;
+        const sp = project3DEx3(htx, hty, htz, camImg, viewImg.width, viewImg.height);
+        drawTraceTooltipEx1(ctxI, viewImg.width, viewImg.height, sp.px, sp.py, [
+          { text: 'T(v) = (', color: '#f1f5f9' },
+          { text: htx.toFixed(1), color: '#18c5d9' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: hty.toFixed(1), color: '#f06565' },
+          { text: ', ', color: '#f1f5f9' },
+          { text: htz.toFixed(1), color: '#a855f7' },
+          { text: ')', color: '#f1f5f9' }
+        ]);
+      }
+
+      /* 3. ACTUALIZACIÓN DE CAJAS DE ESTADO Y TEOREMA RANGO-NULIDAD */
+      const statusBox = document.getElementById('ex3-status-box');
+      const eliotToast = document.getElementById('eliot-toast-3');
+      const eliotText = document.getElementById('eliot-msg-text-3');
+
+      const kerSubDesc =
+        info.nullity === 0 ? 'nu T = { (0, 0, 0) } (Solo el origen)' :
+        info.nullity === 1 ? `Recta en ℝ³ • Base = { (${info.kerBasis[0].join(', ')})ᵀ }` :
+        info.nullity === 2 ? `Plano en ℝ³ • Base = { (${info.kerBasis[0].join(', ')})ᵀ, (${info.kerBasis[1].join(', ')})ᵀ }` :
+        'nu T = ℝ³ (Todo el espacio tridimensional)';
+
+      if (isKernelValid) {
+        statusBox.className = 'ex3-status-box is-valid';
+        statusBox.innerHTML = `
+          <div><strong>✓ ¡NÚCLEO ENCONTRADO CON PRECISIÓN EXACTA!</strong></div>
+          <div style="margin-top:0.35rem;">
+            <span class="vec-arrow">v</span> = (<span class="ex3-cx">${x.toFixed(1)}</span>, <span class="ex3-cy">${y.toFixed(1)}</span>, <span class="ex3-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0)
+          </div>
+          <div>Subespacio: <strong>${kerSubDesc}</strong></div>
+        `;
+        eliotText.textContent = info.nullity === 0
+          ? '¡Exacto! Como det(A) ≠ 0, el origen (0,0,0) es el único vector en nu T.'
+          : `¡Excelente! (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) colapsa al vector nulo en ℝ³.`;
+        eliotToast.classList.add('visible');
+      } else {
+        statusBox.className = 'ex3-status-box is-invalid';
+        const hintMsg = (info.nullity > 0 && x === 0 && y === 0 && z === 0)
+          ? 'El origen (0,0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
+          : 'Ajusta los deslizadores (x, y, z) hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0).';
+        statusBox.innerHTML = `
+          <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
+          <div style="margin-top:0.35rem;">
+            <span class="vec-arrow">v</span> = (<span class="ex3-cx">${x.toFixed(1)}</span>, <span class="ex3-cy">${y.toFixed(1)}</span>, <span class="ex3-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="ex3-cx">${tx.toFixed(1)}</span>, <span class="ex3-cy">${ty.toFixed(1)}</span>, <span class="ex3-cz">${tz.toFixed(1)}</span>)
+          </div>
+          <div style="opacity:0.88;">${hintMsg}</div>
+        `;
+        eliotToast.classList.remove('visible');
+      }
+
+      const imgSubDesc =
+        info.rank === 0 ? 'im T = { <span class="vec-arrow">0</span> } (Solo el origen)' :
+        info.rank === 1 ? 'Recta en ℝ³ (dim = 1)' :
+        info.rank === 2 ? 'Plano en ℝ³ (dim = 2)' :
+        `im T = ℝ³ (Biyectiva • |det(A)| = ${Math.abs(info.det)})`;
+
+      const imgBasisText = info.imgBasis.length === 0
+        ? 'Base = ∅'
+        : `Base = { ${info.imgBasis.map(v => `(${v.join(', ')})ᵀ`).join(', ')} }`;
+
+      document.getElementById('ex3-img-readout').innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+          <div class="ex3-col-equation" style="font-size:0.95rem;">
+            <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+            <div class="ex3-bracket-box">
+              <span class="matrix-bracket left"></span>
+              <div class="col-vector-cells">
+                <span class="ex3-cx">${tx.toFixed(1)}</span>
+                <span class="ex3-cy">${ty.toFixed(1)}</span>
+                <span class="ex3-cz">${tz.toFixed(1)}</span>
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          </div>
+          <div style="font-size:0.82rem;">
+            <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgSubDesc}</span></div>
+            <div><strong>${imgBasisText}</strong></div>
+          </div>
+        </div>
+        <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
+          Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${info.rank} + ${info.nullity} = 3</strong>
+        </div>
+      `;
+    }
+
+    function solvePreimageEx3(m, info, targetW) {
+      if (info.rank === 0) return [0, 0, 0];
+
+      if (info.rank === 3) {
+        const aug = [
+          [m[0][0], m[0][1], m[0][2], targetW[0]],
+          [m[1][0], m[1][1], m[1][2], targetW[1]],
+          [m[2][0], m[2][1], m[2][2], targetW[2]]
+        ];
+        for (let col = 0; col < 3; col++) {
+          let pivotRow = col;
+          for (let r = col + 1; r < 3; r++) {
+            if (Math.abs(aug[r][col]) > Math.abs(aug[pivotRow][col])) pivotRow = r;
+          }
+          [aug[col], aug[pivotRow]] = [aug[pivotRow], aug[col]];
+          const div = aug[col][col];
+          if (Math.abs(div) < 1e-7) continue;
+          for (let j = col; j < 4; j++) aug[col][j] /= div;
+          for (let r = 0; r < 3; r++) {
+            if (r !== col && Math.abs(aug[r][col]) > 1e-7) {
+              const f = aug[r][col];
+              for (let j = col; j < 4; j++) aug[r][j] -= f * aug[col][j];
+            }
+          }
+        }
+        return [aug[0][3], aug[1][3], aug[2][3]];
+      }
+
+      if (info.rank === 1) {
+        const b1 = info.imgBasis[0];
+        const normSq = b1[0] * b1[0] + b1[1] * b1[1] + b1[2] * b1[2] || 1;
+        const alpha = (b1[0] * targetW[0] + b1[1] * targetW[1] + b1[2] * targetW[2]) / normSq;
+        for (let c = 0; c < 3; c++) {
+          if (Math.abs(m[0][c] - b1[0]) < 1e-6 && Math.abs(m[1][c] - b1[1]) < 1e-6 && Math.abs(m[2][c] - b1[2]) < 1e-6) {
+            const v = [0, 0, 0];
+            v[c] = alpha;
+            return v;
+          }
+        }
+        return [alpha, 0, 0];
+      }
+
+      const b1 = info.imgBasis[0];
+      const b2 = info.imgBasis[1];
+      const g11 = b1[0] * b1[0] + b1[1] * b1[1] + b1[2] * b1[2];
+      const g12 = b1[0] * b2[0] + b1[1] * b2[1] + b1[2] * b2[2];
+      const g22 = b2[0] * b2[0] + b2[1] * b2[1] + b2[2] * b2[2];
+      const rhs1 = b1[0] * targetW[0] + b1[1] * targetW[1] + b1[2] * targetW[2];
+      const rhs2 = b2[0] * targetW[0] + b2[1] * targetW[1] + b2[2] * targetW[2];
+      const detG = g11 * g22 - g12 * g12 || 1;
+
+      const a1 = (rhs1 * g22 - rhs2 * g12) / detG;
+      const a2 = (g11 * rhs2 - g12 * rhs1) / detG;
+
+      const colsUsed = [];
+      for (let c = 0; c < 3; c++) {
+        if (colsUsed.length === 0 && Math.abs(m[0][c] - b1[0]) < 1e-6 && Math.abs(m[1][c] - b1[1]) < 1e-6 && Math.abs(m[2][c] - b1[2]) < 1e-6) {
+          colsUsed.push({ idx: c, val: a1 });
+        } else if (colsUsed.length === 1 && Math.abs(m[0][c] - b2[0]) < 1e-6 && Math.abs(m[1][c] - b2[1]) < 1e-6 && Math.abs(m[2][c] - b2[2]) < 1e-6) {
+          colsUsed.push({ idx: c, val: a2 });
+        }
+      }
+      const v = [0, 0, 0];
+      colsUsed.forEach(item => { v[item.idx] = item.val; });
+      return v;
+    }
+
+    function traceAtImagePointerEx3(clientX, clientY, isNewStroke) {
+      const canvas = document.getElementById('canvas3_img');
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const cam = stateEx3.camImg;
+
+      const sx = (clientX - rect.left - width / 2) / cam.scale;
+      const sy = (clientY - rect.top - (height / 2 + 18)) / cam.scale;
+
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
+
+      const ry0 = sy * sinP;
+      const rz0 = -sy * cosP;
+      const P0 = [
+        sx * cosY + ry0 * sinY,
+        -sx * sinY + ry0 * cosY,
+        rz0
+      ];
+      const u = [
+        cosP * sinY,
+        cosP * cosY,
+        sinP
+      ];
+
+      const m = stateEx3.m;
+      const info = analyzeMatrix3x3Ex3(m);
+      let targetW = [0, 0, 0];
+
+      if (info.rank === 2) {
+        const b1 = info.imgBasis[0];
+        const b2 = info.imgBasis[1];
+        const nx = b1[1] * b2[2] - b1[2] * b2[1];
+        const ny = b1[2] * b2[0] - b1[0] * b2[2];
+        const nz = b1[0] * b2[1] - b1[1] * b2[0];
+        const nLen = Math.hypot(nx, ny, nz) || 1;
+        const n = [nx / nLen, ny / nLen, nz / nLen];
+        const denom = n[0] * u[0] + n[1] * u[1] + n[2] * u[2];
+
+        if (Math.abs(denom) > 0.08) {
+          const d = -(n[0] * P0[0] + n[1] * P0[1] + n[2] * P0[2]) / denom;
+          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
+        } else {
+          const d = -(P0[0] * u[0] + P0[1] * u[1] + P0[2] * u[2]);
+          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
+        }
+      } else if (info.rank === 1) {
+        const b1 = info.imgBasis[0];
+        const bLen = Math.hypot(b1[0], b1[1], b1[2]) || 1;
+        const bh = [b1[0] / bLen, b1[1] / bLen, b1[2] / bLen];
+        const c = bh[0] * u[0] + bh[1] * u[1] + bh[2] * u[2];
+        const pb = P0[0] * bh[0] + P0[1] * bh[1] + P0[2] * bh[2];
+        const pu = P0[0] * u[0] + P0[1] * u[1] + P0[2] * u[2];
+        const denom = 1 - c * c;
+        const t = denom > 1e-4 ? (pb - c * pu) / denom : pb;
+        targetW = [t * bh[0], t * bh[1], t * bh[2]];
+      } else if (info.rank === 3) {
+        const curTz = m[2][0] * stateEx3.x + m[2][1] * stateEx3.y + m[2][2] * stateEx3.z;
+        if (Math.abs(sinP) > 0.22) {
+          const d = (curTz - P0[2]) / sinP;
+          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], curTz];
+        } else {
+          const curTx = m[0][0] * stateEx3.x + m[0][1] * stateEx3.y + m[0][2] * stateEx3.z;
+          const curTy = m[1][0] * stateEx3.x + m[1][1] * stateEx3.y + m[1][2] * stateEx3.z;
+          const d = curTx * u[0] + curTy * u[1] + curTz * u[2];
+          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
+        }
+      }
+
+      const rawV = solvePreimageEx3(m, info, targetW);
+      const nx = Math.max(-5, Math.min(5, Math.round(rawV[0] * 10) / 10));
+      const ny = Math.max(-5, Math.min(5, Math.round(rawV[1] * 10) / 10));
+      const nz = Math.max(-5, Math.min(5, Math.round(rawV[2] * 10) / 10));
+
+      if (!isNewStroke && stateEx3.currentStroke && stateEx3.currentStroke.length > 0) {
+        const prev = stateEx3.currentStroke[stateEx3.currentStroke.length - 1];
+        if (Math.hypot(nx - prev.x, ny - prev.y, nz - prev.z) < 0.08) {
+          return;
+        }
+      }
+
+      const sxEl = document.getElementById('ex3-slider-x');
+      const syEl = document.getElementById('ex3-slider-y');
+      const szEl = document.getElementById('ex3-slider-z');
+      if (sxEl) sxEl.value = nx;
+      if (syEl) syEl.value = ny;
+      if (szEl) szEl.value = nz;
+
+      stateEx3.x = nx;
+      stateEx3.y = ny;
+      stateEx3.z = nz;
+
+      document.getElementById('ex3-val-x').textContent = nx.toFixed(1);
+      document.getElementById('ex3-val-y').textContent = ny.toFixed(1);
+      document.getElementById('ex3-val-z').textContent = nz.toFixed(1);
+
+      recordTracePointEx3(nx, ny, nz, isNewStroke);
+      drawEx3();
+    }
+
+    function bind3DCanvasEventsEx3(canvasId, camKey, isKer) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const cam = stateEx3[camKey];
+
+      canvas.addEventListener('pointerdown', (e) => {
+        if (!isKer && stateEx3.traceEnabled && e.button === 0) {
+          cam.drawing = true;
+          cam.dragging = false;
+          stateEx3.currentStroke = null;
+          canvas.setPointerCapture(e.pointerId);
+          traceAtImagePointerEx3(e.clientX, e.clientY, true);
+          return;
+        }
+
+        cam.dragging = true;
+        cam.drawing = false;
+        cam.lastX = e.clientX;
+        cam.lastY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (cam.drawing) {
+          traceAtImagePointerEx3(e.clientX, e.clientY, false);
+          return;
+        }
+
+        if (cam.dragging) {
+          const dx = e.clientX - cam.lastX;
+          const dy = e.clientY - cam.lastY;
+          cam.lastX = e.clientX;
+          cam.lastY = e.clientY;
+          cam.yaw += dx * 0.01;
+          cam.pitch = Math.max(-1.35, Math.min(1.35, cam.pitch + dy * 0.01));
+          drawEx3();
+          return;
+        }
+
+        if (stateEx3.traces.length === 0) return;
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        let best = null;
+        let bestDist = 13;
+
+        for (const stroke of stateEx3.traces) {
+          for (const pt of stroke) {
+            const coords = isKer
+              ? [pt.x, pt.y, pt.z]
+              : [
+                  stateEx3.m[0][0] * pt.x + stateEx3.m[0][1] * pt.y + stateEx3.m[0][2] * pt.z,
+                  stateEx3.m[1][0] * pt.x + stateEx3.m[1][1] * pt.y + stateEx3.m[1][2] * pt.z,
+                  stateEx3.m[2][0] * pt.x + stateEx3.m[2][1] * pt.y + stateEx3.m[2][2] * pt.z
+                ];
+            const sp = project3DEx3(coords[0], coords[1], coords[2], cam, rect.width, rect.height);
+            const d = Math.hypot(mx - sp.px, my - sp.py);
+            if (d < bestDist) {
+              bestDist = d;
+              best = pt;
+            }
+          }
+        }
+
+        const prop = isKer ? 'hoveredTraceKer' : 'hoveredTraceImg';
+        if (best !== stateEx3[prop]) {
+          stateEx3[prop] = best;
+          drawEx3();
+        }
+      });
+
+      const stopPointerAction = (e) => {
+        if (cam.drawing) {
+          cam.drawing = false;
+          stateEx3.currentStroke = null;
+        }
+        cam.dragging = false;
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      };
+
+      canvas.addEventListener('pointerup', stopPointerAction);
+      canvas.addEventListener('pointercancel', stopPointerAction);
+
+      canvas.addEventListener('contextmenu', (e) => {
+        if (!isKer && stateEx3.traceEnabled) e.preventDefault();
+      });
+
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx3(isKer ? 'ker' : 'img', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
+    }
+
+    function initEx3() {
+      const cKer = document.getElementById('canvas3_ker');
+      if (!cKer) return;
+
+      const scheduleDrawEx3 = createSmoothRenderer(updateEx3);
+      ['ex3-slider-x', 'ex3-slider-y', 'ex3-slider-z'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', scheduleDrawEx3);
+      });
+
+      bind3DCanvasEventsEx3('canvas3_ker', 'camKer', true);
+      bind3DCanvasEventsEx3('canvas3_img', 'camImg', false);
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => drawEx3());
+        ro.observe(cKer);
+        const cImg = document.getElementById('canvas3_img');
+        if (cImg) ro.observe(cImg);
+      }
+
+      window.addEventListener('resize', drawEx3);
+      renderFormulaInputsEx3();
+      updateEx3();
+    }
+    /* ==========================================================================
        3. INICIALIZACIÓN GLOBAL (PEGAR LLAMADAS initExN() AQUÍ DENTRO)
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
@@ -3524,6 +5321,7 @@
         initMenuBg();
         initEx1();
         initEx2();
+        initEx3();
         
       // Pegar aquí las inicializaciones de cada ejercicio (ej. initEx1();)
     });
