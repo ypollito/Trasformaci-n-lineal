@@ -1048,10 +1048,10 @@
     transition: border-color 0.15s, background 0.15s;
   }
 
-  .ex3-zoom-btn:hover {
-    border-color: var(--neon-cyan);
-    background: rgba(24, 197, 217, 0.15);
-    color: var(--neon-cyan);
+  .ex3-zoom-btn.active {
+    border-color: var(--neon-purple);
+    background: rgba(168, 85, 247, 0.25);
+    color: #e9d5ff;
   }
 
   .ex3-eliot-toast {
@@ -1947,6 +1947,7 @@
     </main>
   </div>
   <!-- VISTA DE EJERCICIOS: R3 -> R3 -->
+  <!-- VISTA DE EJERCICIOS: R3 -> R3 -->
   <div id="view-r3-r3" class="view-hidden">
     <header class="app-header">
       <div class="header-inner">
@@ -1964,7 +1965,7 @@
           <div class="card-title-group">
             <span class="badge badge-purple">EJERCICIO 03 • ℝ³ → ℝ³</span>
             <h2>Núcleo e Imagen Espacial 3D de un Endomorfismo Lineal</h2>
-            <p>Edita la transformación en <span class="math-font">ℝ³</span>, explora ambos espacios tridimensionales rotando la cámara y activa <strong>Dibujar Rastro</strong> para proyectar trayectorias espaciales en tiempo real.</p>
+            <p>Edita la transformación en <span class="math-font">ℝ³</span>, arrastra <span class="vec-arrow">v</span> o <span class="math-font">T(<span class="vec-arrow">v</span>)</span> directamente en 3D y activa <strong>Dibujar Rastro</strong> para proyectar trayectorias en la imagen.</p>
           </div>
         </div>
 
@@ -2040,7 +2041,7 @@
               </div>
 
               <div class="canvas-legend">
-                <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span> movible</span>
                 <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">x</span></span>
                 <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">y</span></span>
                 <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-var">z</span></span>
@@ -2096,20 +2097,20 @@
               </div>
 
               <div class="canvas-legend">
-                <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span><span class="math-font">T(<span class="vec-arrow">v</span>)</span> movible</span>
                 <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-font">im <span class="math-var">T</span></span></span>
                 <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Rastro 3D</span>
               </div>
             </div>
 
-            <!-- Barra de Rastreo y Giro sincronizada -->
+            <!-- Barra de Rastreo y Giro debajo de la Imagen -->
             <div class="ex3-trace-bar">
               <label class="ex3-trace-toggle">
-          <input type="checkbox" id="ex3-trace-active" onchange="toggleTraceEx3()">
-        <span>Dibujar Rastro (clic en Imagen 3D)</span>
-        </label>
+                <input type="checkbox" id="ex3-trace-active" onchange="toggleTraceEx3()">
+                <span>Dibujar Rastro</span>
+              </label>
               <div class="btn-group">
-                <button type="button" id="ex3-btn-spin" class="ex3-zoom-btn" onclick="toggleSpinEx3()" title="Girar lentamente en 3D">⟳ Girar</button>
+                <button type="button" id="ex3-btn-spin" class="ex3-zoom-btn" onclick="toggleSpinEx3()" title="Girar lentamente la imagen 3D">⟳ Girar</button>
                 <button type="button" class="ex3-mini-btn" onclick="undoTraceEx3()">↶ Deshacer</button>
                 <button type="button" class="ex3-mini-btn" onclick="clearTraceEx3()">Limpiar</button>
               </div>
@@ -2217,7 +2218,7 @@
               </div>
 
               <div class="canvas-legend">
-                <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span></span>
+                <span class="legend-item"><span class="legend-dot" style="background:#4f7df3"></span><span class="vec-arrow">v</span>movible</span>
                 <span class="legend-item"><span class="legend-dot" style="background:#18c5d9"></span><span class="math-var">x</span></span>
                 <span class="legend-item"><span class="legend-dot" style="background:#f06565"></span><span class="math-var">y</span></span>
                 <span class="legend-item"><span class="legend-dot" style="background:#a855f7"></span><span class="math-var">z</span></span>
@@ -4694,6 +4695,12 @@
     /* ==========================================================================
        MÓDULO 3: NÚCLEO E IMAGEN EN EL ESPACIO (R³ -> R³)
        ========================================================================== */
+    /* ==========================================================================
+       MÓDULO 3: TRANSFORMACIONES LINEALES R³ -> R³ (ENDOMORFISMOS 3D)
+       ========================================================================== */
+    /* ==========================================================================
+       MÓDULO 3: TRANSFORMACIONES LINEALES R³ -> R³ (ENDOMORFISMOS 3D)
+       ========================================================================== */
     const stateEx3 = {
       m: [
         [1, 0, -1],
@@ -4703,34 +4710,34 @@
       x: 1.5,
       y: 1.0,
       z: 0.5,
-      camKer: { yaw: 0.65, pitch: 0.42, scale: 34, dragging: false, lastX: 0, lastY: 0 },
-      camImg: { yaw: 0.65, pitch: 0.42, scale: 34, dragging: false, lastX: 0, lastY: 0 },
-      spinning: false,
-      spinRafId: null,
+      camKer: {
+        scale: 28,
+        yaw: 0.68,
+        pitch: 0.42,
+        draggingOrbit: false,
+        draggingVec: false,
+        dragDepth: 0,
+        lastX: 0,
+        lastY: 0
+      },
+      camImg: {
+        scale: 28,
+        yaw: 0.68,
+        pitch: 0.42,
+        draggingOrbit: false,
+        draggingVec: false,
+        dragDepth: 0,
+        drawingTrace: false,
+        lastX: 0,
+        lastY: 0
+      },
       traceEnabled: false,
       traces: [],
       currentStroke: null,
-      hoveredTraceKer: null,
-      hoveredTraceImg: null
+      hoveredTraceImg: null,
+      autoSpin: false,
+      spinRafId: null
     };
-
-    function setupHiDPI3DCanvasEx3(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return null;
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width || canvas.clientWidth || 460;
-      const height = rect.height || canvas.clientHeight || 430;
-      const dpr = window.devicePixelRatio || 1;
-
-      if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
-      }
-
-      const ctx = canvas.getContext('2d');
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      return { canvas, ctx, width, height };
-    }
 
     function project3DEx3(x, y, z, cam, width, height) {
       const cosY = Math.cos(cam.yaw);
@@ -4738,75 +4745,98 @@
       const cosP = Math.cos(cam.pitch);
       const sinP = Math.sin(cam.pitch);
 
-      // Sistema matemático derecho: X hacia frente-derecha, Y hacia fondo-derecha, Z hacia arriba
-      const rx = x * cosY - y * sinY;
-      const ry = x * sinY + y * cosY;
-      const rz = z;
+      const x1 = x * cosY - y * sinY;
+      const y1 = x * sinY + y * cosY;
 
-      const sx = rx;
-      const sy = ry * sinP - rz * cosP;
-      const depth = ry * cosP + rz * sinP;
+      const depth = y1 * cosP + z * sinP;
+      const z2 = -y1 * sinP + z * cosP;
 
       return {
-        px: width / 2 + sx * cam.scale,
-        py: height / 2 + 18 + sy * cam.scale,
+        px: width / 2 + x1 * cam.scale,
+        py: (height / 2 + 18) - z2 * cam.scale,
         depth
       };
     }
 
+    function unproject3DEx3(px, py, targetDepth, cam, width, height) {
+      const x1 = (px - width / 2) / cam.scale;
+      const z2 = -(py - (height / 2 + 18)) / cam.scale;
+
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
+
+      const y1 = targetDepth * cosP - z2 * sinP;
+      const z = targetDepth * sinP + z2 * cosP;
+
+      const x = x1 * cosY + y1 * sinY;
+      const y = -x1 * sinY + y1 * cosY;
+
+      return [x, y, z];
+    }
+
     function zoomEx3(target, factor) {
       const cam = target === 'ker' ? stateEx3.camKer : stateEx3.camImg;
-      cam.scale = Math.max(14, Math.min(85, cam.scale * factor));
+      cam.scale = Math.max(12, Math.min(64, cam.scale * factor));
       drawEx3();
     }
 
     function resetZoomEx3(target) {
       const cam = target === 'ker' ? stateEx3.camKer : stateEx3.camImg;
-      cam.yaw = 0.65;
+      cam.scale = 28;
+      cam.yaw = 0.68;
       cam.pitch = 0.42;
-      cam.scale = 34;
       drawEx3();
     }
 
     function toggleSpinEx3() {
-      stateEx3.spinning = !stateEx3.spinning;
+      stateEx3.autoSpin = !stateEx3.autoSpin;
       const btn = document.getElementById('ex3-btn-spin');
       if (btn) {
-        btn.style.borderColor = stateEx3.spinning ? 'var(--neon-cyan)' : '';
-        btn.style.color = stateEx3.spinning ? 'var(--neon-cyan)' : '';
+        btn.style.borderColor = stateEx3.autoSpin ? 'var(--neon-purple)' : 'var(--border-color)';
+        btn.style.color = stateEx3.autoSpin ? '#d8b4fe' : 'var(--text-primary)';
       }
 
-      if (stateEx3.spinning) {
-        const stepSpin = () => {
-          if (!stateEx3.spinning) return;
-          stateEx3.camKer.yaw += 0.008;
+      if (stateEx3.autoSpin) {
+        const spinLoop = () => {
+          if (!stateEx3.autoSpin) return;
           stateEx3.camImg.yaw += 0.008;
           drawEx3();
-          stateEx3.spinRafId = requestAnimationFrame(stepSpin);
+          stateEx3.spinRafId = requestAnimationFrame(spinLoop);
         };
-        stateEx3.spinRafId = requestAnimationFrame(stepSpin);
+        stateEx3.spinRafId = requestAnimationFrame(spinLoop);
       } else if (stateEx3.spinRafId) {
         cancelAnimationFrame(stateEx3.spinRafId);
         stateEx3.spinRafId = null;
       }
     }
 
-   function toggleTraceEx3() {
+    function toggleTraceEx3() {
       const chk = document.getElementById('ex3-trace-active');
       stateEx3.traceEnabled = chk ? chk.checked : false;
       stateEx3.currentStroke = null;
-
       const cImg = document.getElementById('canvas3_img');
-      if (cImg) {
-        cImg.style.cursor = stateEx3.traceEnabled ? 'crosshair' : 'grab';
-      }
+      if (cImg) cImg.style.cursor = stateEx3.traceEnabled ? 'crosshair' : 'grab';
       drawEx3();
+    }
+
+    function recordTracePointEx3(x, y, z, isNewStroke = false) {
+      if (!stateEx3.traceEnabled) return;
+      if (isNewStroke || !stateEx3.currentStroke) {
+        stateEx3.currentStroke = [];
+        stateEx3.traces.push(stateEx3.currentStroke);
+      }
+      const last = stateEx3.currentStroke[stateEx3.currentStroke.length - 1];
+      if (!last || Math.hypot(last.x - x, last.y - y, last.z - z) >= 0.08) {
+        stateEx3.currentStroke.push({ x, y, z });
+      }
     }
 
     function undoTraceEx3() {
       if (stateEx3.traces.length > 0) {
         stateEx3.traces.pop();
-        stateEx3.hoveredTraceKer = null;
+        stateEx3.currentStroke = null;
         stateEx3.hoveredTraceImg = null;
         drawEx3();
       }
@@ -4815,28 +4845,8 @@
     function clearTraceEx3() {
       stateEx3.traces = [];
       stateEx3.currentStroke = null;
-      stateEx3.hoveredTraceKer = null;
       stateEx3.hoveredTraceImg = null;
       drawEx3();
-    }
-
-    function recordTracePointEx3(x, y, z, isNewStroke = false) {
-      if (!stateEx3.traceEnabled) return;
-      const pt = {
-        x: Math.round(x * 100) / 100,
-        y: Math.round(y * 100) / 100,
-        z: Math.round(z * 100) / 100
-      };
-      if (isNewStroke || stateEx3.traces.length === 0) {
-        stateEx3.currentStroke = [pt];
-        stateEx3.traces.push(stateEx3.currentStroke);
-      } else {
-        const stroke = stateEx3.traces[stateEx3.traces.length - 1];
-        const last = stroke[stroke.length - 1];
-        if (!last || last.x !== pt.x || last.y !== pt.y || last.z !== pt.z) {
-          stroke.push(pt);
-        }
-      }
     }
 
     function renderFormulaInputsEx3() {
@@ -4847,13 +4857,10 @@
       const mode = modeEl.value;
       const m = stateEx3.m;
 
+      const inp = (r, c) =>
+        `<input type="number" step="0.5" id="ex3-m-${r}-${c}" class="ex3-coeff-input" value="${m[r][c]}">`;
+
       if (mode === 'matrix') {
-        let cellsHTML = '';
-        for (let r = 0; r < 3; r++) {
-          for (let c = 0; c < 3; c++) {
-            cellsHTML += `<input type="number" step="0.5" id="ex3-m-${r}-${c}" class="ex3-coeff-input" value="${m[r][c]}">`;
-          }
-        }
         container.innerHTML = `
           <span><span class="math-var">T</span></span>
           <div class="ex3-bracket-box">
@@ -4868,8 +4875,10 @@
           <span>=</span>
           <div class="ex3-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; padding:0.2rem 0.3rem;">
-              ${cellsHTML}
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; padding:0.25rem;">
+              ${inp(0, 0)}${inp(0, 1)}${inp(0, 2)}
+              ${inp(1, 0)}${inp(1, 1)}${inp(1, 2)}
+              ${inp(2, 0)}${inp(2, 1)}${inp(2, 2)}
             </div>
             <span class="matrix-bracket right"></span>
           </div>
@@ -4884,89 +4893,60 @@
           </div>
         `;
       } else if (mode === 'columns') {
-        const varNames = [
-          { sym: 'x', cls: 'ex3-cx' },
-          { sym: 'y', cls: 'ex3-cy' },
-          { sym: 'z', cls: 'ex3-cz' }
-        ];
-        let colsHTML = '';
-        for (let c = 0; c < 3; c++) {
-          if (c > 0) colsHTML += `<span>+</span>`;
-          colsHTML += `
-            <span class="${varNames[c].cls}" style="font-weight:700;">${varNames[c].sym}</span>
-            <div class="ex3-bracket-box">
-              <span class="matrix-bracket left"></span>
-              <div class="ex3-col-stack">
-                <input type="number" step="0.5" id="ex3-m-0-${c}" class="ex3-coeff-input" value="${m[0][c]}">
-                <input type="number" step="0.5" id="ex3-m-1-${c}" class="ex3-coeff-input" value="${m[1][c]}">
-                <input type="number" step="0.5" id="ex3-m-2-${c}" class="ex3-coeff-input" value="${m[2][c]}">
-              </div>
-              <span class="matrix-bracket right"></span>
-            </div>
-          `;
-        }
         container.innerHTML = `
-          <span><span class="math-var">T</span></span>
+          <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+          <span class="ex3-cx" style="font-weight:700;">x</span>
           <div class="ex3-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div class="ex3-col-stack">
-              <span class="ex3-cx" style="font-weight:700;">x</span>
-              <span class="ex3-cy" style="font-weight:700;">y</span>
-              <span class="ex3-cz" style="font-weight:700;">z</span>
-            </div>
+            <div class="ex3-col-stack">${inp(0, 0)}${inp(1, 0)}${inp(2, 0)}</div>
             <span class="matrix-bracket right"></span>
           </div>
-          <span>=</span>
-          ${colsHTML}
+          <span>+</span>
+          <span class="ex3-cy" style="font-weight:700;">y</span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">${inp(0, 1)}${inp(1, 1)}${inp(2, 1)}</div>
+            <span class="matrix-bracket right"></span>
+          </div>
+          <span>+</span>
+          <span class="ex3-cz" style="font-weight:700;">z</span>
+          <div class="ex3-bracket-box">
+            <span class="matrix-bracket left"></span>
+            <div class="ex3-col-stack">${inp(0, 2)}${inp(1, 2)}${inp(2, 2)}</div>
+            <span class="matrix-bracket right"></span>
+          </div>
         `;
       } else {
-        let rowsHTML = '';
-        for (let r = 0; r < 3; r++) {
-          rowsHTML += `
-            <div>
-              <input type="number" step="0.5" id="ex3-m-${r}-0" class="ex3-coeff-input" value="${m[r][0]}">
-              <span class="ex3-cx" style="font-weight:700;">x</span> +
-              <input type="number" step="0.5" id="ex3-m-${r}-1" class="ex3-coeff-input" value="${m[r][1]}">
-              <span class="ex3-cy" style="font-weight:700;">y</span> +
-              <input type="number" step="0.5" id="ex3-m-${r}-2" class="ex3-coeff-input" value="${m[r][2]}">
-              <span class="ex3-cz" style="font-weight:700;">z</span>
-            </div>
-          `;
-        }
         container.innerHTML = `
-          <span><span class="math-var">T</span></span>
+          <span><span class="math-var">T</span>(<span class="ex3-cx">x</span>, <span class="ex3-cy">y</span>, <span class="ex3-cz">z</span>) =</span>
           <div class="ex3-bracket-box">
             <span class="matrix-bracket left"></span>
             <div class="ex3-col-stack">
-              <span class="ex3-cx" style="font-weight:700;">x</span>
-              <span class="ex3-cy" style="font-weight:700;">y</span>
-              <span class="ex3-cz" style="font-weight:700;">z</span>
-            </div>
-            <span class="matrix-bracket right"></span>
-          </div>
-          <span>=</span>
-          <div class="ex3-bracket-box">
-            <span class="matrix-bracket left"></span>
-            <div class="ex3-col-stack">
-              ${rowsHTML}
+              <div>${inp(0, 0)}<span class="ex3-cx">x</span> + ${inp(0, 1)}<span class="ex3-cy">y</span> + ${inp(0, 2)}<span class="ex3-cz">z</span></div>
+              <div>${inp(1, 0)}<span class="ex3-cx">x</span> + ${inp(1, 1)}<span class="ex3-cy">y</span> + ${inp(1, 2)}<span class="ex3-cz">z</span></div>
+              <div>${inp(2, 0)}<span class="ex3-cx">x</span> + ${inp(2, 1)}<span class="ex3-cy">y</span> + ${inp(2, 2)}<span class="ex3-cz">z</span></div>
             </div>
             <span class="matrix-bracket right"></span>
           </div>
         `;
       }
 
-      const scheduleDrawEx3 = createSmoothRenderer(updateEx3);
       for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
           const el = document.getElementById(`ex3-m-${r}-${c}`);
-          if (el) el.addEventListener('input', scheduleDrawEx3);
+          if (el) {
+            el.addEventListener('input', () => {
+              stateEx3.m[r][c] = parseFloat(el.value) || 0;
+              drawEx3();
+            });
+          }
         }
       }
     }
 
     function changeStructureEx3() {
       renderFormulaInputsEx3();
-      updateEx3();
+      drawEx3();
     }
 
     function setPresetEx3(a11, a12, a13, a21, a22, a23, a31, a32, a33) {
@@ -4975,604 +4955,96 @@
         [a21, a22, a23],
         [a31, a32, a33]
       ];
+      stateEx3.traces = [];
+      stateEx3.currentStroke = null;
+      stateEx3.hoveredTraceImg = null;
       renderFormulaInputsEx3();
-      updateEx3();
+      drawEx3();
     }
 
     function analyzeMatrix3x3Ex3(m) {
-      const EPS = 1e-7;
-      const R = m.map(row => [...row]);
-      const pivotCols = [];
-      let lead = 0;
-
-      for (let r = 0; r < 3 && lead < 3; r++) {
-        let i = r;
-        while (i < 3 && Math.abs(R[i][lead]) < EPS) i++;
-        if (i === 3) {
-          lead++;
-          r--;
-          continue;
-        }
-        [R[r], R[i]] = [R[i], R[r]];
-        const div = R[r][lead];
-        for (let j = 0; j < 3; j++) R[r][j] /= div;
-        for (let k = 0; k < 3; k++) {
-          if (k !== r && Math.abs(R[k][lead]) > EPS) {
-            const factor = R[k][lead];
-            for (let j = 0; j < 3; j++) R[k][j] -= factor * R[r][j];
-          }
-        }
-        pivotCols.push(lead);
-        lead++;
-      }
-
-      const rank = pivotCols.length;
-      const nullity = 3 - rank;
-      const freeCols = [0, 1, 2].filter(c => !pivotCols.includes(c));
-
-      const imgBasis = pivotCols.map(c => [m[0][c], m[1][c], m[2][c]]);
-      const kerBasis = freeCols.map(fc => {
-        const vec = [0, 0, 0];
-        vec[fc] = 1;
-        pivotCols.forEach((pc, rowIdx) => {
-          const val = -R[rowIdx][fc];
-          vec[pc] = Math.abs(val) < EPS ? 0 : Math.round(val * 100) / 100;
-        });
-        return vec;
-      });
-
       const det =
         m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) -
         m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) +
         m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
 
-      return {
-        rank,
-        nullity,
-        imgBasis,
-        kerBasis,
-        det: Math.round(det * 1e6) / 1e6
-      };
-    }
-
-    function draw3DSceneBaseEx3(ctx, width, height, cam) {
-      ctx.clearRect(0, 0, width, height);
-
-      // Rejilla del plano suelo Z = 0
-      const gridRange = 4;
-      ctx.save();
-      for (let i = -gridRange; i <= gridRange; i++) {
-        const p1 = project3DEx3(i, -gridRange, 0, cam, width, height);
-        const p2 = project3DEx3(i, gridRange, 0, cam, width, height);
-        ctx.strokeStyle = i === 0 ? 'rgba(240, 101, 101, 0.35)' : 'rgba(148, 163, 184, 0.12)';
-        ctx.lineWidth = i === 0 ? 1.4 : 1;
-        ctx.beginPath();
-        ctx.moveTo(p1.px, p1.py);
-        ctx.lineTo(p2.px, p2.py);
-        ctx.stroke();
-
-        const p3 = project3DEx3(-gridRange, i, 0, cam, width, height);
-        const p4 = project3DEx3(gridRange, i, 0, cam, width, height);
-        ctx.strokeStyle = i === 0 ? 'rgba(24, 197, 217, 0.35)' : 'rgba(148, 163, 184, 0.12)';
-        ctx.lineWidth = i === 0 ? 1.4 : 1;
-        ctx.beginPath();
-        ctx.moveTo(p3.px, p3.py);
-        ctx.lineTo(p4.px, p4.py);
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // Ejes coordenados X (cian), Y (coral), Z (púrpura) con relieve y marcas
-      const axisLen = 4.6;
-      const axes = [
-        { dir: [1, 0, 0], color: '#18c5d9', label: 'X' },
-        { dir: [0, 1, 0], color: '#f06565', label: 'Y' },
-        { dir: [0, 0, 1], color: '#a855f7', label: 'Z' }
+      const cols = [
+        [m[0][0], m[1][0], m[2][0]],
+        [m[0][1], m[1][1], m[2][1]],
+        [m[0][2], m[1][2], m[2][2]]
       ];
 
-      axes.forEach(ax => {
-        const neg = project3DEx3(-ax.dir[0] * axisLen, -ax.dir[1] * axisLen, -ax.dir[2] * axisLen, cam, width, height);
-        const pos = project3DEx3(ax.dir[0] * axisLen, ax.dir[1] * axisLen, ax.dir[2] * axisLen, cam, width, height);
-
-        ctx.save();
-        ctx.strokeStyle = ax.color;
-        ctx.globalAlpha = 0.28;
-        ctx.lineWidth = 1.4;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(neg.px, neg.py);
-        ctx.lineTo(pos.px, pos.py);
-        ctx.stroke();
-
-        const orig = project3DEx3(0, 0, 0, cam, width, height);
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 0.92;
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.moveTo(orig.px, orig.py);
-        ctx.lineTo(pos.px, pos.py);
-        ctx.stroke();
-
-        // Marcas numéricas en cada eje
-        for (let t = 1; t <= 4; t++) {
-          const tp = project3DEx3(ax.dir[0] * t, ax.dir[1] * t, ax.dir[2] * t, cam, width, height);
-          ctx.fillStyle = ax.color;
-          ctx.beginPath();
-          ctx.arc(tp.px, tp.py, 2.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.font = 'bold 12px "JetBrains Mono", monospace';
-        ctx.fillStyle = ax.color;
-        ctx.fillText(ax.label, pos.px + 7, pos.py + 4);
-        ctx.restore();
-      });
-    }
-
-    function drawArrow3DEx3(ctx, width, height, cam, vec, color, label = '', dashed = false) {
-      const [vx, vy, vz] = vec;
-      if (Math.hypot(vx, vy, vz) < 1e-4) return;
-
-      const p0 = project3DEx3(0, 0, 0, cam, width, height);
-      const p1 = project3DEx3(vx, vy, vz, cam, width, height);
-
-      const dx = p1.px - p0.px;
-      const dy = p1.py - p0.py;
-      const len = Math.hypot(dx, dy);
-      if (len < 2) return;
-
-      const angle = Math.atan2(dy, dx);
-      const headLen = Math.min(13, len * 0.35);
-
-      ctx.save();
-      if (dashed) {
-        ctx.setLineDash([5, 4]);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2.1;
-        ctx.beginPath();
-        ctx.moveTo(p0.px, p0.py);
-        ctx.lineTo(p1.px, p1.py);
-        ctx.stroke();
-      } else {
-        // Sombra de relieve del cuerpo 3D
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = 5.5;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(p0.px + 1.5, p0.py + 2);
-        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.55) + 1.5, p1.py - Math.sin(angle) * (headLen * 0.55) + 2);
-        ctx.stroke();
-
-        // Cuerpo principal con relieve
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3.8;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(p0.px, p0.py);
-        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.55), p1.py - Math.sin(angle) * (headLen * 0.55));
-        ctx.stroke();
-
-        // Brillo especular central para efecto cilíndrico 3D
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.38)';
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(p0.px, p0.py);
-        ctx.lineTo(p1.px - Math.cos(angle) * (headLen * 0.65), p1.py - Math.sin(angle) * (headLen * 0.65));
-        ctx.stroke();
+      const isZero = cols.every(c => Math.hypot(c[0], c[1], c[2]) < 1e-7);
+      if (isZero) {
+        return { rank: 0, nullity: 3, det: 0, imgBasis: [], kerBasis: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] };
       }
 
-      // Punta cónica 3D
-      ctx.setLineDash([]);
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.moveTo(p1.px, p1.py);
-      ctx.lineTo(p1.px - headLen * Math.cos(angle - Math.PI / 6.5), p1.py - headLen * Math.sin(angle - Math.PI / 6.5));
-      ctx.lineTo(p1.px - headLen * Math.cos(angle + Math.PI / 6.5), p1.py - headLen * Math.sin(angle + Math.PI / 6.5));
-      ctx.closePath();
-      ctx.fill();
-
-      if (label) {
-        ctx.font = 'italic bold 13px "STIX Two Text", "Cambria Math", serif';
-        const metrics = ctx.measureText(label);
-        const boxW = metrics.width + 10;
-        const boxH = 20;
-        let lx = Math.max(8, Math.min(width - boxW - 8, p1.px + Math.cos(angle) * 16 - boxW / 2));
-        let ly = Math.max(8, Math.min(height - boxH - 8, p1.py + Math.sin(angle) * 16 - boxH / 2));
-
-        ctx.fillStyle = 'rgba(11, 12, 16, 0.88)';
-        ctx.beginPath();
-        ctx.roundRect(lx, ly, boxW, boxH, 5);
-        ctx.fill();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.fillStyle = color;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(label, lx + boxW / 2, ly + boxH / 2 + 1);
+      if (Math.abs(det) > 1e-5) {
+        return { rank: 3, nullity: 0, det, imgBasis: cols, kerBasis: [] };
       }
-      ctx.restore();
-    }
 
-    function drawComponentBox3DEx3(ctx, width, height, cam, vec) {
-      const [vx, vy, vz] = vec;
-      const p000 = project3DEx3(0, 0, 0, cam, width, height);
-      const px00 = project3DEx3(vx, 0, 0, cam, width, height);
-      const pxy0 = project3DEx3(vx, vy, 0, cam, width, height);
-      const pxyz = project3DEx3(vx, vy, vz, cam, width, height);
-
-      ctx.save();
-      ctx.setLineDash([4, 4]);
-      ctx.lineWidth = 1.8;
-
-      if (vx !== 0) {
-        ctx.strokeStyle = '#18c5d9';
-        ctx.beginPath();
-        ctx.moveTo(p000.px, p000.py);
-        ctx.lineTo(px00.px, px00.py);
-        ctx.stroke();
-      }
-      if (vy !== 0) {
-        ctx.strokeStyle = '#f06565';
-        ctx.beginPath();
-        ctx.moveTo(px00.px, px00.py);
-        ctx.lineTo(pxy0.px, pxy0.py);
-        ctx.stroke();
-      }
-      if (vz !== 0) {
-        ctx.strokeStyle = '#a855f7';
-        ctx.beginPath();
-        ctx.moveTo(pxy0.px, pxy0.py);
-        ctx.lineTo(pxyz.px, pxyz.py);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-
-    function drawParallelepiped3DEx3(ctx, width, height, cam, v1, v2, v3, fillColor, strokeColor) {
-      const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
-      const c000 = [0, 0, 0];
-      const c100 = v1;
-      const c010 = v2;
-      const c001 = v3;
-      const c110 = add(v1, v2);
-      const c101 = add(v1, v3);
-      const c011 = add(v2, v3);
-      const c111 = add(c110, v3);
-
-      const verts = [c000, c100, c110, c010, c001, c101, c111, c011].map(v =>
-        project3DEx3(v[0], v[1], v[2], cam, width, height)
-      );
-
-      const faces = [
-        [0, 1, 2, 3],
-        [4, 5, 6, 7],
-        [0, 1, 5, 4],
-        [2, 3, 7, 6],
-        [1, 2, 6, 5],
-        [0, 3, 7, 4]
-      ];
-
-      ctx.save();
-      faces.forEach(f => {
-        ctx.beginPath();
-        ctx.moveTo(verts[f[0]].px, verts[f[0]].py);
-        ctx.lineTo(verts[f[1]].px, verts[f[1]].py);
-        ctx.lineTo(verts[f[2]].px, verts[f[2]].py);
-        ctx.lineTo(verts[f[3]].px, verts[f[3]].py);
-        ctx.closePath();
-        ctx.fillStyle = fillColor;
-        ctx.fill();
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = 1.2;
-        ctx.setLineDash([4, 3]);
-        ctx.stroke();
-      });
-      ctx.restore();
-    }
-
-    function drawSubspace3DEx3(ctx, width, height, cam, basis, colorRgb, strokeHex) {
-      if (basis.length === 1) {
-        const [bx, by, bz] = basis[0];
-        const norm = Math.hypot(bx, by, bz) || 1;
-        const span = 5.5;
-        const ux = (bx / norm) * span;
-        const uy = (by / norm) * span;
-        const uz = (bz / norm) * span;
-        const pA = project3DEx3(-ux, -uy, -uz, cam, width, height);
-        const pB = project3DEx3(ux, uy, uz, cam, width, height);
-
-        ctx.save();
-        ctx.strokeStyle = strokeHex;
-        ctx.lineWidth = 3.2;
-        ctx.setLineDash([7, 5]);
-        ctx.beginPath();
-        ctx.moveTo(pA.px, pA.py);
-        ctx.lineTo(pB.px, pB.py);
-        ctx.stroke();
-        ctx.restore();
-      } else if (basis.length === 2) {
-        const u = basis[0];
-        const v = basis[1];
-        const nu = Math.hypot(...u) || 1;
-        const nv = Math.hypot(...v) || 1;
-        const s = 3.2;
-        const u1 = u.map(c => (c / nu) * s);
-        const v1 = v.map(c => (c / nv) * s);
-
-        const corners = [
-          [-u1[0] - v1[0], -u1[1] - v1[1], -u1[2] - v1[2]],
-          [ u1[0] - v1[0],  u1[1] - v1[1],  u1[2] - v1[2]],
-          [ u1[0] + v1[0],  u1[1] + v1[1],  u1[2] + v1[2]],
-          [-u1[0] + v1[0], -u1[1] + v1[1], -u1[2] + v1[2]]
-        ].map(pt => project3DEx3(pt[0], pt[1], pt[2], cam, width, height));
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(corners[0].px, corners[0].py);
-        ctx.lineTo(corners[1].px, corners[1].py);
-        ctx.lineTo(corners[2].px, corners[2].py);
-        ctx.lineTo(corners[3].px, corners[3].py);
-        ctx.closePath();
-        ctx.fillStyle = `rgba(${colorRgb}, 0.16)`;
-        ctx.fill();
-        ctx.strokeStyle = strokeHex;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
-    function drawTraces3DEx3(ctx, width, height, cam, transformFn) {
-      if (stateEx3.traces.length === 0) return;
-      ctx.save();
-      ctx.strokeStyle = '#ec4899';
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      for (const stroke of stateEx3.traces) {
-        if (stroke.length === 0) continue;
-        ctx.beginPath();
-        stroke.forEach((pt, idx) => {
-          const [px3, py3, pz3] = transformFn(pt);
-          const sp = project3DEx3(px3, py3, pz3, cam, width, height);
-          if (idx === 0) ctx.moveTo(sp.px, sp.py);
-          else ctx.lineTo(sp.px, sp.py);
-        });
-        ctx.stroke();
-
-        for (const pt of stroke) {
-          const [px3, py3, pz3] = transformFn(pt);
-          const sp = project3DEx3(px3, py3, pz3, cam, width, height);
-          ctx.fillStyle = '#f472b6';
-          ctx.beginPath();
-          ctx.arc(sp.px, sp.py, 3.6, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      ctx.restore();
-    }
-
-    function updateEx3() {
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
-          const el = document.getElementById(`ex3-m-${r}-${c}`);
-          if (el) stateEx3.m[r][c] = parseFloat(el.value) || 0;
+      const imgBasis = [];
+      for (const c of cols) {
+        if (Math.hypot(c[0], c[1], c[2]) < 1e-7) continue;
+        if (imgBasis.length === 0) {
+          imgBasis.push(c);
+        } else if (imgBasis.length === 1) {
+          const b = imgBasis[0];
+          const cr = [
+            b[1] * c[2] - b[2] * c[1],
+            b[2] * c[0] - b[0] * c[2],
+            b[0] * c[1] - b[1] * c[0]
+          ];
+          if (Math.hypot(cr[0], cr[1], cr[2]) > 1e-5) {
+            imgBasis.push(c);
+            break;
+          }
         }
       }
 
-      const sx = document.getElementById('ex3-slider-x');
-      const sy = document.getElementById('ex3-slider-y');
-      const sz = document.getElementById('ex3-slider-z');
-      if (!sx || !sy || !sz) return;
+      const rank = imgBasis.length;
+      const nullity = 3 - rank;
 
-      const x = Math.round(parseFloat(sx.value) * 10) / 10;
-      const y = Math.round(parseFloat(sy.value) * 10) / 10;
-      const z = Math.round(parseFloat(sz.value) * 10) / 10;
+      const rows = [m[0], m[1], m[2]];
+      let kerBasis = [];
 
-      stateEx3.x = x;
-      stateEx3.y = y;
-      stateEx3.z = z;
-
-      document.getElementById('ex3-val-x').textContent = x.toFixed(1);
-      document.getElementById('ex3-val-y').textContent = y.toFixed(1);
-      document.getElementById('ex3-val-z').textContent = z.toFixed(1);
-
-      recordTracePointEx3(x, y, z, false);
-      drawEx3();
-    }
-
-    function drawEx3() {
-      const viewKer = setupHiDPI3DCanvasEx3('canvas3_ker');
-      const viewImg = setupHiDPI3DCanvasEx3('canvas3_img');
-      if (!viewKer || !viewImg) return;
-
-      const { m, x, y, z, camKer, camImg } = stateEx3;
-      const tx = Math.round((m[0][0] * x + m[0][1] * y + m[0][2] * z) * 1e6) / 1e6;
-      const ty = Math.round((m[1][0] * x + m[1][1] * y + m[1][2] * z) * 1e6) / 1e6;
-      const tz = Math.round((m[2][0] * x + m[2][1] * y + m[2][2] * z) * 1e6) / 1e6;
-
-      const info = analyzeMatrix3x3Ex3(m);
-      const isZeroOutput = (tx === 0 && ty === 0 && tz === 0);
-      const isKernelValid = info.nullity === 0
-        ? (x === 0 && y === 0 && z === 0)
-        : (isZeroOutput && (x !== 0 || y !== 0 || z !== 0));
-
-      /* 1. ESCENA 3D IZQUIERDA: DOMINIO R³ Y NÚCLEO nu T */
-      const ctxK = viewKer.ctx;
-      draw3DSceneBaseEx3(ctxK, viewKer.width, viewKer.height, camKer);
-
-      // Cubo unitario de referencia en el dominio
-      drawParallelepiped3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [1, 0, 0], [0, 1, 0], [0, 0, 1], 'rgba(168, 85, 247, 0.06)', 'rgba(168, 85, 247, 0.35)');
-
-      // Subespacio nu T en esmeralda
-      if (info.nullity === 1 || info.nullity === 2) {
-        drawSubspace3DEx3(ctxK, viewKer.width, viewKer.height, camKer, info.kerBasis, '16, 185, 129', '#10b981');
-      } else if (info.nullity === 3) {
-        ctxK.save();
-        ctxK.fillStyle = 'rgba(16, 185, 129, 0.07)';
-        ctxK.fillRect(0, 0, viewKer.width, viewKer.height);
-        ctxK.restore();
+      if (rank === 1) {
+        const n = rows.find(r => Math.hypot(r[0], r[1], r[2]) > 1e-7) || [0, 0, 1];
+        const ref = Math.abs(n[0]) < 0.8 ? [1, 0, 0] : [0, 1, 0];
+        const u1 = [
+          n[1] * ref[2] - n[2] * ref[1],
+          n[2] * ref[0] - n[0] * ref[2],
+          n[0] * ref[1] - n[1] * ref[0]
+        ];
+        const u1L = Math.hypot(u1[0], u1[1], u1[2]) || 1;
+        const b1 = u1.map(v => v / u1L);
+        const u2 = [
+          n[1] * b1[2] - n[2] * b1[1],
+          n[2] * b1[0] - n[0] * b1[2],
+          n[0] * b1[1] - n[1] * b1[0]
+        ];
+        const u2L = Math.hypot(u2[0], u2[1], u2[2]) || 1;
+        const b2 = u2.map(v => v / u2L);
+        kerBasis = [b1, b2];
+      } else if (rank === 2) {
+        const r1 = rows.find(r => Math.hypot(r[0], r[1], r[2]) > 1e-7) || [1, 0, 0];
+        let dir = [0, 0, 1];
+        for (const r2 of rows) {
+          const cr = [
+            r1[1] * r2[2] - r1[2] * r2[1],
+            r1[2] * r2[0] - r1[0] * r2[2],
+            r1[0] * r2[1] - r1[1] * r2[0]
+          ];
+          const len = Math.hypot(cr[0], cr[1], cr[2]);
+          if (len > 1e-5) {
+            dir = cr.map(v => v / len);
+            break;
+          }
+        }
+        kerBasis = [dir];
       }
 
-      drawTraces3DEx3(ctxK, viewKer.width, viewKer.height, camKer, pt => [pt.x, pt.y, pt.z]);
-      drawComponentBox3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [x, y, z]);
-      drawArrow3DEx3(ctxK, viewKer.width, viewKer.height, camKer, [x, y, z], isKernelValid ? '#10b981' : '#4f7df3', 'v⃗', false);
-
-      // Punto de vértice de v⃗
-      const pTipKer = project3DEx3(x, y, z, camKer, viewKer.width, viewKer.height);
-      ctxK.save();
-      ctxK.beginPath();
-      ctxK.arc(pTipKer.px, pTipKer.py, 5.5, 0, Math.PI * 2);
-      ctxK.fillStyle = isKernelValid ? '#10b981' : '#f06565';
-      ctxK.fill();
-      ctxK.lineWidth = 1.8;
-      ctxK.strokeStyle = '#ffffff';
-      ctxK.stroke();
-      ctxK.restore();
-
-      if (stateEx3.hoveredTraceKer) {
-        const hp = stateEx3.hoveredTraceKer;
-        const sp = project3DEx3(hp.x, hp.y, hp.z, camKer, viewKer.width, viewKer.height);
-        drawTraceTooltipEx1(ctxK, viewKer.width, viewKer.height, sp.px, sp.py, [
-          { text: 'v = (', color: '#f1f5f9' },
-          { text: hp.x.toFixed(1), color: '#18c5d9' },
-          { text: ', ', color: '#f1f5f9' },
-          { text: hp.y.toFixed(1), color: '#f06565' },
-          { text: ', ', color: '#f1f5f9' },
-          { text: hp.z.toFixed(1), color: '#a855f7' },
-          { text: ')', color: '#f1f5f9' }
-        ]);
-      }
-
-      /* 2. ESCENA 3D DERECHA: CODOMINIO R³ E IMAGEN im T */
-      const ctxI = viewImg.ctx;
-      draw3DSceneBaseEx3(ctxI, viewImg.width, viewImg.height, camImg);
-
-      const col1 = [m[0][0], m[1][0], m[2][0]];
-      const col2 = [m[0][1], m[1][1], m[2][1]];
-      const col3 = [m[0][2], m[1][2], m[2][2]];
-
-      if (info.rank === 3) {
-        drawParallelepiped3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col1, col2, col3, 'rgba(168, 85, 247, 0.14)', '#a855f7');
-      } else if (info.rank === 1 || info.rank === 2) {
-        drawSubspace3DEx3(ctxI, viewImg.width, viewImg.height, camImg, info.imgBasis, '168, 85, 247', '#a855f7');
-      }
-
-      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col1, '#18c5d9', 'T(î)', true);
-      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col2, '#f06565', 'T(ĵ)', true);
-      drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, col3, '#a855f7', 'T(k̂)', true);
-
-      drawTraces3DEx3(ctxI, viewImg.width, viewImg.height, camImg, pt => [
-        m[0][0] * pt.x + m[0][1] * pt.y + m[0][2] * pt.z,
-        m[1][0] * pt.x + m[1][1] * pt.y + m[1][2] * pt.z,
-        m[2][0] * pt.x + m[2][1] * pt.y + m[2][2] * pt.z
-      ]);
-
-      drawComponentBox3DEx3(ctxI, viewImg.width, viewImg.height, camImg, [tx, ty, tz]);
-      if (tx !== 0 || ty !== 0 || tz !== 0) {
-        drawArrow3DEx3(ctxI, viewImg.width, viewImg.height, camImg, [tx, ty, tz], '#10b981', 'T(v⃗)', false);
-      } else {
-        const origI = project3DEx3(0, 0, 0, camImg, viewImg.width, viewImg.height);
-        ctxI.save();
-        ctxI.beginPath();
-        ctxI.arc(origI.px, origI.py, 6.5, 0, Math.PI * 2);
-        ctxI.fillStyle = '#10b981';
-        ctxI.fill();
-        ctxI.restore();
-      }
-
-      if (stateEx3.hoveredTraceImg) {
-        const hp = stateEx3.hoveredTraceImg;
-        const htx = m[0][0] * hp.x + m[0][1] * hp.y + m[0][2] * hp.z;
-        const hty = m[1][0] * hp.x + m[1][1] * hp.y + m[1][2] * hp.z;
-        const htz = m[2][0] * hp.x + m[2][1] * hp.y + m[2][2] * hp.z;
-        const sp = project3DEx3(htx, hty, htz, camImg, viewImg.width, viewImg.height);
-        drawTraceTooltipEx1(ctxI, viewImg.width, viewImg.height, sp.px, sp.py, [
-          { text: 'T(v) = (', color: '#f1f5f9' },
-          { text: htx.toFixed(1), color: '#18c5d9' },
-          { text: ', ', color: '#f1f5f9' },
-          { text: hty.toFixed(1), color: '#f06565' },
-          { text: ', ', color: '#f1f5f9' },
-          { text: htz.toFixed(1), color: '#a855f7' },
-          { text: ')', color: '#f1f5f9' }
-        ]);
-      }
-
-      /* 3. ACTUALIZACIÓN DE CAJAS DE ESTADO Y TEOREMA RANGO-NULIDAD */
-      const statusBox = document.getElementById('ex3-status-box');
-      const eliotToast = document.getElementById('eliot-toast-3');
-      const eliotText = document.getElementById('eliot-msg-text-3');
-
-      const kerSubDesc =
-        info.nullity === 0 ? 'nu T = { (0, 0, 0) } (Solo el origen)' :
-        info.nullity === 1 ? `Recta en ℝ³ • Base = { (${info.kerBasis[0].join(', ')})ᵀ }` :
-        info.nullity === 2 ? `Plano en ℝ³ • Base = { (${info.kerBasis[0].join(', ')})ᵀ, (${info.kerBasis[1].join(', ')})ᵀ }` :
-        'nu T = ℝ³ (Todo el espacio tridimensional)';
-
-      if (isKernelValid) {
-        statusBox.className = 'ex3-status-box is-valid';
-        statusBox.innerHTML = `
-          <div><strong>✓ ¡NÚCLEO ENCONTRADO CON PRECISIÓN EXACTA!</strong></div>
-          <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="ex3-cx">${x.toFixed(1)}</span>, <span class="ex3-cy">${y.toFixed(1)}</span>, <span class="ex3-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0)
-          </div>
-          <div>Subespacio: <strong>${kerSubDesc}</strong></div>
-        `;
-        eliotText.textContent = info.nullity === 0
-          ? '¡Exacto! Como det(A) ≠ 0, el origen (0,0,0) es el único vector en nu T.'
-          : `¡Excelente! (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) colapsa al vector nulo en ℝ³.`;
-        eliotToast.classList.add('visible');
-      } else {
-        statusBox.className = 'ex3-status-box is-invalid';
-        const hintMsg = (info.nullity > 0 && x === 0 && y === 0 && z === 0)
-          ? 'El origen (0,0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
-          : 'Ajusta los deslizadores (x, y, z) hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0).';
-        statusBox.innerHTML = `
-          <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
-          <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="ex3-cx">${x.toFixed(1)}</span>, <span class="ex3-cy">${y.toFixed(1)}</span>, <span class="ex3-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="ex3-cx">${tx.toFixed(1)}</span>, <span class="ex3-cy">${ty.toFixed(1)}</span>, <span class="ex3-cz">${tz.toFixed(1)}</span>)
-          </div>
-          <div style="opacity:0.88;">${hintMsg}</div>
-        `;
-        eliotToast.classList.remove('visible');
-      }
-
-      const imgSubDesc =
-        info.rank === 0 ? 'im T = { <span class="vec-arrow">0</span> } (Solo el origen)' :
-        info.rank === 1 ? 'Recta en ℝ³ (dim = 1)' :
-        info.rank === 2 ? 'Plano en ℝ³ (dim = 2)' :
-        `im T = ℝ³ (Biyectiva • |det(A)| = ${Math.abs(info.det)})`;
-
-      const imgBasisText = info.imgBasis.length === 0
-        ? 'Base = ∅'
-        : `Base = { ${info.imgBasis.map(v => `(${v.join(', ')})ᵀ`).join(', ')} }`;
-
-      document.getElementById('ex3-img-readout').innerHTML = `
-        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
-          <div class="ex3-col-equation" style="font-size:0.95rem;">
-            <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
-            <div class="ex3-bracket-box">
-              <span class="matrix-bracket left"></span>
-              <div class="col-vector-cells">
-                <span class="ex3-cx">${tx.toFixed(1)}</span>
-                <span class="ex3-cy">${ty.toFixed(1)}</span>
-                <span class="ex3-cz">${tz.toFixed(1)}</span>
-              </div>
-              <span class="matrix-bracket right"></span>
-            </div>
-          </div>
-          <div style="font-size:0.82rem;">
-            <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgSubDesc}</span></div>
-            <div><strong>${imgBasisText}</strong></div>
-          </div>
-        </div>
-        <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
-          Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${info.rank} + ${info.nullity} = 3</strong>
-        </div>
-      `;
+      return { rank, nullity, det, imgBasis, kerBasis };
     }
 
     function solvePreimageEx3(m, info, targetW) {
@@ -5642,98 +5114,42 @@
       return v;
     }
 
-    function traceAtImagePointerEx3(clientX, clientY, isNewStroke) {
-      const canvas = document.getElementById('canvas3_img');
-      if (!canvas) return;
+    function syncDomainVectorEx3(rawX, rawY, rawZ, isNewStroke = false) {
+      const nx = Math.max(-5, Math.min(5, Math.round(rawX * 10) / 10));
+      const ny = Math.max(-5, Math.min(5, Math.round(rawY * 10) / 10));
+      const nz = Math.max(-5, Math.min(5, Math.round(rawZ * 10) / 10));
 
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      const cam = stateEx3.camImg;
+      stateEx3.x = nx;
+      stateEx3.y = ny;
+      stateEx3.z = nz;
 
-      const sx = (clientX - rect.left - width / 2) / cam.scale;
-      const sy = (clientY - rect.top - (height / 2 + 18)) / cam.scale;
+      const sx = document.getElementById('ex3-slider-x');
+      const sy = document.getElementById('ex3-slider-y');
+      const sz = document.getElementById('ex3-slider-z');
+      if (sx) sx.value = nx;
+      if (sy) sy.value = ny;
+      if (sz) sz.value = nz;
 
-      const cosY = Math.cos(cam.yaw);
-      const sinY = Math.sin(cam.yaw);
-      const cosP = Math.cos(cam.pitch);
-      const sinP = Math.sin(cam.pitch);
+      const vxEl = document.getElementById('ex3-val-x');
+      const vyEl = document.getElementById('ex3-val-y');
+      const vzEl = document.getElementById('ex3-val-z');
+      if (vxEl) vxEl.textContent = nx.toFixed(1);
+      if (vyEl) vyEl.textContent = ny.toFixed(1);
+      if (vzEl) vzEl.textContent = nz.toFixed(1);
 
-      const ry0 = sy * sinP;
-      const rz0 = -sy * cosP;
-      const P0 = [
-        sx * cosY + ry0 * sinY,
-        -sx * sinY + ry0 * cosY,
-        rz0
-      ];
-      const u = [
-        cosP * sinY,
-        cosP * cosY,
-        sinP
-      ];
+      recordTracePointEx3(nx, ny, nz, isNewStroke);
+      drawEx3();
+    }
 
-      const m = stateEx3.m;
-      const info = analyzeMatrix3x3Ex3(m);
-      let targetW = [0, 0, 0];
+    function updateEx3() {
+      const sx = document.getElementById('ex3-slider-x');
+      const sy = document.getElementById('ex3-slider-y');
+      const sz = document.getElementById('ex3-slider-z');
+      if (!sx || !sy || !sz) return;
 
-      if (info.rank === 2) {
-        const b1 = info.imgBasis[0];
-        const b2 = info.imgBasis[1];
-        const nx = b1[1] * b2[2] - b1[2] * b2[1];
-        const ny = b1[2] * b2[0] - b1[0] * b2[2];
-        const nz = b1[0] * b2[1] - b1[1] * b2[0];
-        const nLen = Math.hypot(nx, ny, nz) || 1;
-        const n = [nx / nLen, ny / nLen, nz / nLen];
-        const denom = n[0] * u[0] + n[1] * u[1] + n[2] * u[2];
-
-        if (Math.abs(denom) > 0.08) {
-          const d = -(n[0] * P0[0] + n[1] * P0[1] + n[2] * P0[2]) / denom;
-          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
-        } else {
-          const d = -(P0[0] * u[0] + P0[1] * u[1] + P0[2] * u[2]);
-          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
-        }
-      } else if (info.rank === 1) {
-        const b1 = info.imgBasis[0];
-        const bLen = Math.hypot(b1[0], b1[1], b1[2]) || 1;
-        const bh = [b1[0] / bLen, b1[1] / bLen, b1[2] / bLen];
-        const c = bh[0] * u[0] + bh[1] * u[1] + bh[2] * u[2];
-        const pb = P0[0] * bh[0] + P0[1] * bh[1] + P0[2] * bh[2];
-        const pu = P0[0] * u[0] + P0[1] * u[1] + P0[2] * u[2];
-        const denom = 1 - c * c;
-        const t = denom > 1e-4 ? (pb - c * pu) / denom : pb;
-        targetW = [t * bh[0], t * bh[1], t * bh[2]];
-      } else if (info.rank === 3) {
-        const curTz = m[2][0] * stateEx3.x + m[2][1] * stateEx3.y + m[2][2] * stateEx3.z;
-        if (Math.abs(sinP) > 0.22) {
-          const d = (curTz - P0[2]) / sinP;
-          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], curTz];
-        } else {
-          const curTx = m[0][0] * stateEx3.x + m[0][1] * stateEx3.y + m[0][2] * stateEx3.z;
-          const curTy = m[1][0] * stateEx3.x + m[1][1] * stateEx3.y + m[1][2] * stateEx3.z;
-          const d = curTx * u[0] + curTy * u[1] + curTz * u[2];
-          targetW = [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
-        }
-      }
-
-      const rawV = solvePreimageEx3(m, info, targetW);
-      const nx = Math.max(-5, Math.min(5, Math.round(rawV[0] * 10) / 10));
-      const ny = Math.max(-5, Math.min(5, Math.round(rawV[1] * 10) / 10));
-      const nz = Math.max(-5, Math.min(5, Math.round(rawV[2] * 10) / 10));
-
-      if (!isNewStroke && stateEx3.currentStroke && stateEx3.currentStroke.length > 0) {
-        const prev = stateEx3.currentStroke[stateEx3.currentStroke.length - 1];
-        if (Math.hypot(nx - prev.x, ny - prev.y, nz - prev.z) < 0.08) {
-          return;
-        }
-      }
-
-      const sxEl = document.getElementById('ex3-slider-x');
-      const syEl = document.getElementById('ex3-slider-y');
-      const szEl = document.getElementById('ex3-slider-z');
-      if (sxEl) sxEl.value = nx;
-      if (syEl) syEl.value = ny;
-      if (szEl) szEl.value = nz;
+      const nx = Math.round(parseFloat(sx.value) * 10) / 10;
+      const ny = Math.round(parseFloat(sy.value) * 10) / 10;
+      const nz = Math.round(parseFloat(sz.value) * 10) / 10;
 
       stateEx3.x = nx;
       stateEx3.y = ny;
@@ -5743,421 +5159,780 @@
       document.getElementById('ex3-val-y').textContent = ny.toFixed(1);
       document.getElementById('ex3-val-z').textContent = nz.toFixed(1);
 
-      recordTracePointEx3(nx, ny, nz, isNewStroke);
+      recordTracePointEx3(nx, ny, nz, false);
       drawEx3();
     }
 
-    function bind3DCanvasEventsEx3(canvasId, camKey, isKer) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const cam = stateEx3[camKey];
+    function draw3DAxesAndFloorEx3(ctx, cam, w, h) {
+      const proj = (px, py, pz) => project3DEx3(px, py, pz, cam, w, h);
 
-      canvas.addEventListener('pointerdown', (e) => {
-        if (!isKer && stateEx3.traceEnabled && e.button === 0) {
-          cam.drawing = true;
-          cam.dragging = false;
-          stateEx3.currentStroke = null;
-          canvas.setPointerCapture(e.pointerId);
-          traceAtImagePointerEx3(e.clientX, e.clientY, true);
-          return;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(34, 39, 54, 0.55)';
+      ctx.lineWidth = 1;
+      for (let g = -5; g <= 5; g++) {
+        const aP = proj(g, -5, 0);
+        const bP = proj(g, 5, 0);
+        ctx.beginPath(); ctx.moveTo(aP.px, aP.py); ctx.lineTo(bP.px, bP.py); ctx.stroke();
+
+        const cP = proj(-5, g, 0);
+        const dP = proj(5, g, 0);
+        ctx.beginPath(); ctx.moveTo(cP.px, cP.py); ctx.lineTo(dP.px, dP.py); ctx.stroke();
+      }
+      ctx.restore();
+
+      const axisLen = 5.8;
+      const axes = [
+        { from: [-axisLen, 0, 0], to: [axisLen, 0, 0], label: 'x', color: '#64748b' },
+        { from: [0, -axisLen, 0], to: [0, axisLen, 0], label: 'y', color: '#64748b' },
+        { from: [0, 0, -axisLen], to: [0, 0, axisLen], label: 'z', color: '#64748b' }
+      ];
+
+      ctx.save();
+      axes.forEach(ax => {
+        const pS = proj(...ax.from);
+        const pE = proj(...ax.to);
+        ctx.strokeStyle = ax.color;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(pS.px, pS.py);
+        ctx.lineTo(pE.px, pE.py);
+        ctx.stroke();
+
+        const ang = Math.atan2(pE.py - pS.py, pE.px - pS.px);
+        ctx.fillStyle = ax.color;
+        ctx.beginPath();
+        ctx.moveTo(pE.px, pE.py);
+        ctx.lineTo(pE.px - 8 * Math.cos(ang - 0.4), pE.py - 8 * Math.sin(ang - 0.4));
+        ctx.lineTo(pE.px - 8 * Math.cos(ang + 0.4), pE.py - 8 * Math.sin(ang + 0.4));
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.font = 'italic bold 14px "STIX Two Text", "Cambria Math", serif';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(ax.label, pE.px + Math.cos(ang) * 12, pE.py + Math.sin(ang) * 12);
+      });
+      ctx.restore();
+    }
+
+    function drawEx3() {
+      const viewKer = setupHiDPICanvas('canvas3_ker', 1);
+      const viewImg = setupHiDPICanvas('canvas3_img', 1);
+      if (!viewKer || !viewImg) return;
+
+      const { m, x, y, z } = stateEx3;
+      const info = analyzeMatrix3x3Ex3(m);
+
+      const tx = Math.round((m[0][0] * x + m[0][1] * y + m[0][2] * z) * 1e6) / 1e6;
+      const ty = Math.round((m[1][0] * x + m[1][1] * y + m[1][2] * z) * 1e6) / 1e6;
+      const tz = Math.round((m[2][0] * x + m[2][1] * y + m[2][2] * z) * 1e6) / 1e6;
+
+      const isZeroOutput = (Math.abs(tx) < 1e-5 && Math.abs(ty) < 1e-5 && Math.abs(tz) < 1e-5);
+      const isNonZeroVec = (Math.abs(x) > 1e-5 || Math.abs(y) > 1e-5 || Math.abs(z) > 1e-5);
+
+      const isKernelValid = (info.rank === 3)
+        ? !isNonZeroVec
+        : (info.rank === 0 ? true : (isZeroOutput && isNonZeroVec));
+
+      /* 1. PANEL IZQUIERDO: DOMINIO ℝ³ Y NÚCLEO nu T (SIN RASTRO) */
+      const { ctx: ctxK, width: wK, height: hK } = viewKer;
+      ctxK.clearRect(0, 0, wK, hK);
+      const projK = (px, py, pz) => project3DEx3(px, py, pz, stateEx3.camKer, wK, hK);
+
+      if (isKernelValid && info.rank === 0) {
+        ctxK.save();
+        ctxK.fillStyle = 'rgba(16, 185, 129, 0.12)';
+        ctxK.fillRect(0, 0, wK, hK);
+        ctxK.restore();
+      }
+
+      draw3DAxesAndFloorEx3(ctxK, stateEx3.camKer, wK, hK);
+
+      if (info.rank === 2 && info.kerBasis.length === 1) {
+        const d = info.kerBasis[0];
+        const p1 = projK(-d[0] * 6.5, -d[1] * 6.5, -d[2] * 6.5);
+        const p2 = projK(d[0] * 6.5, d[1] * 6.5, d[2] * 6.5);
+        ctxK.save();
+        ctxK.strokeStyle = isKernelValid ? '#10b981' : 'rgba(16, 185, 129, 0.42)';
+        ctxK.lineWidth = isKernelValid ? 3.2 : 2;
+        ctxK.setLineDash([7, 5]);
+        ctxK.beginPath();
+        ctxK.moveTo(p1.px, p1.py);
+        ctxK.lineTo(p2.px, p2.py);
+        ctxK.stroke();
+        ctxK.restore();
+      } else if (info.rank === 1 && info.kerBasis.length === 2) {
+        const u = info.kerBasis[0].map(v => v * 4.8);
+        const v = info.kerBasis[1].map(val => val * 4.8);
+        const cA = projK(-u[0] - v[0], -u[1] - v[1], -u[2] - v[2]);
+        const cB = projK(u[0] - v[0], u[1] - v[1], u[2] - v[2]);
+        const cC = projK(u[0] + v[0], u[1] + v[1], u[2] + v[2]);
+        const cD = projK(-u[0] + v[0], -u[1] + v[1], -u[2] + v[2]);
+
+        ctxK.save();
+        ctxK.beginPath();
+        ctxK.moveTo(cA.px, cA.py);
+        ctxK.lineTo(cB.px, cB.py);
+        ctxK.lineTo(cC.px, cC.py);
+        ctxK.lineTo(cD.px, cD.py);
+        ctxK.closePath();
+        ctxK.fillStyle = isKernelValid ? 'rgba(16, 185, 129, 0.22)' : 'rgba(16, 185, 129, 0.11)';
+        ctxK.fill();
+        ctxK.strokeStyle = isKernelValid ? '#10b981' : 'rgba(16, 185, 129, 0.45)';
+        ctxK.lineWidth = 1.4;
+        ctxK.stroke();
+        ctxK.restore();
+      }
+
+      const oK = projK(0, 0, 0);
+      const pKx = projK(x, 0, 0);
+      const pKxy = projK(x, y, 0);
+      const pKxyz = projK(x, y, z);
+
+      ctxK.save();
+      ctxK.setLineDash([4, 4]);
+      ctxK.lineWidth = 1.8;
+      if (x !== 0) {
+        ctxK.strokeStyle = '#18c5d9';
+        ctxK.beginPath(); ctxK.moveTo(oK.px, oK.py); ctxK.lineTo(pKx.px, pKx.py); ctxK.stroke();
+      }
+      if (y !== 0) {
+        ctxK.strokeStyle = '#f06565';
+        ctxK.beginPath(); ctxK.moveTo(pKx.px, pKx.py); ctxK.lineTo(pKxy.px, pKxy.py); ctxK.stroke();
+      }
+      if (z !== 0) {
+        ctxK.strokeStyle = '#a855f7';
+        ctxK.beginPath(); ctxK.moveTo(pKxy.px, pKxy.py); ctxK.lineTo(pKxyz.px, pKxyz.py); ctxK.stroke();
+      }
+      ctxK.restore();
+
+      if (isNonZeroVec) {
+        const cMain = isKernelValid ? '#10b981' : '#4f7df3';
+        const cLight = isKernelValid ? '#6ee7b7' : '#93c5fd';
+        const cDark = isKernelValid ? '#047857' : '#1d4ed8';
+        draw3DArrowRelief(ctxK, oK, pKxyz, cMain, cLight, cDark, 5.0, 'v');
+        draw3DSphereRelief(ctxK, pKxyz, 7.2, isKernelValid ? '#a7f3d0' : '#fca5a5', isKernelValid ? '#10b981' : '#f06565', '#1e293b');
+      } else {
+        draw3DSphereRelief(ctxK, oK, 7.2, '#a7f3d0', '#10b981', '#064e3b');
+      }
+
+      const statusBox = document.getElementById('ex3-status-box');
+      const eliotToast = document.getElementById('eliot-toast-3');
+      const eliotText = document.getElementById('eliot-msg-text-3');
+
+      if (statusBox) {
+        if (isKernelValid) {
+          statusBox.className = 'ex3-status-box is-valid';
+          statusBox.innerHTML = `
+            <div><strong>✓ ¡VECTOR EN EL NÚCLEO nu T!</strong></div>
+            <div style="margin-top:0.3rem;">
+              <span class="vec-arrow">v</span> = (<span class="ex3-cx">${x.toFixed(1)}</span>, <span class="ex3-cy">${y.toFixed(1)}</span>, <span class="ex3-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0)
+            </div>
+            <div>Nulidad: <strong>dim(nu T) = ${info.nullity}</strong></div>
+          `;
+          if (eliotText && eliotToast) {
+            eliotText.textContent = info.rank === 3
+              ? '¡Exacto! Al ser inyectiva (det ≠ 0), nu T = {(0,0,0)}.'
+              : `¡Bien! v = (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) colapsa al origen (0,0,0).`;
+            eliotToast.classList.add('visible');
+          }
+        } else {
+          statusBox.className = 'ex3-status-box is-invalid';
+          const hint = (info.rank < 3 && !isNonZeroVec)
+            ? 'El origen (0,0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
+            : 'Mueve <span class="vec-arrow">v</span> o los deslizadores hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0, 0.0).';
+          statusBox.innerHTML = `
+            <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
+            <div style="margin-top:0.3rem;">
+              T(<span class="vec-arrow">v</span>) = (<span class="ex3-cx">${tx.toFixed(1)}</span>, <span class="ex3-cy">${ty.toFixed(1)}</span>, <span class="ex3-cz">${tz.toFixed(1)}</span>)
+            </div>
+            <div style="opacity:0.88;">${hint}</div>
+          `;
+          if (eliotToast) eliotToast.classList.remove('visible');
         }
+      }
 
-        cam.dragging = true;
-        cam.drawing = false;
-        cam.lastX = e.clientX;
-        cam.lastY = e.clientY;
-        canvas.setPointerCapture(e.pointerId);
+      /* 2. PANEL DERECHO: CODOMINIO ℝ³ E IMAGEN im T (MORADO EN INYECTIVA + RASTRO) */
+      const { ctx: ctxI, width: wI, height: hI } = viewImg;
+      ctxI.clearRect(0, 0, wI, hI);
+      const projI = (px, py, pz) => project3DEx3(px, py, pz, stateEx3.camImg, wI, hI);
+
+      if (info.rank === 3) {
+        ctxI.save();
+        ctxI.fillStyle = 'rgba(168, 85, 247, 0.14)';
+        ctxI.fillRect(0, 0, wI, hI);
+        ctxI.restore();
+      }
+
+      draw3DAxesAndFloorEx3(ctxI, stateEx3.camImg, wI, hI);
+
+      if (info.rank === 2 && info.imgBasis.length === 2) {
+        const b1 = info.imgBasis[0];
+        const b2 = info.imgBasis[1];
+        const n1 = Math.hypot(b1[0], b1[1], b1[2]) || 1;
+        const n2 = Math.hypot(b2[0], b2[1], b2[2]) || 1;
+        const u = b1.map(v => (v / n1) * 4.5);
+        const v = b2.map(val => (val / n2) * 4.5);
+
+        const cA = projI(-u[0] - v[0], -u[1] - v[1], -u[2] - v[2]);
+        const cB = projI(u[0] - v[0], u[1] - v[1], u[2] - v[2]);
+        const cC = projI(u[0] + v[0], u[1] + v[1], u[2] + v[2]);
+        const cD = projI(-u[0] + v[0], -u[1] + v[1], -u[2] + v[2]);
+
+        ctxI.save();
+        ctxI.beginPath();
+        ctxI.moveTo(cA.px, cA.py);
+        ctxI.lineTo(cB.px, cB.py);
+        ctxI.lineTo(cC.px, cC.py);
+        ctxI.lineTo(cD.px, cD.py);
+        ctxI.closePath();
+        ctxI.fillStyle = 'rgba(168, 85, 247, 0.18)';
+        ctxI.fill();
+        ctxI.strokeStyle = 'rgba(168, 85, 247, 0.6)';
+        ctxI.lineWidth = 1.4;
+        ctxI.stroke();
+        ctxI.restore();
+      } else if (info.rank === 1 && info.imgBasis.length === 1) {
+        const b1 = info.imgBasis[0];
+        const n1 = Math.hypot(b1[0], b1[1], b1[2]) || 1;
+        const l1 = projI(-(b1[0] / n1) * 7.5, -(b1[1] / n1) * 7.5, -(b1[2] / n1) * 7.5);
+        const l2 = projI((b1[0] / n1) * 7.5, (b1[1] / n1) * 7.5, (b1[2] / n1) * 7.5);
+
+        ctxI.save();
+        ctxI.strokeStyle = '#a855f7';
+        ctxI.lineWidth = 3.0;
+        ctxI.setLineDash([6, 4]);
+        ctxI.beginPath();
+        ctxI.moveTo(l1.px, l1.py);
+        ctxI.lineTo(l2.px, l2.py);
+        ctxI.stroke();
+        ctxI.restore();
+      }
+
+      if (stateEx3.traces.length > 0) {
+        for (const stroke of stateEx3.traces) {
+          if (stroke.length === 0) continue;
+          const pts3D = stroke.map(pt => {
+            const wPt = [
+              m[0][0] * pt.x + m[0][1] * pt.y + m[0][2] * pt.z,
+              m[1][0] * pt.x + m[1][1] * pt.y + m[1][2] * pt.z,
+              m[2][0] * pt.x + m[2][1] * pt.y + m[2][2] * pt.z
+            ];
+            return {
+              w: wPt,
+              p: projI(wPt[0], wPt[1], wPt[2]),
+              floor: projI(wPt[0], wPt[1], 0)
+            };
+          });
+
+          ctxI.save();
+          ctxI.strokeStyle = 'rgba(236, 72, 153, 0.25)';
+          ctxI.lineWidth = 1;
+          ctxI.setLineDash([2, 3]);
+          for (const item of pts3D) {
+            ctxI.beginPath();
+            ctxI.moveTo(item.floor.px, item.floor.py);
+            ctxI.lineTo(item.p.px, item.p.py);
+            ctxI.stroke();
+          }
+          ctxI.restore();
+
+          ctxI.save();
+          ctxI.strokeStyle = '#ec4899';
+          ctxI.lineWidth = 3;
+          ctxI.lineCap = 'round';
+          ctxI.lineJoin = 'round';
+          ctxI.beginPath();
+          pts3D.forEach((item, idx) => {
+            if (idx === 0) ctxI.moveTo(item.p.px, item.p.py);
+            else ctxI.lineTo(item.p.px, item.p.py);
+          });
+          ctxI.stroke();
+          ctxI.restore();
+
+          for (const item of pts3D) {
+            draw3DSphereRelief(ctxI, item.p, 4.0, '#f9a8d4', '#ec4899', '#831843');
+          }
+        }
+      }
+
+      const oI = projI(0, 0, 0);
+      const pTxyz = projI(tx, ty, tz);
+
+      if (!isZeroOutput) {
+        draw3DArrowRelief(ctxI, oI, pTxyz, '#10b981', '#6ee7b7', '#047857', 5.2, 'T(v)');
+        draw3DSphereRelief(ctxI, pTxyz, 7.2, '#a7f3d0', '#10b981', '#064e3b');
+      } else {
+        draw3DSphereRelief(ctxI, oI, 7.2, '#a7f3d0', '#10b981', '#064e3b');
+      }
+
+      if (stateEx3.hoveredTraceImg) {
+        const hp = stateEx3.hoveredTraceImg;
+        const htx = m[0][0] * hp.x + m[0][1] * hp.y + m[0][2] * hp.z;
+        const hty = m[1][0] * hp.x + m[1][1] * hp.y + m[1][2] * hp.z;
+        const htz = m[2][0] * hp.x + m[2][1] * hp.y + m[2][2] * hp.z;
+        const sp = projI(htx, hty, htz);
+        const label = `T(v) = (${htx.toFixed(1)}, ${hty.toFixed(1)}, ${htz.toFixed(1)})`;
+
+        ctxI.save();
+        ctxI.font = '600 12px "JetBrains Mono", monospace';
+        const tw = ctxI.measureText(label).width + 16;
+        const bx = Math.min(wI - tw - 8, Math.max(8, sp.px + 10));
+        const by = Math.max(8, sp.py - 30);
+        ctxI.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctxI.strokeStyle = '#ec4899';
+        ctxI.lineWidth = 1.2;
+        ctxI.beginPath();
+        ctxI.roundRect(bx, by, tw, 24, 6);
+        ctxI.fill();
+        ctxI.stroke();
+        ctxI.fillStyle = '#f8fafc';
+        ctxI.fillText(label, bx + 8, by + 16);
+        ctxI.restore();
+      }
+
+      const readoutEl = document.getElementById('ex3-img-readout');
+      if (readoutEl) {
+        let imgSubspaceDesc = 'im T = { <span class="vec-arrow">0</span> } (Origen)';
+        if (info.rank === 1) imgSubspaceDesc = 'Recta en ℝ³ (dim = 1)';
+        else if (info.rank === 2) imgSubspaceDesc = 'Plano en ℝ³ (dim = 2)';
+        else if (info.rank === 3) imgSubspaceDesc = 'im T = ℝ³ (Inyectiva / Sobreyectiva, dim = 3)';
+
+        const basisStr = info.imgBasis.length === 0
+          ? '∅'
+          : info.imgBasis.map(b => `(${b[0]}, ${b[1]}, ${b[2]})ᵀ`).join(', ');
+
+        readoutEl.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+            <div class="ex3-col-equation" style="font-size:0.98rem;">
+              <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+              <div class="ex3-bracket-box">
+                <span class="matrix-bracket left"></span>
+                <div class="ex3-col-stack">
+                  <span class="ex3-cx">${tx.toFixed(1)}</span>
+                  <span class="ex3-cy">${ty.toFixed(1)}</span>
+                  <span class="ex3-cz">${tz.toFixed(1)}</span>
+                </div>
+                <span class="matrix-bracket right"></span>
+              </div>
+            </div>
+            <div style="font-size:0.82rem;">
+              <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgSubspaceDesc}</span></div>
+              <div><strong>Base im T:</strong> { ${basisStr} }</div>
+            </div>
+          </div>
+          <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
+            Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${info.rank} + ${info.nullity} = 3</strong>
+          </div>
+        `;
+      }
+    }
+
+    function initEx3() {
+      const canvasKer = document.getElementById('canvas3_ker');
+      const canvasImg = document.getElementById('canvas3_img');
+      if (!canvasKer || !canvasImg) return;
+
+      ['ex3-slider-x', 'ex3-slider-y', 'ex3-slider-z'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateEx3);
       });
 
-      canvas.addEventListener('pointermove', (e) => {
-        if (cam.drawing) {
-          traceAtImagePointerEx3(e.clientX, e.clientY, false);
+      function getKerTipScreen(rect) {
+        return project3DEx3(
+          stateEx3.x, stateEx3.y, stateEx3.z,
+          stateEx3.camKer, rect.width, rect.height
+        );
+      }
+
+      function applyKerDragPoint(clientX, clientY, isNewStroke) {
+        const rect = canvasKer.getBoundingClientRect();
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const [wx, wy, wz] = unproject3DEx3(
+          px, py, stateEx3.camKer.dragDepth,
+          stateEx3.camKer, rect.width, rect.height
+        );
+        syncDomainVectorEx3(wx, wy, wz, isNewStroke);
+      }
+
+      canvasKer.addEventListener('pointerdown', (e) => {
+        const rect = canvasKer.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+        const tipKer = getKerTipScreen(rect);
+
+        canvasKer.setPointerCapture(e.pointerId);
+
+        if (e.button === 0 && (Math.hypot(px - tipKer.px, py - tipKer.py) <= 32 || e.shiftKey)) {
+          stateEx3.camKer.draggingVec = true;
+          stateEx3.camKer.dragDepth = tipKer.depth;
+          applyKerDragPoint(e.clientX, e.clientY, true);
+        } else {
+          stateEx3.camKer.draggingOrbit = true;
+          stateEx3.camKer.lastX = e.clientX;
+          stateEx3.camKer.lastY = e.clientY;
+        }
+      });
+
+      canvasKer.addEventListener('pointermove', (e) => {
+        const rect = canvasKer.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+
+        if (stateEx3.camKer.draggingVec) {
+          applyKerDragPoint(e.clientX, e.clientY, false);
           return;
         }
 
-        if (cam.dragging) {
-          const dx = e.clientX - cam.lastX;
-          const dy = e.clientY - cam.lastY;
-          cam.lastX = e.clientX;
-          cam.lastY = e.clientY;
-          cam.yaw += dx * 0.01;
-          cam.pitch = Math.max(-1.35, Math.min(1.35, cam.pitch + dy * 0.01));
+        if (stateEx3.camKer.draggingOrbit) {
+          const dx = e.clientX - stateEx3.camKer.lastX;
+          const dy = e.clientY - stateEx3.camKer.lastY;
+          stateEx3.camKer.lastX = e.clientX;
+          stateEx3.camKer.lastY = e.clientY;
+          stateEx3.camKer.yaw += dx * 0.01;
+          stateEx3.camKer.pitch = Math.max(-1.42, Math.min(1.42, stateEx3.camKer.pitch + dy * 0.01));
           drawEx3();
           return;
         }
 
+        const tipKer = getKerTipScreen(rect);
+        canvasKer.style.cursor = (Math.hypot(px - tipKer.px, py - tipKer.py) <= 32) ? 'pointer' : 'grab';
+      });
+
+      const stopKerPointer = (e) => {
+        stateEx3.camKer.draggingVec = false;
+        stateEx3.camKer.draggingOrbit = false;
+        stateEx3.currentStroke = null;
+        if (canvasKer.hasPointerCapture(e.pointerId)) {
+          canvasKer.releasePointerCapture(e.pointerId);
+        }
+      };
+
+      canvasKer.addEventListener('pointerup', stopKerPointer);
+      canvasKer.addEventListener('pointercancel', stopKerPointer);
+
+      canvasKer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx3('ker', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
+
+      function getImgTipScreen(rect) {
+        const { m, x, y, z } = stateEx3;
+        const tx = m[0][0] * x + m[0][1] * y + m[0][2] * z;
+        const ty = m[1][0] * x + m[1][1] * y + m[1][2] * z;
+        const tz = m[2][0] * x + m[2][1] * y + m[2][2] * z;
+        return project3DEx3(tx, ty, tz, stateEx3.camImg, rect.width, rect.height);
+      }
+
+      function raycastImageSubspaceEx3(clientX, clientY, fallbackDepth) {
+        const rect = canvasImg.getBoundingClientRect();
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const cam = stateEx3.camImg;
+
+        const P0 = unproject3DEx3(px, py, 0, cam, rect.width, rect.height);
+        const P1 = unproject3DEx3(px, py, 1, cam, rect.width, rect.height);
+        const u = [P1[0] - P0[0], P1[1] - P0[1], P1[2] - P0[2]];
+
+        const info = analyzeMatrix3x3Ex3(stateEx3.m);
+
+        if (info.rank === 0) return [0, 0, 0];
+
+        if (info.rank === 2 && info.imgBasis.length === 2) {
+          const b1 = info.imgBasis[0];
+          const b2 = info.imgBasis[1];
+          const nx = b1[1] * b2[2] - b1[2] * b2[1];
+          const ny = b1[2] * b2[0] - b1[0] * b2[2];
+          const nz = b1[0] * b2[1] - b1[1] * b2[0];
+          const nLen = Math.hypot(nx, ny, nz) || 1;
+          const n = [nx / nLen, ny / nLen, nz / nLen];
+          const denom = n[0] * u[0] + n[1] * u[1] + n[2] * u[2];
+
+          if (Math.abs(denom) > 0.08) {
+            const dRaw = -(n[0] * P0[0] + n[1] * P0[1] + n[2] * P0[2]) / denom;
+            const d = Math.max(-14, Math.min(14, dRaw));
+            return [P0[0] + d * u[0], P0[1] + d * u[1], P0[2] + d * u[2]];
+          }
+        } else if (info.rank === 1 && info.imgBasis.length === 1) {
+          const b1 = info.imgBasis[0];
+          const bLen = Math.hypot(b1[0], b1[1], b1[2]) || 1;
+          const bh = [b1[0] / bLen, b1[1] / bLen, b1[2] / bLen];
+          const c = bh[0] * u[0] + bh[1] * u[1] + bh[2] * u[2];
+          const pb = P0[0] * bh[0] + P0[1] * bh[1] + P0[2] * bh[2];
+          const pu = P0[0] * u[0] + P0[1] * u[1] + P0[2] * u[2];
+          const denom = 1 - c * c;
+          const s = denom > 1e-4 ? (pb - c * pu) / denom : pb;
+          return [s * bh[0], s * bh[1], s * bh[2]];
+        }
+
+        return unproject3DEx3(px, py, fallbackDepth, cam, rect.width, rect.height);
+      }
+
+      function applyImgDragPoint(clientX, clientY, depthVal, isNewStroke) {
+        const targetW = raycastImageSubspaceEx3(clientX, clientY, depthVal);
+        const info = analyzeMatrix3x3Ex3(stateEx3.m);
+        const domV = solvePreimageEx3(stateEx3.m, info, targetW);
+        syncDomainVectorEx3(domV[0], domV[1], domV[2], isNewStroke);
+      }
+
+      canvasImg.addEventListener('pointerdown', (e) => {
+        const rect = canvasImg.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+        const tipImg = getImgTipScreen(rect);
+
+        canvasImg.setPointerCapture(e.pointerId);
+
+        if (stateEx3.traceEnabled && e.button === 0) {
+          stateEx3.camImg.drawingTrace = true;
+          stateEx3.camImg.dragDepth = tipImg.depth;
+          applyImgDragPoint(e.clientX, e.clientY, stateEx3.camImg.dragDepth, true);
+        } else if (e.button === 0 && (Math.hypot(px - tipImg.px, py - tipImg.py) <= 34 || e.shiftKey)) {
+          stateEx3.camImg.draggingVec = true;
+          stateEx3.camImg.dragDepth = tipImg.depth;
+          applyImgDragPoint(e.clientX, e.clientY, stateEx3.camImg.dragDepth, false);
+        } else {
+          stateEx3.camImg.draggingOrbit = true;
+          stateEx3.camImg.lastX = e.clientX;
+          stateEx3.camImg.lastY = e.clientY;
+        }
+      });
+
+      canvasImg.addEventListener('pointermove', (e) => {
+        const rect = canvasImg.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+
+        if (stateEx3.camImg.drawingTrace) {
+          applyImgDragPoint(e.clientX, e.clientY, stateEx3.camImg.dragDepth, false);
+          return;
+        }
+
+        if (stateEx3.camImg.draggingVec) {
+          applyImgDragPoint(e.clientX, e.clientY, stateEx3.camImg.dragDepth, false);
+          return;
+        }
+
+        if (stateEx3.camImg.draggingOrbit) {
+          const dx = e.clientX - stateEx3.camImg.lastX;
+          const dy = e.clientY - stateEx3.camImg.lastY;
+          stateEx3.camImg.lastX = e.clientX;
+          stateEx3.camImg.lastY = e.clientY;
+          stateEx3.camImg.yaw += dx * 0.01;
+          stateEx3.camImg.pitch = Math.max(-1.42, Math.min(1.42, stateEx3.camImg.pitch + dy * 0.01));
+          drawEx3();
+          return;
+        }
+
+        const tipImg = getImgTipScreen(rect);
+        if (Math.hypot(px - tipImg.px, py - tipImg.py) <= 34) {
+          canvasImg.style.cursor = 'pointer';
+        } else {
+          canvasImg.style.cursor = stateEx3.traceEnabled ? 'crosshair' : 'grab';
+        }
+
         if (stateEx3.traces.length === 0) return;
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
         let best = null;
         let bestDist = 13;
-
         for (const stroke of stateEx3.traces) {
           for (const pt of stroke) {
-            const coords = isKer
-              ? [pt.x, pt.y, pt.z]
-              : [
-                  stateEx3.m[0][0] * pt.x + stateEx3.m[0][1] * pt.y + stateEx3.m[0][2] * pt.z,
-                  stateEx3.m[1][0] * pt.x + stateEx3.m[1][1] * pt.y + stateEx3.m[1][2] * pt.z,
-                  stateEx3.m[2][0] * pt.x + stateEx3.m[2][1] * pt.y + stateEx3.m[2][2] * pt.z
-                ];
-            const sp = project3DEx3(coords[0], coords[1], coords[2], cam, rect.width, rect.height);
-            const d = Math.hypot(mx - sp.px, my - sp.py);
+            const wtx = stateEx3.m[0][0] * pt.x + stateEx3.m[0][1] * pt.y + stateEx3.m[0][2] * pt.z;
+            const wty = stateEx3.m[1][0] * pt.x + stateEx3.m[1][1] * pt.y + stateEx3.m[1][2] * pt.z;
+            const wtz = stateEx3.m[2][0] * pt.x + stateEx3.m[2][1] * pt.y + stateEx3.m[2][2] * pt.z;
+            const sp = project3DEx3(wtx, wty, wtz, stateEx3.camImg, rect.width, rect.height);
+            const d = Math.hypot(px - sp.px, py - sp.py);
             if (d < bestDist) {
               bestDist = d;
               best = pt;
             }
           }
         }
-
-        const prop = isKer ? 'hoveredTraceKer' : 'hoveredTraceImg';
-        if (best !== stateEx3[prop]) {
-          stateEx3[prop] = best;
+        if (best !== stateEx3.hoveredTraceImg) {
+          stateEx3.hoveredTraceImg = best;
           drawEx3();
         }
       });
 
-      const stopPointerAction = (e) => {
-        if (cam.drawing) {
-          cam.drawing = false;
-          stateEx3.currentStroke = null;
-        }
-        cam.dragging = false;
-        if (canvas.hasPointerCapture(e.pointerId)) {
-          canvas.releasePointerCapture(e.pointerId);
+      const stopImgPointer = (e) => {
+        stateEx3.camImg.drawingTrace = false;
+        stateEx3.camImg.draggingVec = false;
+        stateEx3.camImg.draggingOrbit = false;
+        stateEx3.currentStroke = null;
+        if (canvasImg.hasPointerCapture(e.pointerId)) {
+          canvasImg.releasePointerCapture(e.pointerId);
         }
       };
 
-      canvas.addEventListener('pointerup', stopPointerAction);
-      canvas.addEventListener('pointercancel', stopPointerAction);
+      canvasImg.addEventListener('pointerup', stopImgPointer);
+      canvasImg.addEventListener('pointercancel', stopImgPointer);
 
-      canvas.addEventListener('contextmenu', (e) => {
-        if (!isKer && stateEx3.traceEnabled) e.preventDefault();
+      canvasImg.addEventListener('contextmenu', (e) => {
+        if (stateEx3.traceEnabled) e.preventDefault();
       });
 
-      canvas.addEventListener('wheel', (e) => {
+      canvasImg.addEventListener('wheel', (e) => {
         e.preventDefault();
-        zoomEx3(isKer ? 'ker' : 'img', e.deltaY < 0 ? 1.12 : 0.89);
+        zoomEx3('img', e.deltaY < 0 ? 1.12 : 0.89);
       }, { passive: false });
-    }
-
-    function initEx3() {
-      const cKer = document.getElementById('canvas3_ker');
-      if (!cKer) return;
-
-      const scheduleDrawEx3 = createSmoothRenderer(updateEx3);
-      ['ex3-slider-x', 'ex3-slider-y', 'ex3-slider-z'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', scheduleDrawEx3);
-      });
-
-      bind3DCanvasEventsEx3('canvas3_ker', 'camKer', true);
-      bind3DCanvasEventsEx3('canvas3_img', 'camImg', false);
 
       if (typeof ResizeObserver !== 'undefined') {
         const ro = new ResizeObserver(() => drawEx3());
-        ro.observe(cKer);
-        const cImg = document.getElementById('canvas3_img');
-        if (cImg) ro.observe(cImg);
+        ro.observe(canvasKer);
+        ro.observe(canvasImg);
       }
 
       window.addEventListener('resize', drawEx3);
       renderFormulaInputsEx3();
       updateEx3();
     }
+    /* ==========================================================================
+       MÓDULO 4: TRANSFORMACIONES LINEALES R³ -> R²
+       ========================================================================== */
     const stateEx4 = {
-      a1: 1, b1: 0, c1: -1,
-      a2: 0, b2: 1, c2: -1,
+      m: [
+        [1, 0, -1],
+        [0, 1, -1]
+      ],
       x: 1.5,
       y: 1.0,
       z: 0.5,
-      zoom3D: 38,
-      yaw: -0.62,
-      pitch: 0.42,
-      autoSpin: false,
-      spinRafId: null,
+      camKer: {
+        scale: 28,
+        yaw: 0.68,
+        pitch: 0.42,
+        draggingOrbit: false,
+        draggingVec: false,
+        dragDepth: 0,
+        lastX: 0,
+        lastY: 0
+      },
       scaleImg: 36,
-      maxRange: 5,
-      dragging3DCam: false,
-      dragging3DVec: false,
-      dragging2DImg: false,
-      lastMouseX: 0,
-      lastMouseY: 0,
+      draggingImgVec: false,
       traceEnabled: false,
       traces: [],
-      currentStroke: null
+      currentStroke: null,
+      hoveredTraceKer: null,
+      hoveredTraceImg: null,
+      autoSpin: false,
+      spinRafId: null
     };
 
-    function setSpinStateEx4(active) {
-      stateEx4.autoSpin = active;
-      const btn = document.getElementById('ex4-btn-spin');
-      if (btn) btn.classList.toggle('active', active);
+    function project3DEx4(x, y, z, cam, width, height) {
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
 
-      if (active && !stateEx4.spinRafId) {
-        const stepSpin = () => {
-          if (!stateEx4.autoSpin) {
-            stateEx4.spinRafId = null;
-            return;
-          }
-          const viewR3R2 = document.getElementById('view-r3-r2');
-          if (viewR3R2 && !viewR3R2.classList.contains('view-hidden')) {
-            stateEx4.yaw += 0.0055;
-            drawEx4();
-          }
-          stateEx4.spinRafId = requestAnimationFrame(stepSpin);
-        };
-        stateEx4.spinRafId = requestAnimationFrame(stepSpin);
-      } else if (!active && stateEx4.spinRafId) {
-        cancelAnimationFrame(stateEx4.spinRafId);
-        stateEx4.spinRafId = null;
-      }
+      const x1 = x * cosY - y * sinY;
+      const y1 = x * sinY + y * cosY;
+
+      const depth = y1 * cosP + z * sinP;
+      const z2 = -y1 * sinP + z * cosP;
+
+      return {
+        px: width / 2 + x1 * cam.scale,
+        py: (height / 2 + 18) - z2 * cam.scale,
+        depth
+      };
     }
 
-    function toggleSpinEx4() {
-      setSpinStateEx4(!stateEx4.autoSpin);
+    function unproject3DEx4(px, py, targetDepth, cam, width, height) {
+      const x1 = (px - width / 2) / cam.scale;
+      const z2 = -(py - (height / 2 + 18)) / cam.scale;
+
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
+
+      const y1 = targetDepth * cosP - z2 * sinP;
+      const z = targetDepth * sinP + z2 * cosP;
+
+      const x = x1 * cosY + y1 * sinY;
+      const y = -x1 * sinY + y1 * cosY;
+
+      return [x, y, z];
     }
 
     function zoomEx4(target, factor) {
       if (target === 'ker') {
-        stateEx4.zoom3D = Math.max(14, Math.min(90, stateEx4.zoom3D * factor));
-      } else if (target === 'img') {
-        stateEx4.scaleImg = Math.max(12, Math.min(72, stateEx4.scaleImg * factor));
+        stateEx4.camKer.scale = Math.max(12, Math.min(64, stateEx4.camKer.scale * factor));
+      } else {
+        stateEx4.scaleImg = Math.max(14, Math.min(72, stateEx4.scaleImg * factor));
       }
-      updateEx4();
+      drawEx4();
     }
 
     function resetZoomEx4(target) {
       if (target === 'ker') {
-        setSpinStateEx4(false);
-        stateEx4.zoom3D = 38;
-        stateEx4.yaw = -0.62;
-        stateEx4.pitch = 0.42;
-      } else if (target === 'img') {
+        stateEx4.camKer.scale = 28;
+        stateEx4.camKer.yaw = 0.68;
+        stateEx4.camKer.pitch = 0.42;
+      } else {
         stateEx4.scaleImg = 36;
       }
-      updateEx4();
+      drawEx4();
+    }
+
+    function toggleSpinEx4() {
+      stateEx4.autoSpin = !stateEx4.autoSpin;
+      const btn = document.getElementById('ex4-btn-spin');
+      if (btn) {
+        btn.style.borderColor = stateEx4.autoSpin ? 'var(--neon-cyan)' : 'var(--border-color)';
+        btn.style.color = stateEx4.autoSpin ? '#67e8f9' : 'var(--text-primary)';
+      }
+
+      if (stateEx4.autoSpin) {
+        const spinLoop = () => {
+          if (!stateEx4.autoSpin) return;
+          stateEx4.camKer.yaw += 0.008;
+          drawEx4();
+          stateEx4.spinRafId = requestAnimationFrame(spinLoop);
+        };
+        stateEx4.spinRafId = requestAnimationFrame(spinLoop);
+      } else if (stateEx4.spinRafId) {
+        cancelAnimationFrame(stateEx4.spinRafId);
+        stateEx4.spinRafId = null;
+      }
     }
 
     function toggleTraceEx4() {
       const chk = document.getElementById('ex4-trace-active');
       stateEx4.traceEnabled = chk ? chk.checked : false;
       stateEx4.currentStroke = null;
+      const cImg = document.getElementById('canvas4_img');
+      if (cImg) cImg.style.cursor = stateEx4.traceEnabled ? 'crosshair' : 'pointer';
       drawEx4();
     }
 
-    function recordTracePointEx4(x, y, z, isNewStroke) {
+    function recordTracePointEx4(x, y, z, isNewStroke = false) {
       if (!stateEx4.traceEnabled) return;
-
       if (isNewStroke || !stateEx4.currentStroke) {
-        stateEx4.currentStroke = [{ x, y, z }];
+        stateEx4.currentStroke = [];
         stateEx4.traces.push(stateEx4.currentStroke);
-        return;
       }
-
       const last = stateEx4.currentStroke[stateEx4.currentStroke.length - 1];
-      if (!last || Math.hypot(x - last.x, y - last.y, z - last.z) >= 0.06) {
+      if (!last || Math.hypot(last.x - x, last.y - y, last.z - z) >= 0.08) {
         stateEx4.currentStroke.push({ x, y, z });
       }
     }
 
     function undoTraceEx4() {
-      stateEx4.traces.pop();
-      stateEx4.currentStroke = null;
-      drawEx4();
+      if (stateEx4.traces.length > 0) {
+        stateEx4.traces.pop();
+        stateEx4.currentStroke = null;
+        stateEx4.hoveredTraceKer = null;
+        stateEx4.hoveredTraceImg = null;
+        drawEx4();
+      }
     }
 
     function clearTraceEx4() {
       stateEx4.traces = [];
       stateEx4.currentStroke = null;
+      stateEx4.hoveredTraceKer = null;
+      stateEx4.hoveredTraceImg = null;
       drawEx4();
-    }
-
-    function getMatrixInfoEx4() {
-      const { a1, b1, c1, a2, b2, c2 } = stateEx4;
-      const r1 = [a1, b1, c1];
-      const r2 = [a2, b2, c2];
-      const normR1Sq = a1 * a1 + b1 * b1 + c1 * c1;
-      const normR2Sq = a2 * a2 + b2 * b2 + c2 * c2;
-
-      // Producto cruz r1 x r2: si es != 0, rango = 2 y r1 x r2 es la dirección de la recta nu T
-      const kx = b1 * c2 - c1 * b2;
-      const ky = c1 * a2 - a1 * c2;
-      const kz = a1 * b2 - b1 * a2;
-      const crossLen = Math.hypot(kx, ky, kz);
-
-      const isZeroMatrix = (normR1Sq < 1e-12 && normR2Sq < 1e-12);
-      const isRank2 = (crossLen > 1e-6);
-      const isRank1 = (!isZeroMatrix && !isRank2);
-      const rank = isZeroMatrix ? 0 : (isRank1 ? 1 : 2);
-
-      return {
-        r1, r2,
-        normR1Sq, normR2Sq,
-        kerDir: isRank2 ? [kx / crossLen, ky / crossLen, kz / crossLen] : [0, 0, 1],
-        planeNormal: normR1Sq >= normR2Sq ? r1 : r2,
-        isZeroMatrix,
-        isRank1,
-        isRank2,
-        rank,
-        nullity: 3 - rank
-      };
-    }
-
-    function applyVectorSyncEx4(nx, ny, nz, recordTrace, isNewStroke) {
-      const limit = stateEx4.maxRange;
-      const cx = Math.max(-limit, Math.min(limit, Math.round(nx * 10) / 10));
-      const cy = Math.max(-limit, Math.min(limit, Math.round(ny * 10) / 10));
-      const cz = Math.max(-limit, Math.min(limit, Math.round(nz * 10) / 10));
-
-      stateEx4.x = cx;
-      stateEx4.y = cy;
-      stateEx4.z = cz;
-
-      const sx = document.getElementById('ex4-slider-x');
-      const sy = document.getElementById('ex4-slider-y');
-      const sz = document.getElementById('ex4-slider-z');
-      if (sx) sx.value = cx;
-      if (sy) sy.value = cy;
-      if (sz) sz.value = cz;
-
-      const vx = document.getElementById('ex4-val-x');
-      const vy = document.getElementById('ex4-val-y');
-      const vz = document.getElementById('ex4-val-z');
-      if (vx) vx.textContent = cx.toFixed(1);
-      if (vy) vy.textContent = cy.toFixed(1);
-      if (vz) vz.textContent = cz.toFixed(1);
-
-      if (recordTrace) {
-        recordTracePointEx4(cx, cy, cz, isNewStroke);
-      }
-
-      drawEx4();
-    }
-
-    function project3DEx4(x, y, z, width, height) {
-      const cosY = Math.cos(stateEx4.yaw);
-      const sinY = Math.sin(stateEx4.yaw);
-      const cosP = Math.cos(stateEx4.pitch);
-      const sinP = Math.sin(stateEx4.pitch);
-
-      const rx = x * cosY - y * sinY;
-      const ry = x * sinY + y * cosY;
-
-      const sy = ry * sinP - z * cosP;
-      const depth = ry * cosP + z * sinP;
-
-      return {
-        px: width / 2 + rx * stateEx4.zoom3D,
-        py: (height / 2 + 16) + sy * stateEx4.zoom3D,
-        depth
-      };
-    }
-
-    function moveVFrom3DKerPointerEx4(clientX, clientY, isNewStroke) {
-      const canvas = document.getElementById('canvas4_ker');
-      if (!canvas) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const sx = (clientX - rect.left - rect.width / 2) / stateEx4.zoom3D;
-      const sy = (clientY - rect.top - (rect.height / 2 + 16)) / stateEx4.zoom3D;
-
-      const cosY = Math.cos(stateEx4.yaw);
-      const sinY = Math.sin(stateEx4.yaw);
-      const cosP = Math.cos(stateEx4.pitch);
-      const sinP = Math.sin(stateEx4.pitch);
-
-      const ry0 = sy * sinP;
-      const rz0 = -sy * cosP;
-      const P0 = [
-        sx * cosY + ry0 * sinY,
-        -sx * sinY + ry0 * cosY,
-        rz0
-      ];
-      const u = [
-        cosP * sinY,
-        cosP * cosY,
-        sinP
-      ];
-
-      // Intersectar el rayo de visión con el plano horizontal z = stateEx4.z actual
-      const curZ = stateEx4.z;
-      let nx = stateEx4.x;
-      let ny = stateEx4.y;
-      if (Math.abs(sinP) > 0.2) {
-        const d = (curZ - P0[2]) / sinP;
-        nx = P0[0] + d * u[0];
-        ny = P0[1] + d * u[1];
-      } else {
-        const d = stateEx4.x * u[0] + stateEx4.y * u[1] + curZ * u[2];
-        nx = P0[0] + d * u[0];
-        ny = P0[1] + d * u[1];
-      }
-
-      applyVectorSyncEx4(nx, ny, curZ, stateEx4.traceEnabled, isNewStroke);
-    }
-
-    function moveTvFrom2DImgPointerEx4(clientX, clientY, isNewStroke) {
-      const canvas = document.getElementById('canvas4_img');
-      if (!canvas) return;
-
-      const info = getMatrixInfoEx4();
-      const { a1, b1, c1, a2, b2, c2 } = stateEx4;
-
-      // Si es la matriz nula, T(v) = (0,0) siempre; no sale del origen
-      if (info.isZeroMatrix) {
-        if (stateEx4.traceEnabled) {
-          recordTracePointEx4(stateEx4.x, stateEx4.y, stateEx4.z, isNewStroke);
-        }
-        drawEx4();
-        return;
-      }
-
-      const rect = canvas.getBoundingClientRect();
-      const origin = { x: rect.width / 2, y: rect.height / 2 };
-      const pt = screenToMath(clientX - rect.left, clientY - rect.top, origin, stateEx4.scaleImg);
-
-      if (info.isRank2) {
-        // Pseudoinversa de norma mínima: v = Aᵀ (A Aᵀ)⁻¹ w
-        const g11 = info.normR1Sq;
-        const g12 = a1 * a2 + b1 * b2 + c1 * c2;
-        const g22 = info.normR2Sq;
-        const detG = g11 * g22 - g12 * g12 || 1;
-
-        const l1 = (pt.x * g22 - pt.y * g12) / detG;
-        const l2 = (pt.y * g11 - pt.x * g12) / detG;
-
-        const nx = l1 * a1 + l2 * a2;
-        const ny = l1 * b1 + l2 * b2;
-        const nz = l1 * c1 + l2 * c2;
-        applyVectorSyncEx4(nx, ny, nz, stateEx4.traceEnabled, isNewStroke);
-      } else if (info.isRank1) {
-        // Proyectar el punto del puntero sobre la recta im T para que sea matemáticamente válido
-        const cols = [[a1, a2], [b1, b2], [c1, c2]];
-        let bestCol = cols[0];
-        let bestNormSq = -1;
-        cols.forEach(col => {
-          const nSq = col[0] * col[0] + col[1] * col[1];
-          if (nSq > bestNormSq) {
-            bestNormSq = nSq;
-            bestCol = col;
-          }
-        });
-
-        const colLen = Math.sqrt(bestNormSq) || 1;
-        const bh = [bestCol[0] / colLen, bestCol[1] / colLen];
-        const t = pt.x * bh[0] + pt.y * bh[1];
-
-        const alpha1 = a1 * bh[0] + a2 * bh[1];
-        const alpha2 = b1 * bh[0] + b2 * bh[1];
-        const alpha3 = c1 * bh[0] + c2 * bh[1];
-        const alphaSq = alpha1 * alpha1 + alpha2 * alpha2 + alpha3 * alpha3 || 1;
-
-        const nx = (t * alpha1) / alphaSq;
-        const ny = (t * alpha2) / alphaSq;
-        const nz = (t * alpha3) / alphaSq;
-        applyVectorSyncEx4(nx, ny, nz, stateEx4.traceEnabled, isNewStroke);
-      }
     }
 
     function renderFormulaInputsEx4() {
@@ -6166,7 +5941,10 @@
       if (!container || !modeEl) return;
 
       const mode = modeEl.value;
-      const { a1, b1, c1, a2, b2, c2 } = stateEx4;
+      const m = stateEx4.m;
+
+      const inp = (r, c) =>
+        `<input type="number" step="0.5" id="ex4-m-${r}-${c}" class="ex4-coeff-input" value="${m[r][c]}">`;
 
       if (mode === 'matrix') {
         container.innerHTML = `
@@ -6183,13 +5961,9 @@
           <span>=</span>
           <div class="ex4-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4rem; padding:0.25rem 0.35rem;">
-              <input type="number" step="0.5" id="ex4-a1" class="ex4-coeff-input" value="${a1}">
-              <input type="number" step="0.5" id="ex4-b1" class="ex4-coeff-input" value="${b1}">
-              <input type="number" step="0.5" id="ex4-c1" class="ex4-coeff-input" value="${c1}">
-              <input type="number" step="0.5" id="ex4-a2" class="ex4-coeff-input" value="${a2}">
-              <input type="number" step="0.5" id="ex4-b2" class="ex4-coeff-input" value="${b2}">
-              <input type="number" step="0.5" id="ex4-c2" class="ex4-coeff-input" value="${c2}">
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.35rem; padding:0.25rem;">
+              ${inp(0, 0)}${inp(0, 1)}${inp(0, 2)}
+              ${inp(1, 0)}${inp(1, 1)}${inp(1, 2)}
             </div>
             <span class="matrix-bracket right"></span>
           </div>
@@ -6205,414 +5979,415 @@
         `;
       } else if (mode === 'columns') {
         container.innerHTML = `
-          <span><span class="math-var">T</span></span>
-          <div class="ex4-bracket-box">
-            <span class="matrix-bracket left"></span>
-            <div class="ex4-col-stack">
-              <span class="ex4-cx" style="font-weight:700;">x</span>
-              <span class="ex4-cy" style="font-weight:700;">y</span>
-              <span class="ex4-cz" style="font-weight:700;">z</span>
-            </div>
-            <span class="matrix-bracket right"></span>
-          </div>
-          <span>=</span>
+          <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
           <span class="ex4-cx" style="font-weight:700;">x</span>
           <div class="ex4-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div class="ex4-col-stack">
-              <input type="number" step="0.5" id="ex4-a1" class="ex4-coeff-input" value="${a1}">
-              <input type="number" step="0.5" id="ex4-a2" class="ex4-coeff-input" value="${a2}">
-            </div>
+            <div class="ex4-col-stack">${inp(0, 0)}${inp(1, 0)}</div>
             <span class="matrix-bracket right"></span>
           </div>
           <span>+</span>
           <span class="ex4-cy" style="font-weight:700;">y</span>
           <div class="ex4-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div class="ex4-col-stack">
-              <input type="number" step="0.5" id="ex4-b1" class="ex4-coeff-input" value="${b1}">
-              <input type="number" step="0.5" id="ex4-b2" class="ex4-coeff-input" value="${b2}">
-            </div>
+            <div class="ex4-col-stack">${inp(0, 1)}${inp(1, 1)}</div>
             <span class="matrix-bracket right"></span>
           </div>
           <span>+</span>
           <span class="ex4-cz" style="font-weight:700;">z</span>
           <div class="ex4-bracket-box">
             <span class="matrix-bracket left"></span>
-            <div class="ex4-col-stack">
-              <input type="number" step="0.5" id="ex4-c1" class="ex4-coeff-input" value="${c1}">
-              <input type="number" step="0.5" id="ex4-c2" class="ex4-coeff-input" value="${c2}">
-            </div>
+            <div class="ex4-col-stack">${inp(0, 2)}${inp(1, 2)}</div>
             <span class="matrix-bracket right"></span>
           </div>
         `;
       } else {
         container.innerHTML = `
-          <span><span class="math-var">T</span></span>
+          <span><span class="math-var">T</span>(<span class="ex4-cx">x</span>, <span class="ex4-cy">y</span>, <span class="ex4-cz">z</span>) =</span>
           <div class="ex4-bracket-box">
             <span class="matrix-bracket left"></span>
             <div class="ex4-col-stack">
-              <span class="ex4-cx" style="font-weight:700;">x</span>
-              <span class="ex4-cy" style="font-weight:700;">y</span>
-              <span class="ex4-cz" style="font-weight:700;">z</span>
-            </div>
-            <span class="matrix-bracket right"></span>
-          </div>
-          <span>=</span>
-          <div class="ex4-bracket-box">
-            <span class="matrix-bracket left"></span>
-            <div class="ex4-col-stack">
-              <div>
-                <input type="number" step="0.5" id="ex4-a1" class="ex4-coeff-input" value="${a1}">
-                <span class="ex4-cx" style="font-weight:700;">x</span> +
-                <input type="number" step="0.5" id="ex4-b1" class="ex4-coeff-input" value="${b1}">
-                <span class="ex4-cy" style="font-weight:700;">y</span> +
-                <input type="number" step="0.5" id="ex4-c1" class="ex4-coeff-input" value="${c1}">
-                <span class="ex4-cz" style="font-weight:700;">z</span>
-              </div>
-              <div>
-                <input type="number" step="0.5" id="ex4-a2" class="ex4-coeff-input" value="${a2}">
-                <span class="ex4-cx" style="font-weight:700;">x</span> +
-                <input type="number" step="0.5" id="ex4-b2" class="ex4-coeff-input" value="${b2}">
-                <span class="ex4-cy" style="font-weight:700;">y</span> +
-                <input type="number" step="0.5" id="ex4-c2" class="ex4-coeff-input" value="${c2}">
-                <span class="ex4-cz" style="font-weight:700;">z</span>
-              </div>
+              <div>${inp(0, 0)}<span class="ex4-cx">x</span> + ${inp(0, 1)}<span class="ex4-cy">y</span> + ${inp(0, 2)}<span class="ex4-cz">z</span></div>
+              <div>${inp(1, 0)}<span class="ex4-cx">x</span> + ${inp(1, 1)}<span class="ex4-cy">y</span> + ${inp(1, 2)}<span class="ex4-cz">z</span></div>
             </div>
             <span class="matrix-bracket right"></span>
           </div>
         `;
       }
 
-      const scheduleDrawEx4 = createSmoothRenderer(updateEx4);
-      ['ex4-a1', 'ex4-b1', 'ex4-c1', 'ex4-a2', 'ex4-b2', 'ex4-c2'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', scheduleDrawEx4);
-      });
+      for (let r = 0; r < 2; r++) {
+        for (let c = 0; c < 3; c++) {
+          const el = document.getElementById(`ex4-m-${r}-${c}`);
+          if (el) {
+            el.addEventListener('input', () => {
+              stateEx4.m[r][c] = parseFloat(el.value) || 0;
+              drawEx4();
+            });
+          }
+        }
+      }
     }
 
     function changeStructureEx4() {
       renderFormulaInputsEx4();
-      updateEx4();
+      drawEx4();
     }
 
-    function setPresetEx4(a1, b1, c1, a2, b2, c2) {
-      stateEx4.a1 = a1; stateEx4.b1 = b1; stateEx4.c1 = c1;
-      stateEx4.a2 = a2; stateEx4.b2 = b2; stateEx4.c2 = c2;
+    function setPresetEx4(a11, a12, a13, a21, a22, a23) {
+      stateEx4.m = [
+        [a11, a12, a13],
+        [a21, a22, a23]
+      ];
+      stateEx4.traces = [];
+      stateEx4.currentStroke = null;
+      stateEx4.hoveredTraceKer = null;
+      stateEx4.hoveredTraceImg = null;
       renderFormulaInputsEx4();
-      updateEx4();
+      drawEx4();
     }
 
-    function updateEx4() {
-      const readCoeff = (id, fallback) => {
-        const el = document.getElementById(id);
-        return el ? (parseFloat(el.value) || 0) : fallback;
-      };
+    function analyzeMatrix2x3Ex4(m) {
+      const cols = [
+        [m[0][0], m[1][0]],
+        [m[0][1], m[1][1]],
+        [m[0][2], m[1][2]]
+      ];
 
-      stateEx4.a1 = readCoeff('ex4-a1', stateEx4.a1);
-      stateEx4.b1 = readCoeff('ex4-b1', stateEx4.b1);
-      stateEx4.c1 = readCoeff('ex4-c1', stateEx4.c1);
-      stateEx4.a2 = readCoeff('ex4-a2', stateEx4.a2);
-      stateEx4.b2 = readCoeff('ex4-b2', stateEx4.b2);
-      stateEx4.c2 = readCoeff('ex4-c2', stateEx4.c2);
+      const isZero = cols.every(c => Math.hypot(c[0], c[1]) < 1e-7);
+      if (isZero) {
+        return { rank: 0, nullity: 3, imgBasis: [], kerBasis: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] };
+      }
+
+      const imgBasis = [];
+      for (const c of cols) {
+        if (Math.hypot(c[0], c[1]) < 1e-7) continue;
+        if (imgBasis.length === 0) {
+          imgBasis.push(c);
+        } else {
+          const b = imgBasis[0];
+          const det2 = Math.abs(b[0] * c[1] - b[1] * c[0]);
+          if (det2 > 1e-5) {
+            imgBasis.push(c);
+            break;
+          }
+        }
+      }
+
+      const rank = imgBasis.length;
+      const nullity = 3 - rank;
+
+      const r1 = m[0];
+      const r2 = m[1];
+      const n1 = Math.hypot(r1[0], r1[1], r1[2]);
+      const n2 = Math.hypot(r2[0], r2[1], r2[2]);
+
+      let kerBasis = [];
+      if (rank === 2) {
+        const cr = [
+          r1[1] * r2[2] - r1[2] * r2[1],
+          r1[2] * r2[0] - r1[0] * r2[2],
+          r1[0] * r2[1] - r1[1] * r2[0]
+        ];
+        const len = Math.hypot(cr[0], cr[1], cr[2]) || 1;
+        kerBasis = [cr.map(v => v / len)];
+      } else if (rank === 1) {
+        const refRow = n1 >= n2 ? r1 : r2;
+        const lenR = Math.hypot(refRow[0], refRow[1], refRow[2]) || 1;
+        const n = refRow.map(v => v / lenR);
+        const ref = Math.abs(n[0]) < 0.8 ? [1, 0, 0] : [0, 1, 0];
+        const u1 = [
+          n[1] * ref[2] - n[2] * ref[1],
+          n[2] * ref[0] - n[0] * ref[2],
+          n[0] * ref[1] - n[1] * ref[0]
+        ];
+        const u1L = Math.hypot(u1[0], u1[1], u1[2]) || 1;
+        const b1 = u1.map(v => v / u1L);
+        const u2 = [
+          n[1] * b1[2] - n[2] * b1[1],
+          n[2] * b1[0] - n[0] * b1[2],
+          n[0] * b1[1] - n[1] * b1[0]
+        ];
+        const u2L = Math.hypot(u2[0], u2[1], u2[2]) || 1;
+        const b2 = u2.map(v => v / u2L);
+        kerBasis = [b1, b2];
+      }
+
+      return { rank, nullity, imgBasis, kerBasis };
+    }
+
+    function solvePreimage2x3Ex4(m, info, target2D) {
+      if (info.rank === 0) return [0, 0, 0];
+      const [u, v] = target2D;
+
+      if (info.rank === 2) {
+        const det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+        if (Math.abs(det) > 1e-6) {
+          const x = (u * m[1][1] - m[0][1] * v) / det;
+          const y = (m[0][0] * v - u * m[1][0]) / det;
+          return [x, y, 0];
+        }
+        const detXZ = m[0][0] * m[1][2] - m[0][2] * m[1][0];
+        if (Math.abs(detXZ) > 1e-6) {
+          const x = (u * m[1][2] - m[0][2] * v) / detXZ;
+          const z = (m[0][0] * v - u * m[1][0]) / detXZ;
+          return [x, 0, z];
+        }
+        const detYZ = m[0][1] * m[1][2] - m[0][2] * m[1][1];
+        if (Math.abs(detYZ) > 1e-6) {
+          const y = (u * m[1][2] - m[0][2] * v) / detYZ;
+          const z = (m[0][1] * v - u * m[1][1]) / detYZ;
+          return [0, y, z];
+        }
+      }
+
+      const b1 = info.imgBasis[0];
+      const normSq = b1[0] * b1[0] + b1[1] * b1[1] || 1;
+      const alpha = (b1[0] * u + b1[1] * v) / normSq;
+      for (let c = 0; c < 3; c++) {
+        if (Math.abs(m[0][c] - b1[0]) < 1e-6 && Math.abs(m[1][c] - b1[1]) < 1e-6) {
+          const vec = [0, 0, 0];
+          vec[c] = alpha;
+          return vec;
+        }
+      }
+      return [alpha, 0, 0];
+    }
+
+    function syncDomainVectorEx4(rawX, rawY, rawZ, isNewStroke = false) {
+      const nx = Math.max(-5, Math.min(5, Math.round(rawX * 10) / 10));
+      const ny = Math.max(-5, Math.min(5, Math.round(rawY * 10) / 10));
+      const nz = Math.max(-5, Math.min(5, Math.round(rawZ * 10) / 10));
+
+      stateEx4.x = nx;
+      stateEx4.y = ny;
+      stateEx4.z = nz;
 
       const sx = document.getElementById('ex4-slider-x');
       const sy = document.getElementById('ex4-slider-y');
       const sz = document.getElementById('ex4-slider-z');
-      if (sx && sy && sz) {
-        stateEx4.x = Math.round(parseFloat(sx.value) * 10) / 10;
-        stateEx4.y = Math.round(parseFloat(sy.value) * 10) / 10;
-        stateEx4.z = Math.round(parseFloat(sz.value) * 10) / 10;
-      }
+      if (sx) sx.value = nx;
+      if (sy) sy.value = ny;
+      if (sz) sz.value = nz;
 
-      const vx = document.getElementById('ex4-val-x');
-      const vy = document.getElementById('ex4-val-y');
-      const vz = document.getElementById('ex4-val-z');
-      if (vx) vx.textContent = stateEx4.x.toFixed(1);
-      if (vy) vy.textContent = stateEx4.y.toFixed(1);
-      if (vz) vz.textContent = stateEx4.z.toFixed(1);
+      const vxEl = document.getElementById('ex4-val-x');
+      const vyEl = document.getElementById('ex4-val-y');
+      const vzEl = document.getElementById('ex4-val-z');
+      if (vxEl) vxEl.textContent = nx.toFixed(1);
+      if (vyEl) vyEl.textContent = ny.toFixed(1);
+      if (vzEl) vzEl.textContent = nz.toFixed(1);
 
+      recordTracePointEx4(nx, ny, nz, isNewStroke);
       drawEx4();
     }
 
-    function draw3DArrowReliefEx4(ctx, pFrom, pTo, mainColor, lightColor, darkColor, lineWidth, label) {
-      const dx = pTo.px - pFrom.px;
-      const dy = pTo.py - pFrom.py;
-      const len = Math.hypot(dx, dy);
-      if (len < 2) return;
+    function updateEx4() {
+      const sx = document.getElementById('ex4-slider-x');
+      const sy = document.getElementById('ex4-slider-y');
+      const sz = document.getElementById('ex4-slider-z');
+      if (!sx || !sy || !sz) return;
 
-      ctx.save();
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
-      ctx.lineWidth = lineWidth + 2;
-      ctx.beginPath();
-      ctx.moveTo(pFrom.px + 2, pFrom.py + 3);
-      ctx.lineTo(pTo.px + 2, pTo.py + 3);
-      ctx.stroke();
+      const nx = Math.round(parseFloat(sx.value) * 10) / 10;
+      const ny = Math.round(parseFloat(sy.value) * 10) / 10;
+      const nz = Math.round(parseFloat(sz.value) * 10) / 10;
 
-      const grad = ctx.createLinearGradient(pFrom.px, pFrom.py, pTo.px, pTo.py);
-      grad.addColorStop(0, darkColor);
-      grad.addColorStop(0.55, mainColor);
-      grad.addColorStop(1, lightColor);
+      stateEx4.x = nx;
+      stateEx4.y = ny;
+      stateEx4.z = nz;
 
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = lineWidth;
-      ctx.beginPath();
-      ctx.moveTo(pFrom.px, pFrom.py);
-      ctx.lineTo(pTo.px, pTo.py);
-      ctx.stroke();
+      document.getElementById('ex4-val-x').textContent = nx.toFixed(1);
+      document.getElementById('ex4-val-y').textContent = ny.toFixed(1);
+      document.getElementById('ex4-val-z').textContent = nz.toFixed(1);
 
-      const angle = Math.atan2(dy, dx);
-      const headLen = Math.min(13, Math.max(8, len * 0.25));
-      ctx.fillStyle = lightColor;
-      ctx.beginPath();
-      ctx.moveTo(pTo.px, pTo.py);
-      ctx.lineTo(pTo.px - headLen * Math.cos(angle - 0.42), pTo.py - headLen * Math.sin(angle - 0.42));
-      ctx.lineTo(pTo.px - headLen * Math.cos(angle + 0.42), pTo.py - headLen * Math.sin(angle + 0.42));
-      ctx.closePath();
-      ctx.fill();
-
-      if (label) {
-        ctx.font = '700 13px "JetBrains Mono", monospace';
-        ctx.fillStyle = lightColor;
-        ctx.fillText(label, pTo.px + 9, pTo.py - 8);
-      }
-      ctx.restore();
-    }
-
-    function draw3DSphereReliefEx4(ctx, pt, radius, highlightColor, mainColor, shadowColor) {
-      ctx.save();
-      const grad = ctx.createRadialGradient(
-        pt.px - radius * 0.35, pt.py - radius * 0.35, radius * 0.15,
-        pt.px, pt.py, radius
-      );
-      grad.addColorStop(0, highlightColor);
-      grad.addColorStop(0.6, mainColor);
-      grad.addColorStop(1, shadowColor);
-
-      ctx.beginPath();
-      ctx.arc(pt.px, pt.py, radius, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#ffffff';
-      ctx.stroke();
-      ctx.restore();
+      recordTracePointEx4(nx, ny, nz, false);
+      drawEx4();
     }
 
     function drawEx4() {
-      const canvasKer = document.getElementById('canvas4_ker');
+      const viewKer = setupHiDPICanvas('canvas4_ker', 1);
       const viewImg = setupHiDPICanvas('canvas4_img', stateEx4.scaleImg);
-      if (!canvasKer || !viewImg) return;
+      if (!viewKer || !viewImg) return;
 
-      const { a1, b1, c1, a2, b2, c2, x, y, z } = stateEx4;
-      const info = getMatrixInfoEx4();
+      const { m, x, y, z } = stateEx4;
+      const info = analyzeMatrix2x3Ex4(m);
 
-      const tx = Math.round((a1 * x + b1 * y + c1 * z) * 1e6) / 1e6;
-      const ty = Math.round((a2 * x + b2 * y + c2 * z) * 1e6) / 1e6;
-      const isExactZeroOutput = (Math.abs(tx) < 1e-4 && Math.abs(ty) < 1e-4);
+      const tx = Math.round((m[0][0] * x + m[0][1] * y + m[0][2] * z) * 1e6) / 1e6;
+      const ty = Math.round((m[1][0] * x + m[1][1] * y + m[1][2] * z) * 1e6) / 1e6;
 
-      let isKernelValid = false;
-      if (info.isZeroMatrix) {
-        isKernelValid = true;
-      } else {
-        isKernelValid = isExactZeroOutput && (x !== 0 || y !== 0 || z !== 0);
+      const isZeroOutput = (Math.abs(tx) < 1e-5 && Math.abs(ty) < 1e-5);
+      const isNonZeroVec = (Math.abs(x) > 1e-5 || Math.abs(y) > 1e-5 || Math.abs(z) > 1e-5);
+      const isKernelValid = (info.rank === 0) ? true : (isZeroOutput && isNonZeroVec);
+
+      /* 1. PANEL IZQUIERDO: DOMINIO ℝ³ Y NÚCLEO nu T */
+      const { ctx: ctxK, width: wK, height: hK } = viewKer;
+      ctxK.clearRect(0, 0, wK, hK);
+      const projK = (px, py, pz) => project3DEx4(px, py, pz, stateEx4.camKer, wK, hK);
+
+      if (isKernelValid && info.rank === 0) {
+        ctxK.save();
+        ctxK.fillStyle = 'rgba(16, 185, 129, 0.12)';
+        ctxK.fillRect(0, 0, wK, hK);
+        ctxK.restore();
       }
 
-      /* --------------------------------------------------------
-         1. PANEL IZQUIERDO: DOMINIO 3D Y NÚCLEO nu T (SIN RASTRO)
-         -------------------------------------------------------- */
-      const dpr = window.devicePixelRatio || 1;
-      const rect3 = canvasKer.getBoundingClientRect();
-      const w3 = rect3.width;
-      const h3 = rect3.height;
-      if (canvasKer.width !== Math.round(w3 * dpr) || canvasKer.height !== Math.round(h3 * dpr)) {
-        canvasKer.width = Math.round(w3 * dpr);
-        canvasKer.height = Math.round(h3 * dpr);
+      draw3DAxesAndFloorEx3(ctxK, stateEx4.camKer, wK, hK);
+
+      if (info.rank === 2 && info.kerBasis.length === 1) {
+        const d = info.kerBasis[0];
+        const p1 = projK(-d[0] * 6.5, -d[1] * 6.5, -d[2] * 6.5);
+        const p2 = projK(d[0] * 6.5, d[1] * 6.5, d[2] * 6.5);
+        ctxK.save();
+        ctxK.strokeStyle = isKernelValid ? '#10b981' : 'rgba(16, 185, 129, 0.42)';
+        ctxK.lineWidth = isKernelValid ? 3.2 : 2;
+        ctxK.setLineDash([7, 5]);
+        ctxK.beginPath();
+        ctxK.moveTo(p1.px, p1.py);
+        ctxK.lineTo(p2.px, p2.py);
+        ctxK.stroke();
+        ctxK.restore();
+      } else if (info.rank === 1 && info.kerBasis.length === 2) {
+        const u = info.kerBasis[0].map(v => v * 4.8);
+        const v = info.kerBasis[1].map(val => val * 4.8);
+        const cA = projK(-u[0] - v[0], -u[1] - v[1], -u[2] - v[2]);
+        const cB = projK(u[0] - v[0], u[1] - v[1], u[2] - v[2]);
+        const cC = projK(u[0] + v[0], u[1] + v[1], u[2] + v[2]);
+        const cD = projK(-u[0] + v[0], -u[1] + v[1], -u[2] + v[2]);
+
+        ctxK.save();
+        ctxK.beginPath();
+        ctxK.moveTo(cA.px, cA.py);
+        ctxK.lineTo(cB.px, cB.py);
+        ctxK.lineTo(cC.px, cC.py);
+        ctxK.lineTo(cD.px, cD.py);
+        ctxK.closePath();
+        ctxK.fillStyle = isKernelValid ? 'rgba(16, 185, 129, 0.22)' : 'rgba(16, 185, 129, 0.11)';
+        ctxK.fill();
+        ctxK.strokeStyle = isKernelValid ? '#10b981' : 'rgba(16, 185, 129, 0.45)';
+        ctxK.lineWidth = 1.4;
+        ctxK.stroke();
+        ctxK.restore();
       }
 
-      const ctx3 = canvasKer.getContext('2d');
-      ctx3.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx3.clearRect(0, 0, w3, h3);
+      if (stateEx4.traces.length > 0) {
+        for (const stroke of stateEx4.traces) {
+          if (stroke.length === 0) continue;
+          const ptsK = stroke.map(pt => ({
+            pt,
+            p: projK(pt.x, pt.y, pt.z),
+            floor: projK(pt.x, pt.y, 0)
+          }));
 
-      const proj = (px, py, pz) => project3DEx4(px, py, pz, w3, h3);
+          ctxK.save();
+          ctxK.strokeStyle = 'rgba(236, 72, 153, 0.25)';
+          ctxK.lineWidth = 1;
+          ctxK.setLineDash([2, 3]);
+          for (const item of ptsK) {
+            ctxK.beginPath();
+            ctxK.moveTo(item.floor.px, item.floor.py);
+            ctxK.lineTo(item.p.px, item.p.py);
+            ctxK.stroke();
+          }
+          ctxK.restore();
 
-      // Rejilla base XY (z = 0)
-      ctx3.save();
-      ctx3.strokeStyle = 'rgba(148, 163, 184, 0.14)';
-      ctx3.lineWidth = 1;
-      for (let g = -5; g <= 5; g++) {
-        const aX = proj(g, -5, 0), bX = proj(g, 5, 0);
-        ctx3.beginPath(); ctx3.moveTo(aX.px, aX.py); ctx3.lineTo(bX.px, bX.py); ctx3.stroke();
-        const aY = proj(-5, g, 0), bY = proj(5, g, 0);
-        ctx3.beginPath(); ctx3.moveTo(aY.px, aY.py); ctx3.lineTo(bY.px, bY.py); ctx3.stroke();
-      }
-      ctx3.restore();
+          ctxK.save();
+          ctxK.strokeStyle = '#ec4899';
+          ctxK.lineWidth = 3;
+          ctxK.lineCap = 'round';
+          ctxK.lineJoin = 'round';
+          ctxK.beginPath();
+          ptsK.forEach((item, idx) => {
+            if (idx === 0) ctxK.moveTo(item.p.px, item.p.py);
+            else ctxK.lineTo(item.p.px, item.p.py);
+          });
+          ctxK.stroke();
+          ctxK.restore();
 
-      // Ejes X, Y, Z
-      const o3 = proj(0, 0, 0);
-      const drawAxis3D = (pA, pB, color, label) => {
-        ctx3.save();
-        ctx3.strokeStyle = color;
-        ctx3.lineWidth = 1.8;
-        ctx3.beginPath();
-        ctx3.moveTo(pA.px, pA.py);
-        ctx3.lineTo(pB.px, pB.py);
-        ctx3.stroke();
-        ctx3.font = '700 12px "JetBrains Mono", monospace';
-        ctx3.fillStyle = color;
-        ctx3.fillText(label, pB.px + 6, pB.py + 4);
-        ctx3.restore();
-      };
-      drawAxis3D(proj(-5.5, 0, 0), proj(5.5, 0, 0), '#18c5d9', 'X');
-      drawAxis3D(proj(0, -5.5, 0), proj(0, 5.5, 0), '#f06565', 'Y');
-      drawAxis3D(proj(0, 0, -5.5), proj(0, 0, 5.5), '#a855f7', 'Z');
-
-      // Resaltar el subespacio nu T en ℝ³ cuando se encuentra
-      if (isKernelValid) {
-        ctx3.save();
-        if (info.isZeroMatrix) {
-          ctx3.fillStyle = 'rgba(16, 185, 129, 0.10)';
-          ctx3.fillRect(0, 0, w3, h3);
-        } else if (info.isRank2) {
-          // Recta núcleo en ℝ³
-          const d = info.kerDir.map(v => v * 6.5);
-          const pK1 = proj(-d[0], -d[1], -d[2]);
-          const pK2 = proj(d[0], d[1], d[2]);
-          ctx3.strokeStyle = '#10b981';
-          ctx3.lineWidth = 3;
-          ctx3.setLineDash([7, 5]);
-          ctx3.beginPath();
-          ctx3.moveTo(pK1.px, pK1.py);
-          ctx3.lineTo(pK2.px, pK2.py);
-          ctx3.stroke();
-        } else if (info.isRank1) {
-          // Plano núcleo perpendicular a planeNormal
-          const n = info.planeNormal;
-          const nLen = Math.hypot(n[0], n[1], n[2]) || 1;
-          const nh = [n[0] / nLen, n[1] / nLen, n[2] / nLen];
-          const ref = Math.abs(nh[0]) < 0.8 ? [1, 0, 0] : [0, 1, 0];
-          const u1Raw = [
-            nh[1] * ref[2] - nh[2] * ref[1],
-            nh[2] * ref[0] - nh[0] * ref[2],
-            nh[0] * ref[1] - nh[1] * ref[0]
-          ];
-          const u1Len = Math.hypot(u1Raw[0], u1Raw[1], u1Raw[2]) || 1;
-          const u1 = u1Raw.map(v => (v / u1Len) * 5.2);
-          const u2 = [
-            (nh[1] * u1[2] - nh[2] * u1[1]),
-            (nh[2] * u1[0] - nh[0] * u1[2]),
-            (nh[0] * u1[1] - nh[1] * u1[0])
-          ];
-
-          const cA = proj(-u1[0] - u2[0], -u1[1] - u2[1], -u1[2] - u2[2]);
-          const cB = proj(u1[0] - u2[0], u1[1] - u2[1], u1[2] - u2[2]);
-          const cC = proj(u1[0] + u2[0], u1[1] + u2[1], u1[2] + u2[2]);
-          const cD = proj(-u1[0] + u2[0], -u1[1] + u2[1], -u1[2] + u2[2]);
-
-          ctx3.fillStyle = 'rgba(16, 185, 129, 0.16)';
-          ctx3.strokeStyle = 'rgba(16, 185, 129, 0.75)';
-          ctx3.lineWidth = 1.6;
-          ctx3.beginPath();
-          ctx3.moveTo(cA.px, cA.py);
-          ctx3.lineTo(cB.px, cB.py);
-          ctx3.lineTo(cC.px, cC.py);
-          ctx3.lineTo(cD.px, cD.py);
-          ctx3.closePath();
-          ctx3.fill();
-          ctx3.stroke();
+          for (const item of ptsK) {
+            draw3DSphereRelief(ctxK, item.p, 4.0, '#f9a8d4', '#ec4899', '#831843');
+          }
         }
-        ctx3.restore();
       }
 
-      // Líneas punteadas de componentes de v = (x, y, z) en 3D
-      const pXy = proj(x, y, 0);
-      const pVxyz = proj(x, y, z);
+      const oK = projK(0, 0, 0);
+      const pKx = projK(x, 0, 0);
+      const pKxy = projK(x, y, 0);
+      const pKxyz = projK(x, y, z);
 
-      ctx3.save();
-      ctx3.setLineDash([4, 4]);
-      ctx3.lineWidth = 1.6;
-      ctx3.strokeStyle = 'rgba(148, 163, 184, 0.55)';
-      ctx3.beginPath();
-      ctx3.moveTo(o3.px, o3.py);
-      ctx3.lineTo(pXy.px, pXy.py);
-      ctx3.lineTo(pVxyz.px, pVxyz.py);
-      ctx3.stroke();
-      ctx3.restore();
+      ctxK.save();
+      ctxK.setLineDash([4, 4]);
+      ctxK.lineWidth = 1.8;
+      if (x !== 0) {
+        ctxK.strokeStyle = '#18c5d9';
+        ctxK.beginPath(); ctxK.moveTo(oK.px, oK.py); ctxK.lineTo(pKx.px, pKx.py); ctxK.stroke();
+      }
+      if (y !== 0) {
+        ctxK.strokeStyle = '#f06565';
+        ctxK.beginPath(); ctxK.moveTo(pKx.px, pKx.py); ctxK.lineTo(pKxy.px, pKxy.py); ctxK.stroke();
+      }
+      if (z !== 0) {
+        ctxK.strokeStyle = '#a855f7';
+        ctxK.beginPath(); ctxK.moveTo(pKxy.px, pKxy.py); ctxK.lineTo(pKxyz.px, pKxyz.py); ctxK.stroke();
+      }
+      ctxK.restore();
 
-      // Vector v en el dominio 3D
-      if (x !== 0 || y !== 0 || z !== 0) {
-        const mainC = isKernelValid ? '#10b981' : '#4f7df3';
-        const lightC = isKernelValid ? '#6ee7b7' : '#93c5fd';
-        const darkC = isKernelValid ? '#047857' : '#1d4ed8';
-        draw3DArrowReliefEx4(ctx3, o3, pVxyz, mainC, lightC, darkC, 5.0, 'v⃗');
-        draw3DSphereReliefEx4(ctx3, pVxyz, 6.5, lightC, mainC, darkC);
+      if (isNonZeroVec) {
+        const cMain = isKernelValid ? '#10b981' : '#4f7df3';
+        const cLight = isKernelValid ? '#6ee7b7' : '#93c5fd';
+        const cDark = isKernelValid ? '#047857' : '#1d4ed8';
+        draw3DArrowRelief(ctxK, oK, pKxyz, cMain, cLight, cDark, 5.0, 'v');
+        draw3DSphereRelief(ctxK, pKxyz, 7.2, isKernelValid ? '#a7f3d0' : '#fca5a5', isKernelValid ? '#10b981' : '#f06565', '#1e293b');
       } else {
-        draw3DSphereReliefEx4(ctx3, o3, 6.5, '#a7f3d0', '#10b981', '#064e3b');
+        draw3DSphereRelief(ctxK, oK, 7.2, '#a7f3d0', '#10b981', '#064e3b');
       }
 
-      // Estado y notificación de Eliot
       const statusBox = document.getElementById('ex4-status-box');
       const eliotToast = document.getElementById('eliot-toast-4');
       const eliotText = document.getElementById('eliot-msg-text-4');
 
-      let kernelDesc = '';
-      if (info.isZeroMatrix) {
-        kernelDesc = 'nu T = ℝ³ (Todo el espacio 3D)';
-      } else if (info.isRank2) {
-        const d = info.kerDir.map(v => Math.round(v * 100) / 100);
-        kernelDesc = `Recta en ℝ³ (dim 1) • Gen{ (${d[0]}, ${d[1]}, ${d[2]})ᵀ }`;
-      } else {
-        const n = info.planeNormal;
-        kernelDesc = `Plano en ℝ³ (dim 2): ${n[0]}x + ${n[1]}y + ${n[2]}z = 0`;
+      if (statusBox) {
+        if (isKernelValid) {
+          statusBox.className = 'ex4-status-box is-valid';
+          statusBox.innerHTML = `
+            <div><strong>✓ ¡VECTOR EN EL NÚCLEO nu T!</strong></div>
+            <div style="margin-top:0.3rem;">
+              <span class="vec-arrow">v</span> = (<span class="ex4-cx">${x.toFixed(1)}</span>, <span class="ex4-cy">${y.toFixed(1)}</span>, <span class="ex4-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0)
+            </div>
+            <div>Nulidad: <strong>dim(nu T) = ${info.nullity}</strong></div>
+          `;
+          if (eliotText && eliotToast) {
+            eliotText.textContent = info.rank === 0
+              ? '¡En la transformación nula todo ℝ³ pertenece a nu T!'
+              : `¡Bien! v = (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) se proyecta al origen de ℝ².`;
+            eliotToast.classList.add('visible');
+          }
+        } else {
+          statusBox.className = 'ex4-status-box is-invalid';
+          const hint = (info.rank > 0 && !isNonZeroVec)
+            ? 'El origen (0,0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span>.'
+            : 'Mueve <span class="vec-arrow">v</span> o los deslizadores hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0).';
+          statusBox.innerHTML = `
+            <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
+            <div style="margin-top:0.3rem;">
+              T(<span class="vec-arrow">v</span>) = (<span class="ex4-cx">${tx.toFixed(1)}</span>, <span class="ex4-cy">${ty.toFixed(1)}</span>)
+            </div>
+            <div style="opacity:0.88;">${hint}</div>
+          `;
+          if (eliotToast) eliotToast.classList.remove('visible');
+        }
       }
 
-      if (isKernelValid) {
-        statusBox.className = 'ex4-status-box is-valid';
-        statusBox.innerHTML = `
-          <div><strong>✓ ¡NÚCLEO ENCONTRADO CON PRECISIÓN EXACTA!</strong></div>
-          <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="ex4-cx">${x.toFixed(1)}</span>, <span class="ex4-cy">${y.toFixed(1)}</span>, <span class="ex4-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (0.0, 0.0)
-          </div>
-          <div>Subespacio: <strong>${kernelDesc}</strong></div>
-        `;
-        eliotText.textContent = info.isZeroMatrix
-          ? '¡Correcto! En la transformación nula, TODO vector de ℝ³ pertenece a nu T.'
-          : `¡Excelente! v = (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) colapsa al origen (0,0) de ℝ².`;
-        eliotToast.classList.add('visible');
-      } else {
-        statusBox.className = 'ex4-status-box is-invalid';
-        const hintMsg = (x === 0 && y === 0 && z === 0)
-          ? 'El origen (0,0,0) es trivial; busca un vector no nulo <span class="vec-arrow">v</span> ≠ <span class="vec-arrow">0</span> en nu T.'
-          : 'Mueve <span class="vec-arrow">v</span> en ℝ³ o T(<span class="vec-arrow">v</span>) en ℝ² hasta que T(<span class="vec-arrow">v</span>) = (0.0, 0.0).';
-        statusBox.innerHTML = `
-          <div><strong>✕ AÚN NO ESTÁ EN EL NÚCLEO</strong></div>
-          <div style="margin-top:0.35rem;">
-            <span class="vec-arrow">v</span> = (<span class="ex4-cx">${x.toFixed(1)}</span>, <span class="ex4-cy">${y.toFixed(1)}</span>, <span class="ex4-cz">${z.toFixed(1)}</span>) &nbsp;⇒&nbsp; T(<span class="vec-arrow">v</span>) = (<span class="ex4-cx">${tx.toFixed(1)}</span>, <span class="ex4-cy">${ty.toFixed(1)}</span>)
-          </div>
-          <div style="opacity:0.88;">${hintMsg}</div>
-        `;
-        eliotToast.classList.remove('visible');
-      }
-
-      /* --------------------------------------------------------
-         2. PANEL DERECHO: CODOMINIO 2D E IMAGEN im T + RASTRO
-         -------------------------------------------------------- */
+      /* 2. PANEL DERECHO: CODOMINIO PLANO ℝ² E IMAGEN im T */
       drawBaseGrid(viewImg, true);
+
       const ctxI = viewImg.ctx;
-
-      // Subespacio im T en ℝ²
       ctxI.save();
-      if (info.isRank2) {
-        ctxI.fillStyle = 'rgba(168, 85, 247, 0.08)';
+      if (info.rank === 2) {
+        ctxI.fillStyle = 'rgba(168, 85, 247, 0.14)';
         ctxI.fillRect(0, 0, viewImg.width, viewImg.height);
-      } else if (info.isRank1) {
-        const cols = [[a1, a2], [b1, b2], [c1, c2]];
-        const col = cols.find(c => Math.hypot(c[0], c[1]) > 1e-6) || [1, 0];
-        const norm = Math.hypot(col[0], col[1]) || 1;
-        const ux = (col[0] / norm) * 50;
-        const uy = (col[1] / norm) * 50;
-
+      } else if (info.rank === 1 && info.imgBasis.length === 1) {
+        const b1 = info.imgBasis[0];
+        const norm = Math.hypot(b1[0], b1[1]) || 1;
+        const ux = (b1[0] / norm) * 60;
+        const uy = (b1[1] / norm) * 60;
         const pStart = mathToScreen(-ux, -uy, viewImg.origin, viewImg.scale);
         const pEnd = mathToScreen(ux, uy, viewImg.origin, viewImg.scale);
 
@@ -6625,224 +6400,300 @@
       }
       ctxI.restore();
 
-      // Columnas transformadas T(î), T(ĵ), T(k̂)
-      drawVector(viewImg, a1, a2, '#18c5d9', 'T(î)', 0, 0, true);
-      drawVector(viewImg, b1, b2, '#f06565', 'T(ĵ)', 0, 0, true);
-      drawVector(viewImg, c1, c2, '#a855f7', 'T(k̂)', 0, 0, true);
-
-      // RASTRO EN LA IMAGEN 2D (SOLO DONDE ES MATEMÁTICAMENTE CORRECTO: DENTRO DE im T)
-      const ip0 = mathToScreen(0, 0, viewImg.origin, viewImg.scale);
       if (stateEx4.traces.length > 0) {
-        ctxI.save();
-        if (info.isZeroMatrix) {
+        for (const stroke of stateEx4.traces) {
+          if (stroke.length === 0) continue;
+          const pts2D = stroke.map(pt => {
+            const wtx = m[0][0] * pt.x + m[0][1] * pt.y + m[0][2] * pt.z;
+            const wty = m[1][0] * pt.x + m[1][1] * pt.y + m[1][2] * pt.z;
+            return {
+              wtx, wty,
+              p: mathToScreen(wtx, wty, viewImg.origin, viewImg.scale)
+            };
+          });
+
+          ctxI.save();
+          ctxI.strokeStyle = '#ec4899';
+          ctxI.lineWidth = 3;
+          ctxI.lineCap = 'round';
+          ctxI.lineJoin = 'round';
           ctxI.beginPath();
-          ctxI.arc(ip0.px, ip0.py, 7.5, 0, Math.PI * 2);
-          ctxI.fillStyle = '#ec4899';
-          ctxI.fill();
-          ctxI.font = '600 11px "JetBrains Mono", monospace';
-          ctxI.fillStyle = '#f9a8d4';
-          ctxI.fillText('im T = {0⃗}: rastro colapsado en (0,0)', 14, viewImg.height - 38);
-        } else {
-          for (const stroke of stateEx4.traces) {
-            if (stroke.length === 0) continue;
+          pts2D.forEach((item, idx) => {
+            if (idx === 0) ctxI.moveTo(item.p.px, item.p.py);
+            else ctxI.lineTo(item.p.px, item.p.py);
+          });
+          ctxI.stroke();
+          ctxI.restore();
 
-            if (stroke.length > 1) {
-              ctxI.strokeStyle = '#ec4899';
-              ctxI.lineWidth = 2.6;
-              ctxI.beginPath();
-              stroke.forEach((pt, idx) => {
-                const wx = a1 * pt.x + b1 * pt.y + c1 * pt.z;
-                const wy = a2 * pt.x + b2 * pt.y + c2 * pt.z;
-                const sp = mathToScreen(wx, wy, viewImg.origin, viewImg.scale);
-                if (idx === 0) ctxI.moveTo(sp.px, sp.py);
-                else ctxI.lineTo(sp.px, sp.py);
-              });
-              ctxI.stroke();
-            }
-
-            for (const pt of stroke) {
-              const wx = a1 * pt.x + b1 * pt.y + c1 * pt.z;
-              const wy = a2 * pt.x + b2 * pt.y + c2 * pt.z;
-              const sp = mathToScreen(wx, wy, viewImg.origin, viewImg.scale);
-              ctxI.beginPath();
-              ctxI.arc(sp.px, sp.py, 3.4, 0, Math.PI * 2);
-              ctxI.fillStyle = '#f472b6';
-              ctxI.fill();
-            }
+          for (const item of pts2D) {
+            ctxI.save();
+            ctxI.beginPath();
+            ctxI.arc(item.p.px, item.p.py, 4.2, 0, Math.PI * 2);
+            ctxI.fillStyle = '#ec4899';
+            ctxI.fill();
+            ctxI.restore();
           }
         }
+      }
+
+      const pOrigin2D = mathToScreen(0, 0, viewImg.origin, viewImg.scale);
+      const pTarget2D = mathToScreen(tx, ty, viewImg.origin, viewImg.scale);
+
+      if (!isZeroOutput) {
+        drawVector(viewImg, tx, ty, '#10b981', 'T(v)');
+      } else {
+        ctxI.save();
+        ctxI.beginPath();
+        ctxI.arc(pOrigin2D.px, pOrigin2D.py, 6.5, 0, Math.PI * 2);
+        ctxI.fillStyle = '#10b981';
+        ctxI.fill();
+        ctxI.strokeStyle = '#ffffff';
+        ctxI.lineWidth = 2;
+        ctxI.stroke();
         ctxI.restore();
       }
 
-      // Vector resultante T(v) movible en ℝ²
-      const ipv = mathToScreen(tx, ty, viewImg.origin, viewImg.scale);
-      if (tx !== 0 || ty !== 0) {
-        drawVector(viewImg, tx, ty, '#10b981', 'T(v⃗)');
+      if (stateEx4.hoveredTraceImg) {
+        const hp = stateEx4.hoveredTraceImg;
+        const htx = m[0][0] * hp.x + m[0][1] * hp.y + m[0][2] * hp.z;
+        const hty = m[1][0] * hp.x + m[1][1] * hp.y + m[1][2] * hp.z;
+        const sp = mathToScreen(htx, hty, viewImg.origin, viewImg.scale);
+        const label = `T(v) = (${htx.toFixed(1)}, ${hty.toFixed(1)})`;
+
+        ctxI.save();
+        ctxI.font = '600 12px "JetBrains Mono", monospace';
+        const tw = ctxI.measureText(label).width + 16;
+        const bx = Math.min(viewImg.width - tw - 8, Math.max(8, sp.px + 10));
+        const by = Math.max(8, sp.py - 30);
+        ctxI.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctxI.strokeStyle = '#ec4899';
+        ctxI.lineWidth = 1.2;
+        ctxI.beginPath();
+        ctxI.roundRect(bx, by, tw, 24, 6);
+        ctxI.fill();
+        ctxI.stroke();
+        ctxI.fillStyle = '#f8fafc';
+        ctxI.fillText(label, bx + 8, by + 16);
+        ctxI.restore();
       }
 
-      ctxI.save();
-      ctxI.beginPath();
-      ctxI.arc(ipv.px, ipv.py, 7, 0, Math.PI * 2);
-      ctxI.fillStyle = '#10b981';
-      ctxI.fill();
-      ctxI.lineWidth = 2;
-      ctxI.strokeStyle = '#ffffff';
-      ctxI.stroke();
-      ctxI.restore();
+      const readoutEl = document.getElementById('ex4-img-readout');
+      if (readoutEl) {
+        let imgDesc = 'im T = { <span class="vec-arrow">0</span> } (Origen)';
+        if (info.rank === 1 && info.imgBasis.length === 1) {
+          const b1 = info.imgBasis[0];
+          imgDesc = Math.abs(b1[0]) > 1e-5
+            ? `Recta: y = ${Math.round((b1[1] / b1[0]) * 100) / 100}x`
+            : 'Recta: x = 0';
+        } else if (info.rank === 2) {
+          imgDesc = 'im T = ℝ² (Sobreyectiva, dim = 2)';
+        }
 
-      // Lectura de T(v) y Teorema Rango-Nulidad
-      let imgDesc = '';
-      let imgBasisHTML = '';
-      if (info.rank === 0) {
-        imgDesc = 'im T = { <span class="vec-arrow">0</span> } (Solo el origen)';
-        imgBasisHTML = 'Base = ∅';
-      } else if (info.rank === 1) {
-        const cols = [[a1, a2], [b1, b2], [c1, c2]];
-        const col = cols.find(c => Math.hypot(c[0], c[1]) > 1e-6) || [1, 0];
-        imgDesc = col[0] !== 0
-          ? `Recta: y = ${Math.round((col[1] / col[0]) * 100) / 100}x`
-          : 'Recta: x = 0';
-        imgBasisHTML = `Base = { (${col[0]}, ${col[1]})ᵀ }`;
-      } else {
-        imgDesc = 'im T = ℝ² (Todo el plano — Sobreyectiva)';
-        imgBasisHTML = `Base = { (1, 0)ᵀ, (0, 1)ᵀ }`;
-      }
+        const basisStr = info.imgBasis.length === 0
+          ? '∅'
+          : info.imgBasis.map(b => `(${b[0]}, ${b[1]})ᵀ`).join(', ');
 
-      document.getElementById('ex4-img-readout').innerHTML = `
-        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
-          <div class="ex4-col-equation" style="font-size:0.98rem;">
-            <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
-            <div class="ex4-bracket-box">
-              <span class="matrix-bracket left"></span>
-              <div class="ex4-col-stack">
-                <span class="ex4-cx">${tx.toFixed(1)}</span>
-                <span class="ex4-cy">${ty.toFixed(1)}</span>
+        readoutEl.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+            <div class="ex4-col-equation" style="font-size:0.98rem;">
+              <span><span class="math-var">T</span>(<span class="vec-arrow">v</span>) =</span>
+              <div class="ex4-bracket-box">
+                <span class="matrix-bracket left"></span>
+                <div class="ex4-col-stack">
+                  <span class="ex4-cx">${tx.toFixed(1)}</span>
+                  <span class="ex4-cy">${ty.toFixed(1)}</span>
+                </div>
+                <span class="matrix-bracket right"></span>
               </div>
-              <span class="matrix-bracket right"></span>
+            </div>
+            <div style="font-size:0.82rem;">
+              <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgDesc}</span></div>
+              <div><strong>Base im T:</strong> { ${basisStr} }</div>
             </div>
           </div>
-          <div style="font-size:0.82rem;">
-            <div><strong>Subespacio:</strong> <span style="color:#a855f7;">${imgDesc}</span></div>
-            <div><strong>${imgBasisHTML}</strong></div>
+          <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
+            Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${info.rank} + ${info.nullity} = 3</strong>
           </div>
-        </div>
-        <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); font-size:0.8rem;">
-          Teorema Rango-Nulidad: <strong>dim(im T) + dim(nu T) = ${info.rank} + ${info.nullity} = 3</strong>
-        </div>
-      `;
+        `;
+      }
     }
 
     function initEx4() {
       const canvasKer = document.getElementById('canvas4_ker');
       const canvasImg = document.getElementById('canvas4_img');
-      if (!canvasKer) return;
-
-      const scheduleDrawEx4 = createSmoothRenderer(updateEx4);
+      if (!canvasKer || !canvasImg) return;
 
       ['ex4-slider-x', 'ex4-slider-y', 'ex4-slider-z'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('input', scheduleDrawEx4);
+        if (el) el.addEventListener('input', updateEx4);
       });
 
-      // Interacción en Panel 1 (Núcleo 3D): mover v cerca de su punta o rotar cámara 3D
-      const isPointerNearVTip3D = (clientX, clientY) => {
+      function getKerTipScreen(rect) {
+        return project3DEx4(
+          stateEx4.x, stateEx4.y, stateEx4.z,
+          stateEx4.camKer, rect.width, rect.height
+        );
+      }
+
+      function applyKerDragPoint(clientX, clientY, isNewStroke) {
         const rect = canvasKer.getBoundingClientRect();
-        const mx = clientX - rect.left;
-        const my = clientY - rect.top;
-        const tip = project3DEx4(stateEx4.x, stateEx4.y, stateEx4.z, rect.width, rect.height);
-        return Math.hypot(mx - tip.px, my - tip.py) <= 22;
-      };
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const [wx, wy, wz] = unproject3DEx4(
+          px, py, stateEx4.camKer.dragDepth,
+          stateEx4.camKer, rect.width, rect.height
+        );
+        syncDomainVectorEx4(wx, wy, wz, isNewStroke);
+      }
 
       canvasKer.addEventListener('pointerdown', (e) => {
-        if (isPointerNearVTip3D(e.clientX, e.clientY) && e.button === 0) {
-          stateEx4.dragging3DVec = true;
-          stateEx4.dragging3DCam = false;
-          stateEx4.currentStroke = null;
-          canvasKer.setPointerCapture(e.pointerId);
-          moveVFrom3DKerPointerEx4(e.clientX, e.clientY, true);
-          return;
-        }
+        const rect = canvasKer.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+        const tipKer = getKerTipScreen(rect);
 
-        stateEx4.dragging3DCam = true;
-        stateEx4.dragging3DVec = false;
-        stateEx4.lastMouseX = e.clientX;
-        stateEx4.lastMouseY = e.clientY;
         canvasKer.setPointerCapture(e.pointerId);
+
+        if (e.button === 0 && (Math.hypot(px - tipKer.px, py - tipKer.py) <= 32 || e.shiftKey)) {
+          stateEx4.camKer.draggingVec = true;
+          stateEx4.camKer.dragDepth = tipKer.depth;
+          applyKerDragPoint(e.clientX, e.clientY, true);
+        } else {
+          stateEx4.camKer.draggingOrbit = true;
+          stateEx4.camKer.lastX = e.clientX;
+          stateEx4.camKer.lastY = e.clientY;
+        }
       });
 
       canvasKer.addEventListener('pointermove', (e) => {
-        if (stateEx4.dragging3DVec) {
-          moveVFrom3DKerPointerEx4(e.clientX, e.clientY, false);
+        const rect = canvasKer.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+
+        if (stateEx4.camKer.draggingVec) {
+          applyKerDragPoint(e.clientX, e.clientY, false);
           return;
         }
 
-        if (stateEx4.dragging3DCam) {
-          const dx = e.clientX - stateEx4.lastMouseX;
-          const dy = e.clientY - stateEx4.lastMouseY;
-          stateEx4.lastMouseX = e.clientX;
-          stateEx4.lastMouseY = e.clientY;
-          stateEx4.yaw += dx * 0.01;
-          stateEx4.pitch = Math.max(-1.35, Math.min(1.35, stateEx4.pitch + dy * 0.01));
+        if (stateEx4.camKer.draggingOrbit) {
+          const dx = e.clientX - stateEx4.camKer.lastX;
+          const dy = e.clientY - stateEx4.camKer.lastY;
+          stateEx4.camKer.lastX = e.clientX;
+          stateEx4.camKer.lastY = e.clientY;
+          stateEx4.camKer.yaw += dx * 0.01;
+          stateEx4.camKer.pitch = Math.max(-1.42, Math.min(1.42, stateEx4.camKer.pitch + dy * 0.01));
           drawEx4();
           return;
         }
 
-        canvasKer.style.cursor = isPointerNearVTip3D(e.clientX, e.clientY) ? 'move' : 'grab';
+        const tipKer = getKerTipScreen(rect);
+        canvasKer.style.cursor = (Math.hypot(px - tipKer.px, py - tipKer.py) <= 32) ? 'pointer' : 'grab';
       });
 
-      const stopKer3D = (e) => {
-        stateEx4.dragging3DVec = false;
-        stateEx4.dragging3DCam = false;
+      const stopKerPointer = (e) => {
+        stateEx4.camKer.draggingVec = false;
+        stateEx4.camKer.draggingOrbit = false;
         stateEx4.currentStroke = null;
         if (canvasKer.hasPointerCapture(e.pointerId)) {
           canvasKer.releasePointerCapture(e.pointerId);
         }
       };
-      canvasKer.addEventListener('pointerup', stopKer3D);
-      canvasKer.addEventListener('pointercancel', stopKer3D);
+
+      canvasKer.addEventListener('pointerup', stopKerPointer);
+      canvasKer.addEventListener('pointercancel', stopKerPointer);
 
       canvasKer.addEventListener('wheel', (e) => {
         e.preventDefault();
         zoomEx4('ker', e.deltaY < 0 ? 1.12 : 0.89);
       }, { passive: false });
 
-      // Interacción en Panel 2 (Imagen 2D): mover T(v) y sincronizar con v en 3D
-      if (canvasImg) {
-        canvasImg.addEventListener('pointerdown', (e) => {
-          stateEx4.dragging2DImg = true;
-          stateEx4.currentStroke = null;
-          canvasImg.setPointerCapture(e.pointerId);
-          moveTvFrom2DImgPointerEx4(e.clientX, e.clientY, true);
-        });
+      function applyImgDragPoint(clientX, clientY, isNewStroke) {
+        const rect = canvasImg.getBoundingClientRect();
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+        const mathPt = screenToMath(px, py, origin, stateEx4.scaleImg);
 
-        canvasImg.addEventListener('pointermove', (e) => {
-          if (!stateEx4.dragging2DImg) return;
-          moveTvFrom2DImgPointerEx4(e.clientX, e.clientY, false);
-        });
+        const info = analyzeMatrix2x3Ex4(stateEx4.m);
+        let target2D = [mathPt.x, mathPt.y];
 
-        const stopImg2D = (e) => {
-          stateEx4.dragging2DImg = false;
-          stateEx4.currentStroke = null;
-          if (canvasImg.hasPointerCapture(e.pointerId)) {
-            canvasImg.releasePointerCapture(e.pointerId);
-          }
-        };
-        canvasImg.addEventListener('pointerup', stopImg2D);
-        canvasImg.addEventListener('pointercancel', stopImg2D);
+        if (info.rank === 0) {
+          target2D = [0, 0];
+        } else if (info.rank === 1 && info.imgBasis.length === 1) {
+          const b1 = info.imgBasis[0];
+          const normSq = b1[0] * b1[0] + b1[1] * b1[1] || 1;
+          const projCoeff = (mathPt.x * b1[0] + mathPt.y * b1[1]) / normSq;
+          target2D = [projCoeff * b1[0], projCoeff * b1[1]];
+        }
 
-        canvasImg.addEventListener('wheel', (e) => {
-          e.preventDefault();
-          zoomEx4('img', e.deltaY < 0 ? 1.12 : 0.89);
-        }, { passive: false });
+        const domV = solvePreimage2x3Ex4(stateEx4.m, info, target2D);
+        syncDomainVectorEx4(domV[0], domV[1], domV[2], isNewStroke);
       }
+
+      canvasImg.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        canvasImg.setPointerCapture(e.pointerId);
+        stateEx4.draggingImgVec = true;
+        applyImgDragPoint(e.clientX, e.clientY, stateEx4.traceEnabled);
+      });
+
+      canvasImg.addEventListener('pointermove', (e) => {
+        const rect = canvasImg.getBoundingClientRect();
+        const px = e.clientX - rect.left;
+        const py = e.clientY - rect.top;
+
+        if (stateEx4.draggingImgVec) {
+          applyImgDragPoint(e.clientX, e.clientY, false);
+          return;
+        }
+
+        if (stateEx4.traces.length === 0) return;
+        const { m } = stateEx4;
+        let best = null;
+        let bestDist = 12;
+        const origin = { x: rect.width / 2, y: rect.height / 2 };
+
+        for (const stroke of stateEx4.traces) {
+          for (const pt of stroke) {
+            const wtx = m[0][0] * pt.x + m[0][1] * pt.y + m[0][2] * pt.z;
+            const wty = m[1][0] * pt.x + m[1][1] * pt.y + m[1][2] * pt.z;
+            const sp = mathToScreen(wtx, wty, origin, stateEx4.scaleImg);
+            const d = Math.hypot(px - sp.px, py - sp.py);
+            if (d < bestDist) {
+              bestDist = d;
+              best = pt;
+            }
+          }
+        }
+        if (best !== stateEx4.hoveredTraceImg) {
+          stateEx4.hoveredTraceImg = best;
+          drawEx4();
+        }
+      });
+
+      const stopImgPointer = (e) => {
+        stateEx4.draggingImgVec = false;
+        stateEx4.currentStroke = null;
+        if (canvasImg.hasPointerCapture(e.pointerId)) {
+          canvasImg.releasePointerCapture(e.pointerId);
+        }
+      };
+
+      canvasImg.addEventListener('pointerup', stopImgPointer);
+      canvasImg.addEventListener('pointercancel', stopImgPointer);
+
+      canvasImg.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        zoomEx4('img', e.deltaY < 0 ? 1.12 : 0.89);
+      }, { passive: false });
 
       if (typeof ResizeObserver !== 'undefined') {
-        const ro = new ResizeObserver(() => scheduleDrawEx4());
+        const ro = new ResizeObserver(() => drawEx4());
         ro.observe(canvasKer);
-        if (canvasImg) ro.observe(canvasImg);
+        ro.observe(canvasImg);
       }
 
-      window.addEventListener('resize', scheduleDrawEx4);
+      window.addEventListener('resize', drawEx4);
       renderFormulaInputsEx4();
       updateEx4();
     }
